@@ -1,0 +1,36 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "Ascentroid Map Kit",
+	"Description": "A stripped down version of game properties used by the Ascentroid game runtime to load custom map assets in a restrictive way.",
+	"Category": "Other",
+	"CreatedBy": "Ascentroid",
+	"CreatedByURL": "ascentroid.com",
+	"DocsURL": "ascentroid.com",
+	"MarketplaceURL": "TBD",
+	"SupportURL": "ascentroid.com",
+	"EngineVersion": "4.24.0",
+	"CanContainContent": true,
+	"Installed": true,
+	"Modules": [
+		{
+			"Name": "AscMapKit",
+			"Type": "CookedOnly",
+			"LoadingPhase": "PostEngineInit",
+			"WhitelistPlatforms": [
+				"Win64",
+				"Win32"
+			]
+		},
+		{
+			"Name": "AscMapKit",
+			"Type": "Runtime",
+			"LoadingPhase": "PreDefault",
+			"WhitelistPlatforms": [
+				"Win64",
+				"Win32"
+			]
+		}
+	]
+}

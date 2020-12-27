@@ -1,1 +1,1 @@
-# Ascentroid Placeholder!
+# Ascentroid - Documentation will be coming.
