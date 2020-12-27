@@ -8,10 +8,9 @@
   "FileNameLinux": "Neptune-Linux.pak",
   "TargetAscGameVersion": "0.0.1.P.CSMA",
   "SupportedGameModes": [
-    "Anarchy",
-    "Team Anarchy"
+    "Deathmatch"
   ],
-  "ShowSecretMaps": false,
+  "ShowSecretLevels": false,
   "Revision": 1.0,
   "Date": "01/01/1995",
   "BuildTime": "XX days",
@@ -20,9 +19,9 @@
   "Emails": [""],
   "ToolsUsed": ["Unreal Engine 4 Editor", "Affinity Designer", "Affinity Photo", "3D Studio Max"],
   "Notes": "",
-  "Maps": [
+  "Levels": [
     {
-      "MapName": "Neptune",
+      "LevelName": "Neptune",
       "FriendlyName": "Neptune",
       "Order": 1,
       "Secret": false
