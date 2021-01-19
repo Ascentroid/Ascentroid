@@ -18,15 +18,22 @@ namespace AscMapKitSetup
 
         public MainForm()
         {
-            InitializeComponent();
+            try
+            {
+                InitializeComponent();
 
-            SetInitButton(false);
+                SetInitButton(false);
 
-            _settings = Settings.Load();
+                _settings = Settings.Load();
 
-            InitUE4Path();
+                InitUE4Path();
 
-            LoadForm();
+                LoadForm();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.ToString());
+            }
         }
 
         private void LoadForm()
@@ -108,7 +115,10 @@ namespace AscMapKitSetup
                         SetStatus($"Campaign '{_settings.CampaignName}' is already initialized!");
                     }
                     else
+                    {
                         SetInitButton(true);
+                        SetStatus("[waiting]");
+                    }
 
                     Save();
                 }
@@ -209,14 +219,14 @@ namespace AscMapKitSetup
                          Utils.Copy(sourceBatchScriptPath, destinationBatchScriptPath);
 
                          SetStatus("Preparing config files...");
-                         
+
                          var configFile = Path.Combine(destinationConfigPath, "DefaultEngine.ini");
                          var configContents = File.ReadAllText(configFile);
 
                          configContents = configContents.Replace("Template", _settings.CampaignName);
 
                          File.WriteAllText(configFile, configContents);
-                         
+
                          SetStatus("Preparing source files...");
 
                          var destinationSourcePathDirectoryInfo = new DirectoryInfo(destinationSourcePath);
@@ -288,6 +298,9 @@ namespace AscMapKitSetup
 
         private bool IsAlreadyInitialized()
         {
+            if (string.IsNullOrWhiteSpace(_settings.CampaignPath))
+                return false;
+
             var destinationPluginsPath = Path.Combine(_settings.CampaignPath, "Plugins");
             var destinationMapKitPluginPath = Path.Combine(destinationPluginsPath, "AscMapKit");
 
