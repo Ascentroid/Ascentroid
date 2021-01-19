@@ -4,3 +4,6 @@
 .vs
 /MapKit/Setup/Source/packages
 /MapKit/Setup/Source/AscMapKitSetup/obj
+/MapKit/Setup/Temp
+/MapKit/Setup/Settings.json
+/MapKit/Setup/Source/AscMapKitSetup/bin
