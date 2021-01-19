@@ -1,7 +1,7 @@
 @echo off
 
-set UE4_PATH=E:\Temp\Scratch\UE4Binary\UE_4.24
-set PROJECT_NAME=Neptune
+set UE4_PATH={{UE4_PATH}}
+set PROJECT_NAME={{PROJECT_NAME}}
 set PROJECT_PATH=C:\Dev\Ascentroid\Campaigns\%PROJECT_NAME%
 set UPROJECT_FILE=%PROJECT_PATH%\%PROJECT_NAME%.uproject
-set GAME_PATH=C:\Dev\Ascentroid\Game\Content\Ascentroid\Paks
+set GAME_PATH={{GAME_PATH}}\Content\Ascentroid\Paks
