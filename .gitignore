@@ -1,2 +1,6 @@
 /MapKit/Plugin/AscMapKit/Binaries
 /MapKit/Plugin/AscMapKit/Intermediate
+.idea
+.vs
+/MapKit/Setup/Source/packages
+/MapKit/Setup/Source/AscMapKitSetup/obj
