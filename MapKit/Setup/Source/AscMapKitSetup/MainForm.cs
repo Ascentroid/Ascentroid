@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.Win32;
 
 namespace AscMapKitSetup
@@ -129,146 +130,154 @@ namespace AscMapKitSetup
         {
             Task.Run(() =>
                      {
-                         SetInitButton(false);
-
-                         SetStatus("Downloading Map Kit...");
-
-                         var tempPath = Path.Combine(Utils.GetAppPath(), "Temp");
-                         var unzipPath = Path.Combine(tempPath, "Unzipped");
-
-                         if (!Directory.Exists(tempPath))
-                             Directory.CreateDirectory(tempPath);
-
-                         if (Directory.Exists(unzipPath))
+                         try
                          {
-                             Directory.Delete(unzipPath, true);
-                             Thread.Sleep(500);
-                         }
+                             SetInitButton(false);
 
-                         var tempZip = Path.Combine(tempPath, "latest-stable.zip");
+                             SetStatus("Downloading Map Kit...");
 
-                         var webRequest = (HttpWebRequest) WebRequest.Create("https://github.com/Ascentroid/Ascentroid/archive/latest-stable.zip");
+                             var tempPath = Path.Combine(Utils.GetAppPath(), "Temp");
+                             var unzipPath = Path.Combine(tempPath, "Unzipped");
 
-                         webRequest.CachePolicy = new HttpRequestCachePolicy(HttpRequestCacheLevel.NoCacheNoStore);
+                             if (!Directory.Exists(tempPath))
+                                 Directory.CreateDirectory(tempPath);
 
-                         using (var response = (HttpWebResponse) webRequest.GetResponse())
-                         {
-                             using (var stream = response.GetResponseStream())
+                             if (Directory.Exists(unzipPath))
                              {
-                                 if (stream != null)
+                                 Directory.Delete(unzipPath, true);
+                                 Thread.Sleep(500);
+                             }
+
+                             var tempZip = Path.Combine(tempPath, "latest-stable.zip");
+
+                             var webRequest = (HttpWebRequest) WebRequest.Create("https://github.com/Ascentroid/Ascentroid/archive/latest-stable.zip");
+
+                             webRequest.CachePolicy = new HttpRequestCachePolicy(HttpRequestCacheLevel.NoCacheNoStore);
+
+                             using (var response = (HttpWebResponse) webRequest.GetResponse())
+                             {
+                                 using (var stream = response.GetResponseStream())
                                  {
-                                     using (var fs = File.Create(tempZip))
+                                     if (stream != null)
                                      {
-                                         stream.CopyTo(fs);
+                                         using (var fs = File.Create(tempZip))
+                                         {
+                                             stream.CopyTo(fs);
+                                         }
                                      }
                                  }
                              }
-                         }
 
-                         SetStatus("Extracting...");
+                             SetStatus("Extracting...");
 
-                         ZipFile.ExtractToDirectory(tempZip, unzipPath);
+                             //ZipFile.ExtractToDirectory(tempZip, unzipPath);
+                             new FastZip().ExtractZip(tempZip, unzipPath, null);
 
-                         Thread.Sleep(500);
-
-                         File.Delete(tempZip);
-
-                         SetStatus("Installing files...");
-
-                         var sourceUnzipPath = Path.Combine(unzipPath, "Ascentroid-latest-stable");
-                         var sourcePluginsPath = Path.Combine(sourceUnzipPath, "MapKit", "Plugins");
-                         var sourceMapKitPluginPath = Path.Combine(sourcePluginsPath, "AscMapKit");
-                         var sourceCampaignPluginPath = Path.Combine(sourcePluginsPath, "Campaign");
-                         var sourceConfigPath = Path.Combine(sourceUnzipPath, "MapKit", "Templates", "CampaignProject", "Config");
-                         var sourceSourcePath = Path.Combine(sourceUnzipPath, "MapKit", "Templates", "CampaignProject", "Source");
-                         var sourceBatchScriptPath = Path.Combine(sourceUnzipPath, "MapKit", "Templates", "BatchScripts");
-
-                         var destinationPluginsPath = Path.Combine(_settings.CampaignPath, "Plugins");
-                         var destinationMapKitPluginPath = Path.Combine(destinationPluginsPath, "AscMapKit");
-                         var destinationCampaignPluginPath = Path.Combine(destinationPluginsPath, "Campaign");
-                         var destinationConfigPath = Path.Combine(_settings.CampaignPath, "Config");
-                         var destinationSourcePath = Path.Combine(_settings.CampaignPath, "Source");
-                         var destinationBatchScriptPath = Path.Combine(_settings.CampaignPath, "_BatchScripts");
-
-                         if (Directory.Exists(destinationMapKitPluginPath))
-                             Directory.Delete(destinationMapKitPluginPath, true);
-
-                         if (Directory.Exists(destinationCampaignPluginPath))
-                             Directory.Delete(destinationCampaignPluginPath, true);
-
-                         Thread.Sleep(500);
-
-                         if (Directory.Exists(destinationSourcePath))
-                         {
-                             Directory.Delete(destinationSourcePath, true);
                              Thread.Sleep(500);
-                             Directory.CreateDirectory(destinationSourcePath);
-                         }
 
-                         if (Directory.Exists(destinationBatchScriptPath))
-                         {
-                             Directory.Delete(destinationBatchScriptPath, true);
+                             File.Delete(tempZip);
+
+                             SetStatus("Installing files...");
+
+                             var sourceUnzipPath = Path.Combine(unzipPath, "Ascentroid-latest-stable");
+                             var sourcePluginsPath = Path.Combine(sourceUnzipPath, "MapKit", "Plugins");
+                             var sourceMapKitPluginPath = Path.Combine(sourcePluginsPath, "AscMapKit");
+                             var sourceCampaignPluginPath = Path.Combine(sourcePluginsPath, "Campaign");
+                             var sourceConfigPath = Path.Combine(sourceUnzipPath, "MapKit", "Templates", "CampaignProject", "Config");
+                             var sourceSourcePath = Path.Combine(sourceUnzipPath, "MapKit", "Templates", "CampaignProject", "Source");
+                             var sourceBatchScriptPath = Path.Combine(sourceUnzipPath, "MapKit", "Templates", "BatchScripts");
+
+                             var destinationPluginsPath = Path.Combine(_settings.CampaignPath, "Plugins");
+                             var destinationMapKitPluginPath = Path.Combine(destinationPluginsPath, "AscMapKit");
+                             var destinationCampaignPluginPath = Path.Combine(destinationPluginsPath, "Campaign");
+                             var destinationConfigPath = Path.Combine(_settings.CampaignPath, "Config");
+                             var destinationSourcePath = Path.Combine(_settings.CampaignPath, "Source");
+                             var destinationBatchScriptPath = Path.Combine(_settings.CampaignPath, "_BatchScripts");
+
+                             if (Directory.Exists(destinationMapKitPluginPath))
+                                 Directory.Delete(destinationMapKitPluginPath, true);
+
+                             if (Directory.Exists(destinationCampaignPluginPath))
+                                 Directory.Delete(destinationCampaignPluginPath, true);
+
                              Thread.Sleep(500);
-                             Directory.CreateDirectory(destinationBatchScriptPath);
+
+                             if (Directory.Exists(destinationSourcePath))
+                             {
+                                 Directory.Delete(destinationSourcePath, true);
+                                 Thread.Sleep(500);
+                                 Directory.CreateDirectory(destinationSourcePath);
+                             }
+
+                             if (Directory.Exists(destinationBatchScriptPath))
+                             {
+                                 Directory.Delete(destinationBatchScriptPath, true);
+                                 Thread.Sleep(500);
+                                 Directory.CreateDirectory(destinationBatchScriptPath);
+                             }
+
+                             Utils.Copy(sourceMapKitPluginPath, destinationMapKitPluginPath);
+                             Utils.Copy(sourceCampaignPluginPath, destinationCampaignPluginPath);
+                             Utils.Copy(sourceConfigPath, destinationConfigPath);
+                             Utils.Copy(sourceSourcePath, destinationSourcePath);
+                             Utils.Copy(sourceBatchScriptPath, destinationBatchScriptPath);
+
+                             SetStatus("Preparing config files...");
+
+                             var configFile = Path.Combine(destinationConfigPath, "DefaultEngine.ini");
+                             var configContents = File.ReadAllText(configFile);
+
+                             configContents = configContents.Replace("Template", _settings.CampaignName);
+
+                             File.WriteAllText(configFile, configContents);
+
+                             SetStatus("Preparing source files...");
+
+                             var destinationSourcePathDirectoryInfo = new DirectoryInfo(destinationSourcePath);
+
+                             // Rename source path
+                             foreach (var directory in destinationSourcePathDirectoryInfo.GetDirectories())
+                                 Directory.Move(directory.FullName, directory.FullName.Replace("Template", _settings.CampaignName));
+
+                             // Rename source files and replace text
+                             foreach (var file in destinationSourcePathDirectoryInfo.GetFiles("*.*", SearchOption.AllDirectories))
+                             {
+                                 var newFileName = file.FullName.Replace("Template", _settings.CampaignName);
+
+                                 File.Move(file.FullName, newFileName);
+
+                                 var contents = File.ReadAllText(newFileName);
+
+                                 contents = contents.Replace("Template", _settings.CampaignName);
+
+                                 File.WriteAllText(newFileName, contents);
+                             }
+
+                             SetStatus("Preparing batch files...");
+
+                             // Replace batch script variables
+                             foreach (var file in new DirectoryInfo(destinationBatchScriptPath).GetFiles())
+                             {
+                                 var fileName = file.FullName;
+                                 var contents = File.ReadAllText(fileName);
+
+                                 contents = contents.Replace("{{UE4_PATH}}", _settings.UE4Path);
+                                 contents = contents.Replace("{{PROJECT_NAME}}", _settings.CampaignName);
+                                 contents = contents.Replace("{{GAME_PATH}}", _settings.GamePath);
+                                 contents = contents.Replace("{{SessionId}}", Guid.NewGuid().ToString().ToUpper());
+                                 contents = contents.Replace("{{SessionOwner}}", Environment.UserName);
+
+                                 File.WriteAllText(fileName, contents);
+                             }
+
+                             SetStatus($"Done! Campaign '{_settings.CampaignName}' is ready!");
+
+                             Save();
                          }
-
-                         Utils.Copy(sourceMapKitPluginPath, destinationMapKitPluginPath);
-                         Utils.Copy(sourceCampaignPluginPath, destinationCampaignPluginPath);
-                         Utils.Copy(sourceConfigPath, destinationConfigPath);
-                         Utils.Copy(sourceSourcePath, destinationSourcePath);
-                         Utils.Copy(sourceBatchScriptPath, destinationBatchScriptPath);
-
-                         SetStatus("Preparing config files...");
-
-                         var configFile = Path.Combine(destinationConfigPath, "DefaultEngine.ini");
-                         var configContents = File.ReadAllText(configFile);
-
-                         configContents = configContents.Replace("Template", _settings.CampaignName);
-
-                         File.WriteAllText(configFile, configContents);
-
-                         SetStatus("Preparing source files...");
-
-                         var destinationSourcePathDirectoryInfo = new DirectoryInfo(destinationSourcePath);
-
-                         // Rename source path
-                         foreach (var directory in destinationSourcePathDirectoryInfo.GetDirectories())
-                             Directory.Move(directory.FullName, directory.FullName.Replace("Template", _settings.CampaignName));
-
-                         // Rename source files and replace text
-                         foreach (var file in destinationSourcePathDirectoryInfo.GetFiles("*.*", SearchOption.AllDirectories))
+                         catch (Exception ex)
                          {
-                             var newFileName = file.FullName.Replace("Template", _settings.CampaignName);
-
-                             File.Move(file.FullName, newFileName);
-
-                             var contents = File.ReadAllText(newFileName);
-
-                             contents = contents.Replace("Template", _settings.CampaignName);
-
-                             File.WriteAllText(newFileName, contents);
+                             MessageBox.Show(ex.ToString());
                          }
-
-                         SetStatus("Preparing batch files...");
-
-                         // Replace batch script variables
-                         foreach (var file in new DirectoryInfo(destinationBatchScriptPath).GetFiles())
-                         {
-                             var fileName = file.FullName;
-                             var contents = File.ReadAllText(fileName);
-
-                             contents = contents.Replace("{{UE4_PATH}}", _settings.UE4Path);
-                             contents = contents.Replace("{{PROJECT_NAME}}", _settings.CampaignName);
-                             contents = contents.Replace("{{GAME_PATH}}", _settings.GamePath);
-                             contents = contents.Replace("{{SessionId}}", Guid.NewGuid().ToString().ToUpper());
-                             contents = contents.Replace("{{SessionOwner}}", Environment.UserName);
-
-                             File.WriteAllText(fileName, contents);
-                         }
-
-                         SetStatus($"Done! Campaign '{_settings.CampaignName}' is ready!");
-
-                         Save();
                      });
         }
 
