@@ -260,6 +260,7 @@ namespace AscMapKitSetup
                                  var contents = File.ReadAllText(fileName);
 
                                  contents = contents.Replace("{{UE4_PATH}}", _settings.UE4Path);
+                                 contents = contents.Replace("{{PROJECT_PATH}}", _settings.CampaignPath);
                                  contents = contents.Replace("{{PROJECT_NAME}}", _settings.CampaignName);
                                  contents = contents.Replace("{{GAME_PATH}}", _settings.GamePath);
                                  contents = contents.Replace("{{SessionId}}", Guid.NewGuid().ToString().ToUpper());
