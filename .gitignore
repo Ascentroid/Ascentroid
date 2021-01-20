@@ -7,3 +7,4 @@
 /MapKit/Setup/Temp
 /MapKit/Setup/Settings.json
 /MapKit/Setup/Source/AscMapKitSetup/bin
+*.csproj.user
