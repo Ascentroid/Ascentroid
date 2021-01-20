@@ -8,7 +8,6 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.Win32;
 
 namespace AscMapKitSetup
@@ -170,8 +169,7 @@ namespace AscMapKitSetup
 
                              SetStatus("Extracting...");
 
-                             //ZipFile.ExtractToDirectory(tempZip, unzipPath);
-                             new FastZip().ExtractZip(tempZip, unzipPath, null);
+                             ZipFile.ExtractToDirectory(tempZip, unzipPath);
 
                              Thread.Sleep(500);
 
