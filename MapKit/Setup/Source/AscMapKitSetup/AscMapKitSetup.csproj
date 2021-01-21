@@ -159,6 +159,7 @@ del /s /q "$(SolutionDir)\..\AscMapKitSetup.zip"
 del /s /q "$(SolutionDir)\$(ProjectName)\bin\$(ConfigurationName)\AscMapKitSetup.zip"
 del /s /q "$(SolutionDir)\$(ProjectName)\bin\$(ConfigurationName)\Settings.json"
 del /s /q "$(SolutionDir)\$(ProjectName)\bin\$(ConfigurationName)\Temp"
+rmdir /s /q "$(SolutionDir)\$(ProjectName)\bin\$(ConfigurationName)\Temp"
 %25SZIP%25 a -tzip "$(SolutionDir)\$(ProjectName)\bin\$(ConfigurationName)\AscMapKitSetup.zip" -mx9 "$(SolutionDir)\$(ProjectName)\bin\$(ConfigurationName)\*"
 copy /Y "$(SolutionDir)\$(ProjectName)\bin\$(ConfigurationName)\AscMapKitSetup.zip" "$(SolutionDir)\..\"</PostBuildEvent>
   </PropertyGroup>
