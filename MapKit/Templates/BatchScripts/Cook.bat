@@ -20,6 +20,7 @@ del "%PakBuildOutputDir%\%PROJECT_NAME%-Windows.pak"
 echo Renaming "%PakBuildOutputDir%\Campaign%PROJECT_NAME%-WindowsNoEditor.pak" to "%PROJECT_NAME%-Windows.pak"
 ren "%PakBuildOutputDir%\Campaign%PROJECT_NAME%-WindowsNoEditor.pak" "%PROJECT_NAME%-Windows.pak"
 
+rem Sleep one second
 ping 127.0.0.1 -n 1 > nul
 
 rem Copy the pak file to our game content
@@ -27,7 +28,7 @@ echo Copying "%PakBuildOutputDir%\%PROJECT_NAME%-Windows.pak" to "%GAME_PATH%\"
 copy /y "%PakBuildOutputDir%\%PROJECT_NAME%-Windows.pak" "%GAME_PATH%\"
 
 rem Copy the json file to our game content
-echo Moving JSON from "%PROJECT_PATH%\%PROJECT_NAME%.json" to "%GAME_PATH%\%PROJECT_NAME%.json"
+echo Copying JSON from "%PROJECT_PATH%\%PROJECT_NAME%.json" to "%GAME_PATH%\%PROJECT_NAME%.json"
 copy /y "%PROJECT_PATH%\%PROJECT_NAME%.json" "%GAME_PATH%\%PROJECT_NAME%.json"
 
 pause
