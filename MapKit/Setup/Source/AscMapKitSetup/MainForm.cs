@@ -183,6 +183,7 @@ namespace AscMapKitSetup
                              var sourceMapKitPluginPath = Path.Combine(sourcePluginsPath, "AscMapKit");
                              var sourceCampaignPluginPath = Path.Combine(sourcePluginsPath, "Campaign");
                              var sourceConfigPath = Path.Combine(sourceUnzipPath, "MapKit", "Templates", "CampaignProject", "Config");
+                             var sourceContentPath = Path.Combine(sourceUnzipPath, "MapKit", "Templates", "CampaignProject", "Content");
                              var sourceSourcePath = Path.Combine(sourceUnzipPath, "MapKit", "Templates", "CampaignProject", "Source");
                              var sourceBatchScriptPath = Path.Combine(sourceUnzipPath, "MapKit", "Templates", "BatchScripts");
                              var sourceCampaignJsonFile = Path.Combine(sourceUnzipPath, "MapKit", "Templates", "CampaignProject", "Template.json");
@@ -191,6 +192,7 @@ namespace AscMapKitSetup
                              var destinationMapKitPluginPath = Path.Combine(destinationPluginsPath, "AscMapKit");
                              var destinationCampaignPluginPath = Path.Combine(destinationPluginsPath, "Campaign");
                              var destinationConfigPath = Path.Combine(_settings.CampaignPath, "Config");
+                             var destinationContentPath = Path.Combine(_settings.CampaignPath, "Content");
                              var destinationSourcePath = Path.Combine(_settings.CampaignPath, "Source");
                              var destinationBatchScriptPath = Path.Combine(_settings.CampaignPath, "_BatchScripts");
                              var destinationCampaignJsonFile = Path.Combine(_settings.CampaignPath, $"{_settings.CampaignName}.json");
@@ -220,6 +222,7 @@ namespace AscMapKitSetup
                              Utils.Copy(sourceMapKitPluginPath, destinationMapKitPluginPath);
                              Utils.Copy(sourceCampaignPluginPath, destinationCampaignPluginPath);
                              Utils.Copy(sourceConfigPath, destinationConfigPath);
+                             Utils.Copy(sourceContentPath, destinationContentPath);
                              Utils.Copy(sourceSourcePath, destinationSourcePath);
                              Utils.Copy(sourceBatchScriptPath, destinationBatchScriptPath);
 
@@ -271,9 +274,9 @@ namespace AscMapKitSetup
 
                                  File.WriteAllText(fileName, contents);
                              }
-                             
+
                              File.Copy(sourceCampaignJsonFile, destinationCampaignJsonFile, true);
-                             
+
                              // Replace campaign JSON text
                              var jsonFileInfo = new FileInfo(destinationCampaignJsonFile);
                              var jsonFileName = jsonFileInfo.FullName;
@@ -284,10 +287,10 @@ namespace AscMapKitSetup
                              File.WriteAllText(jsonFileName, jsonContents);
 
                              SetStatus($"Done! Campaign '{_settings.CampaignName}' is ready!");
-                             
+
                              var sb = new StringBuilder().Append(Environment.NewLine);
-                             
-                             sb.Append("Done! Next:").Append(Environment.NewLine);
+
+                             sb.Append("Done! Next:").Append(Environment.NewLine).Append(Environment.NewLine);
                              sb.Append($"1) Execute: {Path.Combine(destinationBatchScriptPath, "GenerateProject.bat")}").Append(Environment.NewLine).Append(Environment.NewLine);
                              sb.Append($"2) Execute: {Path.Combine(destinationBatchScriptPath, "Compile.bat")}").Append(Environment.NewLine).Append(Environment.NewLine);
                              sb.Append("3) Open your UE4 project").Append(Environment.NewLine).Append(Environment.NewLine);
@@ -295,9 +298,9 @@ namespace AscMapKitSetup
                              sb.Append($"5) Edit campaign JSON (make sure your campaign and level name(s) match): {destinationCampaignJsonFile}").Append(Environment.NewLine).Append(Environment.NewLine);
                              sb.Append("6) All assets used in your campaign *must* be saved in the 'Campaign Content' folder (or they *won't* bake!)").Append(Environment.NewLine).Append(Environment.NewLine);
                              sb.Append($"7) To bake your campaign, execute: {Path.Combine(destinationBatchScriptPath, "Cook.bat")}").Append(Environment.NewLine).Append(Environment.NewLine);
-                             sb.Append($"8) The JSON and PAK files for your campaign will be copied to the Ascentroid game folder: {_settings.GamePath}").Append(Environment.NewLine).Append(Environment.NewLine);
+                             sb.Append($"8) The JSON and PAK files for your campaign will be copied to the Ascentroid game folder: {Path.Combine(_settings.GamePath, "Ascentroid", "Content", "Ascentroid", "Paks")}").Append(Environment.NewLine).Append(Environment.NewLine);
                              sb.Append("9) If everything worked, you can now test your campaign in the game, Ascentroid!").Append(Environment.NewLine);
-                             
+
                              MessageBox.Show(sb.ToString());
 
                              Save();
