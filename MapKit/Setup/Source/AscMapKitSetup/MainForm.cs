@@ -294,12 +294,17 @@ namespace AscMapKitSetup
                              sb.Append($"1) Execute: {Path.Combine(destinationBatchScriptPath, "GenerateProject.bat")}").Append(Environment.NewLine).Append(Environment.NewLine);
                              sb.Append($"2) Execute: {Path.Combine(destinationBatchScriptPath, "Compile.bat")}").Append(Environment.NewLine).Append(Environment.NewLine);
                              sb.Append("3) Open your UE4 project").Append(Environment.NewLine).Append(Environment.NewLine);
-                             sb.Append("4) Create at least one level in your UE4 project and save it to the 'Campaign Content' folder").Append(Environment.NewLine).Append(Environment.NewLine);
-                             sb.Append($"5) Edit campaign JSON (make sure your campaign and level name(s) match): {destinationCampaignJsonFile}").Append(Environment.NewLine).Append(Environment.NewLine);
-                             sb.Append("6) All assets used in your campaign *must* be saved in the 'Campaign Content' folder (or they *won't* bake!)").Append(Environment.NewLine).Append(Environment.NewLine);
-                             sb.Append($"7) To bake your campaign, execute: {Path.Combine(destinationBatchScriptPath, "Cook.bat")}").Append(Environment.NewLine).Append(Environment.NewLine);
-                             sb.Append($"8) The JSON and PAK files for your campaign will be copied to the Ascentroid game folder: {Path.Combine(_settings.GamePath, "Ascentroid", "Content", "Ascentroid", "Paks")}").Append(Environment.NewLine).Append(Environment.NewLine);
-                             sb.Append("9) If everything worked, you can now test your campaign in the game, Ascentroid!").Append(Environment.NewLine);
+                             sb.Append("4) If UE4 prompts to \"update project file(s)\", click \"Update\".").Append(Environment.NewLine).Append(Environment.NewLine);
+                             sb.Append("5) If UE4 says there are \"new plugins installed\", click \"Dismiss\".").Append(Environment.NewLine).Append(Environment.NewLine);
+                             sb.Append("6) In the UE4 editor \"Content Browser\", click \"View Options\" and turn on \"Show Plugin Content\".").Append(Environment.NewLine).Append(Environment.NewLine);
+                             sb.Append("7) Create at least one level in your UE4 project and save it to the 'Campaign Content' folder").Append(Environment.NewLine).Append(Environment.NewLine);
+                             sb.Append($"8) Edit campaign JSON (make sure your campaign and level name(s) match): {destinationCampaignJsonFile}").Append(Environment.NewLine).Append(Environment.NewLine);
+                             sb.Append("9) All assets used in your campaign *must* be saved in the 'Campaign Content' folder (or they *won't* cook!)").Append(Environment.NewLine).Append(Environment.NewLine);
+                             sb.Append($"10) To cook your campaign, execute: {Path.Combine(destinationBatchScriptPath, "Cook.bat")}").Append(Environment.NewLine).Append(Environment.NewLine);
+                             sb.Append($"11) The JSON and PAK files for your campaign will be copied to the Ascentroid game folder: {Path.Combine(_settings.GamePath, "Ascentroid", "Content", "Ascentroid", "Paks")}").Append(Environment.NewLine).Append(Environment.NewLine);
+                             sb.Append("12) If everything worked, you can now test your campaign in the game, Ascentroid!").Append(Environment.NewLine).Append(Environment.NewLine);
+                             sb.Append("13) Visit Github for more documentation: https://github.com/Ascentroid/Ascentroid").Append(Environment.NewLine).Append(Environment.NewLine);
+                             sb.Append("14) Visit YouTube for tutorials: http://youtube.ascentroid.com").Append(Environment.NewLine);
 
                              MessageBox.Show(sb.ToString());
 
