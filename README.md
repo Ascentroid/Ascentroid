@@ -224,7 +224,22 @@ Tip: if you would like to save on some disk space, I recommend that you delete u
 
 Tip: after everything has been moved; if there is a set of empty SuperGrid folders still visible in the <b>Content</b> folder, just delete them from the file system / using file explorer.
 
-To reiterate: see <b>[Other Marketplace Content](#other-marketplace-content)</b> for details on why these next steps are absolutely necessary.
+To reiterate: see <b>[Other Marketplace Content](#other-marketplace-content)</b> for details on why these steps are absolutely necessary.
+
+##### Built-In Editor UE4 Mesh Plugins - <i>highly recommended!</i>
+
+UE4 has a few plugins included (free!) you can enable which will allow you to work with 3D meshes directly in the editor. Just go to Edit -> Plugins and enable them:
+
+![Imgur](https://i.imgur.com/5nxvjrM.png)
+
+![Imgur](https://i.imgur.com/apsfsvk.png)
+
+Here are some tutorial videos on how to use some of these free UE4 plugins:
+
+* https://www.youtube.com/watch?v=7Ff0zZcHmaU
+* https://www.youtube.com/watch?v=P75oIsxrYlY
+* https://www.youtube.com/watch?v=UqR6rnZEidg
+* https://www.youtube.com/watch?v=hdk5Bf4zZwk
 
 ##### <a name="mesh-tool"></a>[Mesh Tool](https://forums.unrealengine.com/unreal-engine/marketplace/107840-mesh-tool-a-mesh-editor) - <i>highly recommended</i>!
 
@@ -262,6 +277,8 @@ Tip: Keep an eye out for asset sales. Sometimes you can get a helpful tool for l
 ##### <a name="other-marketplace-content"></a>Other Marketplace Content
 
 You can try using more [Marketplace](https://www.unrealengine.com/marketplace) assets from the UE4 Marketplace here: https://www.unrealengine.com/marketplace
+
+Epic has a lot of free assets available as well: https://www.unrealengine.com/marketplace/en-US/free
 
 When using assets from the UE4 Marketplace, be sure to follow these guidelines:
 
@@ -419,6 +436,8 @@ Note: Doors cannot be scaled yet. This may be coming in the future.
 
 Tip: power stations are considered environment areas. Just select <b>Power Station without Effects</b> or <b>Power Station with Effects</b> from the <b>Environment Area Type</b> property.
 
+Tip: environment area actors do not have pre-defined visual assets available (other than a power station particle). It's up to you to create/import the visual assets you want to use for things like water, acid, lava, etc. I highly recommend the Cartoon Water Shader (paid): https://www.unrealengine.com/marketplace/en-US/product/cartoon-water-shader
+
 Tip: there are tons of actor properties you can tweak! Hover your mouse over the property in the editor. They should all be fully documented!
 
 <b><i>Powerup Respawn Trigger Volumes</i></b>
@@ -463,13 +482,15 @@ If you have any questions about the map kit content, properties, etc, please [em
 
 * If you are going to use high-poly 3D meshes, I recommend learning how to setup LOD groups. Here is a tutorial: https://www.youtube.com/watch?v=li5qraDIZIM
 
+* If your level static meshes are high-poly, it would be a good idea to break them apart into several smaller mesh pieces (instead of one big mesh). If you are using per-poly collision for your level mesh, a giant mesh will require more computation and likely affect game performance. Smaller meshes should perform better. However, if your level is small and doesn't have many polygons, a single mesh is probably fine. You will have to test it out and decide for yourself.
+
 * If you have more performance/optimization tips you'd like added, please [email me](mailto:ascentroid@gmail.com), or find me on the [Ascentroid Discord](https://discord.gg/pktfw78).
 
 #### Scripting is possible, however...
 
-Most scripting capabilities will only run on the client and are not replicated in multiplayer (except in the case where Ascentroid map kit actors send explicit network commands).
+Currently, most scripting capabilities will only run on the client and are not replicated in multiplayer (except in the case where Ascentroid map kit actors send explicit network commands).
 
-Eventually, Ascentroid map kit actors will have events you can attach to in order to perform client-side scripting operations. This is still <i>highly experimental</i>, but here is an example of an event emitted by a secret trigger using [Blueprints](https://docs.unrealengine.com/en-US/ProgrammingAndScripting/Blueprints/GettingStarted/index.html):
+Eventually, Ascentroid map kit actors will have events you can attach to in order to perform client-side scripting operations. This is still <i>highly experimental</i>, but here is an example of an event emitted by an Ascentroid map kit trigger actor using [Blueprints](https://docs.unrealengine.com/en-US/ProgrammingAndScripting/Blueprints/GettingStarted/index.html):
 
 ![Imgur](https://i.imgur.com/gj43Q9X.png)
 
@@ -477,7 +498,7 @@ When this trigger is deactivated, it will change the visibility of a few static 
 
 This Blueprint is embedded entirely in the <b>Campaign Content</b> and considered client-side scripting.
 
-The trigger deactivation <i>is</i> an explicit network command sent by the Ascentroid map kit actor (trigger), so all of the clients in the game scripts will operate in the same way.
+The trigger deactivation <i>is</i> an explicit network command sent by the Ascentroid map kit trigger actor, so all of the clients in the game scripts will operate in the same way.
 
 In the future, I may add generic [RPC-like](https://en.wikipedia.org/wiki/Remote_procedure_call) features for Blueprint-only network communication (depending on how things go).
 
@@ -485,11 +506,57 @@ Lastly, you don't <i>have</i> to use Blueprints. Since the Ascentroid map kit tr
 
 ## <a name="faq"></a>FAQ
 
-todo: coming
+Where can I learn more about the game?
 
-<!--------------------------------------------->
-<!-- todo -->
-<!--------------------------------------------->
+`See: ` https://ascentroid.com/faq.html
+
+How do I handle different game modes?
+
+`Ascentroid currently only has one game mode: deathmatch. When that changes, this documentation will be updated.`
+
+How do I handle single player versus multiplayer?
+
+`Currently, you can run campaigns in either mode (no restrictions). However, cooperative does not work. All enemies will run client-side and are not replicated in multiplayer (yet).`
+
+Why don't you have more pre-defined assets we can use?
+
+`This is a solo indie game development effort, currently without funding.`
+
+Why is it so difficult to convert levels from other games?
+
+`Well, this is a solo indie game development effort, currently without funding.`
+
+Why do I have to use 3D tools to build maps? Why didn't you build something easier for people?
+
+`UE4 is capable to doing a lot out-of-the-box, however, this means you have to put in the effort and learn how to do things yourself. To get started quickly, I highly recommend using ` [SuperGrid](#supergrid)
+
+Why is the setup so complicated?
+
+`It depends on your capabilities. When testing the setup utility, Blarget2 was up and running with his first campaign in about 15 minutes. If you are not technically capable, you probably shouldn't be trying to make campaigns in Ascentroid.`
+
+Is there a reactor?
+
+`No. Single player and cooperative game modes have yet to be developed.`
+
+Is there an escape tunnel?
+
+`Well, no. Single player and cooperative game modes have yet to be developed.`
+
+Do campaigns/levels auto-download if other players don't have them?
+
+`Currently, no. You have to send the file(s) to other players manually. If this changes, I will update this documentation.`
+
+Can I contribute to the map kit to provide more pre-fab asset content?
+
+`Maybe! Let's chat! See: ` [Contact](#contact)
+
+Why does the Ascentroid map kit limit modding abilities?
+
+`Because I'm learning how to do this stuff while working on this project. Depending on how much effort it will take, and where the direction of the project goes, I may expand what it is capable of. For now, it is limited.`
+
+I have more questions, what should I do?
+
+`See:` [Contact](#contact)
 
 ## Version Control
 
@@ -503,7 +570,7 @@ Alternatively, you could setup a local Git server using something like [Bonobo G
 
 You could also use [Linux](https://www.linux.com/training-tutorials/how-run-your-own-git-server/) to host a Git server.
 
-As a bare minimum, something as simple as [Google Drive](https://www.google.com/intl/en_jm/drive/), [OneDrive](https://office.live.com/start/onedrive.aspx) and/or [Backblaze](https://www.backblaze.com/) would be a good idea.
+At the bare minimum, using something as simple as [Google Drive](https://www.google.com/intl/en_jm/drive/), [OneDrive](https://office.live.com/start/onedrive.aspx) and/or [Backblaze](https://www.backblaze.com/) would be a good idea.
 
 You decide.
 
@@ -511,8 +578,12 @@ Note: when Ascentroid gets updated, sometimes I have to upgrade <i><u>UE4 core e
 
 ## Acknowledgments
 
-* Special thanks to <b>Diamond Wolf</b> for contributing a lot of feedback on the map kit while it was being developed. A lot of his ideas were incorporated into what you see.
+* Special thanks to <b>Diamond Wolf</b> for contributing a lot of feedback on the map kit while it was being developed. A lot of his ideas were incorporated into what you see. He also made the level in the campaign <b>Rubicon</b>, which was the first community-based level imported into Ascentroid using the map kit.
 * Special thanks to <b>[Blarget2](https://www.twitch.tv/blarget2)</b> for testing out the [Ascentroid Map Kit Setup Utility](https://github.com/Ascentroid/Ascentroid/blob/latest-stable/MapKit/Setup/AscMapKitSetup.zip), and being the first person to start using the map kit.
+
+## <a name="contact"></a>Contact
+
+Please email me at [ascentroid@gmail.com](mailto:ascentroid@gmail.com), or find me on the [Ascentroid Discord](https://discord.gg/pktfw78). My online handle is <b>Verran</b>.
 
 ## License
 
