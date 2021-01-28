@@ -65,6 +65,7 @@
             this.txtBoxUE4Path.Name = "txtBoxUE4Path";
             this.txtBoxUE4Path.Size = new System.Drawing.Size(713, 31);
             this.txtBoxUE4Path.TabIndex = 1;
+            this.txtBoxUE4Path.Leave += new System.EventHandler(this.txtBoxUE4Path_Leave);
             // 
             // btnUE4Browse
             // 
@@ -96,6 +97,7 @@
             this.txtBoxCampaignProjectPath.Name = "txtBoxCampaignProjectPath";
             this.txtBoxCampaignProjectPath.Size = new System.Drawing.Size(713, 31);
             this.txtBoxCampaignProjectPath.TabIndex = 4;
+            this.txtBoxCampaignProjectPath.Leave += new System.EventHandler(this.txtBoxCampaignProjectPath_Leave);
             // 
             // btnCampaignProjectBrowse
             // 
@@ -181,6 +183,7 @@
             this.txtBoxGamePath.Name = "txtBoxGamePath";
             this.txtBoxGamePath.Size = new System.Drawing.Size(713, 31);
             this.txtBoxGamePath.TabIndex = 12;
+            this.txtBoxGamePath.Leave += new System.EventHandler(this.txtBoxGamePath_Leave);
             // 
             // btnGamePathBrowse
             // 

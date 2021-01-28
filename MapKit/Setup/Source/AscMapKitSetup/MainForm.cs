@@ -60,6 +60,12 @@ namespace AscMapKitSetup
                 SetInitButton(hasGamePath && hasCampaignFile && hasCampaignName);
         }
 
+        private void txtBoxGamePath_Leave(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(txtBoxGamePath.Text))
+                _settings.GamePath = txtBoxGamePath.Text.Trim();
+        }
+        
         private void btnGamePathBrowse_Click(object sender, EventArgs e)
         {
             var folderDialog = new FolderBrowserDialog {ShowNewFolderButton = false};
@@ -79,6 +85,12 @@ namespace AscMapKitSetup
             }
         }
 
+        private void txtBoxUE4Path_Leave(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(txtBoxUE4Path.Text))
+                _settings.UE4Path = txtBoxUE4Path.Text.Trim();
+        }
+        
         private void btnUE4Browse_Click(object sender, EventArgs e)
         {
             var folderDialog = new FolderBrowserDialog {ShowNewFolderButton = false};
@@ -88,42 +100,50 @@ namespace AscMapKitSetup
                 txtBoxUE4Path.Text = folderDialog.SelectedPath;
         }
 
+        private void txtBoxCampaignProjectPath_Leave(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(txtBoxCampaignProjectPath.Text))
+                HandleCampaignPath(txtBoxCampaignProjectPath.Text.Trim());
+        }
+
         private void btnCampaignProjectBrowse_Click(object sender, EventArgs e)
         {
             var openFileDialog = new OpenFileDialog {Multiselect = false, Filter = "UProject files (*.uproject)|*.uproject"};
             var result = openFileDialog.ShowDialog();
 
             if (result == DialogResult.OK)
+                HandleCampaignPath(openFileDialog.FileName);
+        }
+        
+        private void HandleCampaignPath(string campaignPath)
+        {
+            var campaignFileInfo = new FileInfo(campaignPath);
+            var campaignFileFullName = campaignFileInfo.FullName;
+            var campaignFileName = campaignFileInfo.Name;
+            var campaignFileNameWithoutExtension = Regex.Replace(campaignFileName, ".uproject", string.Empty, RegexOptions.IgnoreCase);
+
+            txtBoxCampaignProjectPath.Text = campaignPath;
+            lblCampaignNameValue.Text = campaignFileNameWithoutExtension;
+
+            if (string.IsNullOrWhiteSpace(campaignFileNameWithoutExtension))
+                return;
+
+            _settings.CampaignPath = new DirectoryInfo(campaignFileFullName).Parent?.FullName;
+            _settings.CampaignFile = campaignFileFullName;
+            _settings.CampaignName = campaignFileNameWithoutExtension;
+
+            if (IsAlreadyInitialized())
             {
-                var campaignPath = openFileDialog.FileName;
-                var campaignFileInfo = new FileInfo(campaignPath);
-                var campaignFileFullName = campaignFileInfo.FullName;
-                var campaignFileName = campaignFileInfo.Name;
-                var campaignFileNameWithoutExtension = Regex.Replace(campaignFileName, ".uproject", string.Empty, RegexOptions.IgnoreCase);
-
-                txtBoxCampaignProjectPath.Text = campaignPath;
-                lblCampaignNameValue.Text = campaignFileNameWithoutExtension;
-
-                if (!string.IsNullOrWhiteSpace(campaignFileNameWithoutExtension))
-                {
-                    _settings.CampaignPath = new DirectoryInfo(campaignFileFullName).Parent?.FullName;
-                    _settings.CampaignFile = campaignFileFullName;
-                    _settings.CampaignName = campaignFileNameWithoutExtension;
-
-                    if (IsAlreadyInitialized())
-                    {
-                        SetInitButton(false);
-                        SetStatus($"Campaign '{_settings.CampaignName}' is already initialized!");
-                    }
-                    else
-                    {
-                        SetInitButton(true);
-                        SetStatus("[waiting]");
-                    }
-
-                    Save();
-                }
+                SetInitButton(false);
+                SetStatus($"Campaign '{_settings.CampaignName}' is already initialized!");
             }
+            else
+            {
+                SetInitButton(true);
+                SetStatus("[waiting]");
+            }
+
+            Save();
         }
 
         private void btnInit_Click(object sender, EventArgs e)
@@ -363,5 +383,7 @@ namespace AscMapKitSetup
             btnInit.ForeColor = enabled ? Color.Black : Color.Gray;
             btnInit.BackColor = enabled ? Color.LawnGreen : Color.Gray;
         }
+
+        
     }
 }
