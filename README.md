@@ -14,6 +14,8 @@ What's great about this is that it allows map creators to utilize <b><i>almost a
 
 2) Install Visual Studio 2019 or 2017 (Community Edition is free). This is necessary because Unreal Engine <b>requires Microsoft's C++ compiler</b>: https://visualstudio.microsoft.com/downloads/
 
+* Note: you will probably want to follow the Visual Studio installation instructions for UE4 here: https://docs.unrealengine.com/en-US/ProductionPipelines/DevelopmentSetup/VisualStudioSetup/index.html
+
 * Note: It may be possible to use [Visual Studio Code](https://code.visualstudio.com/download) in conjunction with the [Visual Studio Build Tools](https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2019), but I am not familiar with this setup. If you are able to figure out how to install UE4 with this configuration, feel free to [send me](mailto:ascentroid@gmail.com) the instructions and I will update this documentation.
 
 3) Install Unreal Engine <b><u>4.24.3</u></b> by following the official installation guide. When prompted, select the <b>Publishing License</b>: https://docs.unrealengine.com/en-US/Basics/InstallingUnrealEngine/index.html
