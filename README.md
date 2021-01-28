@@ -12,11 +12,13 @@ What's great about this is that it allows map creators to utilize <b><i>almost a
 
 1) Only <b>Windows</b>, <b>x64</b> is supported right now. Make sure you meet the other required Hardware and Software Specifications for Unreal Engine: https://docs.unrealengine.com/en-US/Basics/RecommendedSpecifications/index.html
 
-2) Install Visual Studio 2019 or 2017 (Community Edition is free). This is necessary because Unreal Engine <b>requires Microsoft's C++ compiler</b>: https://visualstudio.microsoft.com/downloads/
+2) Install Visual Studio Code (free, small download size) <b>OR</b> Visual Studio 2019/2017 Community Edition (free, very large download size): https://visualstudio.microsoft.com/downloads/
 
-* Note: you will probably want to follow the Visual Studio installation instructions for UE4 here: https://docs.unrealengine.com/en-US/ProductionPipelines/DevelopmentSetup/VisualStudioSetup/index.html
+* Note: this is necessary because Unreal Engine <b>requires Microsoft's C++ compiler</b>.
 
-* Note: It may be possible to use [Visual Studio Code](https://code.visualstudio.com/download) in conjunction with the [Visual Studio Build Tools](https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2019), but I am not familiar with this setup. If you are able to figure out how to install UE4 with this configuration, feel free to [send me](mailto:ascentroid@gmail.com) the instructions and I will update this documentation.
+* Note: if you choose Visual Studio Code, try this tutorial (<b><i>I have not tested this!</i></b>; [let me know](#contact) if it works or not): https://anasrar.github.io/blog/post/my-visual-studio-code-set-up-for-unreal-engine-4
+
+* Note: if you choose Visual Studio 2019/2017 Community Edition, follow the base installation instructions for UE4 here: https://docs.unrealengine.com/en-US/ProductionPipelines/DevelopmentSetup/VisualStudioSetup/index.html
 
 3) Install Unreal Engine <b><u>4.24.3</u></b> by following the official installation guide. When prompted, select the <b>Publishing License</b>: https://docs.unrealengine.com/en-US/Basics/InstallingUnrealEngine/index.html
 
