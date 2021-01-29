@@ -549,6 +549,10 @@ Do campaigns/levels auto-download if other players don't have them?
 
 `Currently, no. You have to send the file(s) to other players manually. If this changes, I will update this documentation.`
 
+How can I setup my campaign to transition between levels?
+
+`This is not supported yet. It should be coming in the future. However, currently, you can select individual levels in a campaign when starting a single player game, or when hosting a new multiplayer game.`
+
 Can I contribute to the map kit to provide more pre-fab asset content?
 
 `Maybe! Let's chat! See: ` [Contact](#contact)
