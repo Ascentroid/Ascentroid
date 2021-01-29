@@ -10,19 +10,19 @@ What's great about this is that it allows map creators to utilize <b><i>almost a
 
 ### Prerequisites
 
-1) Only <b>Windows</b>, <b>x64</b> is supported right now. Make sure you meet the other required Hardware and Software Specifications for Unreal Engine: https://docs.unrealengine.com/en-US/Basics/RecommendedSpecifications/index.html
+1) Only <b>Windows</b>, <b>x64</b> is supported right now. Make sure you meet the [required Hardware and Software Specifications for Unreal Engine](https://docs.unrealengine.com/en-US/Basics/RecommendedSpecifications/index.html).
 
-2) Install [Visual Studio Code](https://visualstudio.microsoft.com/downloads/) (free, small download size) + [Visual Studio Build Tools](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16) <b>OR</b> [Visual Studio 2019/2017 Community Edition](https://visualstudio.microsoft.com/downloads/) (free, very large download size): https://visualstudio.microsoft.com/downloads/
+2) Since UE4 treats a campaign like a <b>MOD</b>, it <b>requires Microsoft's C++ compiler</b>. You have two options:
 
-* This is necessary because Unreal Engine <b>requires Microsoft's C++ compiler</b>.
+* <b><i>Option #1</i></b> (free, smaller download size): Install [Visual Studio Code](https://visualstudio.microsoft.com/downloads/) + [Visual Studio 2019 Build Tools](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16) following this [installation tutorial](https://anasrar.github.io/blog/post/my-visual-studio-code-set-up-for-unreal-engine-4).
 
-* If you choose [Visual Studio Code](https://visualstudio.microsoft.com/downloads/) + [Visual Studio Build Tools](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16), try this tutorial (<b><i>I have not tested this</i></b>! [Let me know](#contact) if it works or not): https://anasrar.github.io/blog/post/my-visual-studio-code-set-up-for-unreal-engine-4
+* <b><i>Option 2</i></b> (free, larger download size): Install [Visual Studio 2019 or 2017 Community Edition](https://visualstudio.microsoft.com/downloads/) following this [installation tutorial](https://docs.unrealengine.com/en-US/ProductionPipelines/DevelopmentSetup/VisualStudioSetup/index.html).
 
-* If you choose [Visual Studio 2019/2017 Community Edition](https://visualstudio.microsoft.com/downloads/), follow the base installation instructions for UE4 here: https://docs.unrealengine.com/en-US/ProductionPipelines/DevelopmentSetup/VisualStudioSetup/index.html
-
-3) Install Unreal Engine <b><u>4.24.3</u></b> by following the official installation guide. When prompted, select the <b>Publishing License</b>: https://docs.unrealengine.com/en-US/Basics/InstallingUnrealEngine/index.html
+3) Install Unreal Engine <b><u>4.24.3</u></b> by following the [official installation guide](https://docs.unrealengine.com/en-US/Basics/InstallingUnrealEngine/index.html). When prompted, select the <b>Publishing License</b>.
 
 4) If not already installed, install the [.NET Framework 4.7.2 Runtime](https://dotnet.microsoft.com/download/dotnet-framework/thank-you/net472-web-installer). This is <b>required</b> for the [Ascentroid Map Kit Setup Utility](https://github.com/Ascentroid/Ascentroid/blob/latest-stable/MapKit/Setup/AscMapKitSetup.zip).
+
+Note: you may need to run all installations as a <b>Windows Administrator</b> user.
 
 ### Setup
 
@@ -52,7 +52,7 @@ Download the [Ascentroid Map Kit Setup Utility](https://github.com/Ascentroid/As
 
 https://github.com/Ascentroid/Ascentroid/blob/latest-stable/MapKit/Setup/AscMapKitSetup.zip
 
-Unzip anywhere and execute <b>AscMapKitSetup.exe</b>:
+Unzip anywhere and execute <b>AscMapKitSetup.exe</b>. Run as a <b>Windows Administrator</b> user:
 
 ![Imgur](https://i.imgur.com/6iVNY0e.png)
 
@@ -78,14 +78,14 @@ The utility will perform the following in the background:
 
 When the map kit setup is complete, it should pop-up a series of steps to help guide you through the final setup:
 
-![Imgur](https://i.imgur.com/X3bUgHq.png)
+![Imgur](https://i.imgur.com/zn6Mi4x.png)
 
-1) Execute:
+1) Execute (as a <b>Windows Administrator</b> user):
 ```
 [campaign project root]\_BatchScripts\GenerateProject.bat
 ```
 
-2) Execute:
+2) Execute (as a <b>Windows Administrator</b> user):
 ```
 [campaign project root]\_BatchScripts\Compile.bat
 ```
@@ -100,8 +100,7 @@ When the map kit setup is complete, it should pop-up a series of steps to help g
 
 ![Imgur](https://i.imgur.com/NFjatG5.png)
 
-6) <b>[Skip if you've already done this]</b>:<br/>
-In the UE4 editor <b>Content Browser</b>, click <b>View Options</b> and turn on <b>Show Plugin Content</b>.
+6) If not already done: in the UE4 editor <b>Content Browser</b>, click <b>View Options</b> and turn on <b>Show Plugin Content</b>.
 
 7) Create at least one level in your UE4 project and save it to the <b>Campaign Content</b> folder.
 
@@ -112,7 +111,7 @@ In the UE4 editor <b>Content Browser</b>, click <b>View Options</b> and turn on 
 
 9) All assets used in your campaign <b>must</b> be saved in the <b>Campaign Content</b> folder (or they won't cook!).
 
-10) To cook your campaign, execute:
+10) To cook your campaign, execute (as a <b>Windows Administrator</b> user):
 ```
 [campaign project root]\_BatchScripts\Cook.bat
 ```
