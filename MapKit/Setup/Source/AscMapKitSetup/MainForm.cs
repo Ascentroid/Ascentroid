@@ -23,22 +23,25 @@ namespace AscMapKitSetup
             {
                 InitializeComponent();
 
-                SetInitButton(false);
-
                 _settings = Settings.Load();
 
                 InitUE4Path();
-
-                LoadForm();
             }
             catch (Exception e)
             {
                 MessageBox.Show(e.ToString());
             }
         }
+        
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            LoadForm();
+        }
 
         private void LoadForm()
-        {
+        { 
+            SetInitButton(false);
+            
             txtBoxUE4Path.Text = _settings.UE4Path;
 
             var hasGamePath = !string.IsNullOrWhiteSpace(_settings.GamePath);
@@ -65,7 +68,7 @@ namespace AscMapKitSetup
             if (!string.IsNullOrWhiteSpace(txtBoxGamePath.Text))
                 _settings.GamePath = txtBoxGamePath.Text.Trim();
         }
-        
+
         private void btnGamePathBrowse_Click(object sender, EventArgs e)
         {
             var folderDialog = new FolderBrowserDialog {ShowNewFolderButton = false};
@@ -90,7 +93,7 @@ namespace AscMapKitSetup
             if (!string.IsNullOrWhiteSpace(txtBoxUE4Path.Text))
                 _settings.UE4Path = txtBoxUE4Path.Text.Trim();
         }
-        
+
         private void btnUE4Browse_Click(object sender, EventArgs e)
         {
             var folderDialog = new FolderBrowserDialog {ShowNewFolderButton = false};
@@ -114,7 +117,7 @@ namespace AscMapKitSetup
             if (result == DialogResult.OK)
                 HandleCampaignPath(openFileDialog.FileName);
         }
-        
+
         private void HandleCampaignPath(string campaignPath)
         {
             var campaignFileInfo = new FileInfo(campaignPath);
@@ -148,193 +151,195 @@ namespace AscMapKitSetup
 
         private void btnInit_Click(object sender, EventArgs e)
         {
-            Task.Run(() =>
-                     {
-                         try
-                         {
-                             SetInitButton(false);
+            Invoke(new MethodInvoker(ExecuteInit));
+        }
 
-                             SetStatus("Downloading Map Kit...");
+        private void ExecuteInit()
+        {
+            try
+            {
+                SetInitButton(false);
 
-                             var tempPath = Path.Combine(Utils.GetAppPath(), "Temp");
-                             var unzipPath = Path.Combine(tempPath, "Unzipped");
+                SetStatus("Downloading Map Kit...");
 
-                             if (!Directory.Exists(tempPath))
-                                 Directory.CreateDirectory(tempPath);
+                var tempPath = Path.Combine(Utils.GetAppPath(), "Temp");
+                var unzipPath = Path.Combine(tempPath, "Unzipped");
 
-                             if (Directory.Exists(unzipPath))
-                             {
-                                 Directory.Delete(unzipPath, true);
-                                 Thread.Sleep(500);
-                             }
+                if (!Directory.Exists(tempPath))
+                    Directory.CreateDirectory(tempPath);
 
-                             var tempZip = Path.Combine(tempPath, "latest-stable.zip");
+                if (Directory.Exists(unzipPath))
+                {
+                    Directory.Delete(unzipPath, true);
+                    Thread.Sleep(500);
+                }
 
-                             var webRequest = (HttpWebRequest) WebRequest.Create("https://github.com/Ascentroid/Ascentroid/archive/latest-stable.zip");
+                var tempZip = Path.Combine(tempPath, "latest-stable.zip");
 
-                             webRequest.CachePolicy = new HttpRequestCachePolicy(HttpRequestCacheLevel.NoCacheNoStore);
+                var webRequest = (HttpWebRequest) WebRequest.Create("https://github.com/Ascentroid/Ascentroid/archive/latest-stable.zip");
 
-                             using (var response = (HttpWebResponse) webRequest.GetResponse())
-                             {
-                                 using (var stream = response.GetResponseStream())
-                                 {
-                                     if (stream != null)
-                                     {
-                                         using (var fs = File.Create(tempZip))
-                                         {
-                                             stream.CopyTo(fs);
-                                         }
-                                     }
-                                 }
-                             }
+                webRequest.CachePolicy = new HttpRequestCachePolicy(HttpRequestCacheLevel.NoCacheNoStore);
 
-                             SetStatus("Extracting...");
+                using (var response = (HttpWebResponse) webRequest.GetResponse())
+                {
+                    using (var stream = response.GetResponseStream())
+                    {
+                        if (stream != null)
+                        {
+                            using (var fs = File.Create(tempZip))
+                            {
+                                stream.CopyTo(fs);
+                            }
+                        }
+                    }
+                }
 
-                             ZipFile.ExtractToDirectory(tempZip, unzipPath);
+                SetStatus("Extracting...");
 
-                             Thread.Sleep(500);
+                ZipFile.ExtractToDirectory(tempZip, unzipPath);
 
-                             File.Delete(tempZip);
+                Thread.Sleep(500);
 
-                             SetStatus("Installing files...");
+                File.Delete(tempZip);
 
-                             var sourceUnzipPath = Path.Combine(unzipPath, "Ascentroid-latest-stable");
-                             var sourcePluginsPath = Path.Combine(sourceUnzipPath, "MapKit", "Plugins");
-                             var sourceMapKitPluginPath = Path.Combine(sourcePluginsPath, "AscMapKit");
-                             var sourceCampaignPluginPath = Path.Combine(sourcePluginsPath, "Campaign");
-                             var sourceConfigPath = Path.Combine(sourceUnzipPath, "MapKit", "Templates", "CampaignProject", "Config");
-                             var sourceContentPath = Path.Combine(sourceUnzipPath, "MapKit", "Templates", "CampaignProject", "Content");
-                             var sourceSourcePath = Path.Combine(sourceUnzipPath, "MapKit", "Templates", "CampaignProject", "Source");
-                             var sourceBatchScriptPath = Path.Combine(sourceUnzipPath, "MapKit", "Templates", "BatchScripts");
-                             var sourceCampaignJsonFile = Path.Combine(sourceUnzipPath, "MapKit", "Templates", "CampaignProject", "Template.json");
+                SetStatus("Installing files...");
 
-                             var destinationPluginsPath = Path.Combine(_settings.CampaignPath, "Plugins");
-                             var destinationMapKitPluginPath = Path.Combine(destinationPluginsPath, "AscMapKit");
-                             var destinationCampaignPluginPath = Path.Combine(destinationPluginsPath, "Campaign");
-                             var destinationConfigPath = Path.Combine(_settings.CampaignPath, "Config");
-                             var destinationContentPath = Path.Combine(_settings.CampaignPath, "Content");
-                             var destinationSourcePath = Path.Combine(_settings.CampaignPath, "Source");
-                             var destinationBatchScriptPath = Path.Combine(_settings.CampaignPath, "_BatchScripts");
-                             var destinationCampaignJsonFile = Path.Combine(_settings.CampaignPath, $"{_settings.CampaignName}.json");
+                var sourceUnzipPath = Path.Combine(unzipPath, "Ascentroid-latest-stable");
+                var sourcePluginsPath = Path.Combine(sourceUnzipPath, "MapKit", "Plugins");
+                var sourceMapKitPluginPath = Path.Combine(sourcePluginsPath, "AscMapKit");
+                var sourceCampaignPluginPath = Path.Combine(sourcePluginsPath, "Campaign");
+                var sourceConfigPath = Path.Combine(sourceUnzipPath, "MapKit", "Templates", "CampaignProject", "Config");
+                var sourceContentPath = Path.Combine(sourceUnzipPath, "MapKit", "Templates", "CampaignProject", "Content");
+                var sourceSourcePath = Path.Combine(sourceUnzipPath, "MapKit", "Templates", "CampaignProject", "Source");
+                var sourceBatchScriptPath = Path.Combine(sourceUnzipPath, "MapKit", "Templates", "BatchScripts");
+                var sourceCampaignJsonFile = Path.Combine(sourceUnzipPath, "MapKit", "Templates", "CampaignProject", "Template.json");
 
-                             if (Directory.Exists(destinationMapKitPluginPath))
-                                 Directory.Delete(destinationMapKitPluginPath, true);
+                var destinationPluginsPath = Path.Combine(_settings.CampaignPath, "Plugins");
+                var destinationMapKitPluginPath = Path.Combine(destinationPluginsPath, "AscMapKit");
+                var destinationCampaignPluginPath = Path.Combine(destinationPluginsPath, "Campaign");
+                var destinationConfigPath = Path.Combine(_settings.CampaignPath, "Config");
+                var destinationContentPath = Path.Combine(_settings.CampaignPath, "Content");
+                var destinationSourcePath = Path.Combine(_settings.CampaignPath, "Source");
+                var destinationBatchScriptPath = Path.Combine(_settings.CampaignPath, "_BatchScripts");
+                var destinationCampaignJsonFile = Path.Combine(_settings.CampaignPath, $"{_settings.CampaignName}.json");
 
-                             if (Directory.Exists(destinationCampaignPluginPath))
-                                 Directory.Delete(destinationCampaignPluginPath, true);
+                if (Directory.Exists(destinationMapKitPluginPath))
+                    Directory.Delete(destinationMapKitPluginPath, true);
 
-                             Thread.Sleep(500);
+                if (Directory.Exists(destinationCampaignPluginPath))
+                    Directory.Delete(destinationCampaignPluginPath, true);
 
-                             if (Directory.Exists(destinationSourcePath))
-                             {
-                                 Directory.Delete(destinationSourcePath, true);
-                                 Thread.Sleep(500);
-                                 Directory.CreateDirectory(destinationSourcePath);
-                             }
+                Thread.Sleep(500);
 
-                             if (Directory.Exists(destinationBatchScriptPath))
-                             {
-                                 Directory.Delete(destinationBatchScriptPath, true);
-                                 Thread.Sleep(500);
-                                 Directory.CreateDirectory(destinationBatchScriptPath);
-                             }
+                if (Directory.Exists(destinationSourcePath))
+                {
+                    Directory.Delete(destinationSourcePath, true);
+                    Thread.Sleep(500);
+                    Directory.CreateDirectory(destinationSourcePath);
+                }
 
-                             Utils.Copy(sourceMapKitPluginPath, destinationMapKitPluginPath);
-                             Utils.Copy(sourceCampaignPluginPath, destinationCampaignPluginPath);
-                             Utils.Copy(sourceConfigPath, destinationConfigPath);
-                             Utils.Copy(sourceContentPath, destinationContentPath);
-                             Utils.Copy(sourceSourcePath, destinationSourcePath);
-                             Utils.Copy(sourceBatchScriptPath, destinationBatchScriptPath);
+                if (Directory.Exists(destinationBatchScriptPath))
+                {
+                    Directory.Delete(destinationBatchScriptPath, true);
+                    Thread.Sleep(500);
+                    Directory.CreateDirectory(destinationBatchScriptPath);
+                }
 
-                             SetStatus("Preparing config files...");
+                Utils.Copy(sourceMapKitPluginPath, destinationMapKitPluginPath);
+                Utils.Copy(sourceCampaignPluginPath, destinationCampaignPluginPath);
+                Utils.Copy(sourceConfigPath, destinationConfigPath);
+                Utils.Copy(sourceContentPath, destinationContentPath);
+                Utils.Copy(sourceSourcePath, destinationSourcePath);
+                Utils.Copy(sourceBatchScriptPath, destinationBatchScriptPath);
 
-                             var configFile = Path.Combine(destinationConfigPath, "DefaultEngine.ini");
-                             var configContents = File.ReadAllText(configFile);
+                SetStatus("Preparing config files...");
 
-                             configContents = configContents.Replace("Template", _settings.CampaignName);
+                var configFile = Path.Combine(destinationConfigPath, "DefaultEngine.ini");
+                var configContents = File.ReadAllText(configFile);
 
-                             File.WriteAllText(configFile, configContents);
+                configContents = configContents.Replace("Template", _settings.CampaignName);
 
-                             SetStatus("Preparing source files...");
+                File.WriteAllText(configFile, configContents);
 
-                             var destinationSourcePathDirectoryInfo = new DirectoryInfo(destinationSourcePath);
+                SetStatus("Preparing source files...");
 
-                             // Rename source path
-                             foreach (var directory in destinationSourcePathDirectoryInfo.GetDirectories())
-                                 Directory.Move(directory.FullName, directory.FullName.Replace("Template", _settings.CampaignName));
+                var destinationSourcePathDirectoryInfo = new DirectoryInfo(destinationSourcePath);
 
-                             // Rename source files and replace text
-                             foreach (var file in destinationSourcePathDirectoryInfo.GetFiles("*.*", SearchOption.AllDirectories))
-                             {
-                                 var newFileName = file.FullName.Replace("Template", _settings.CampaignName);
+                // Rename source path
+                foreach (var directory in destinationSourcePathDirectoryInfo.GetDirectories())
+                    Directory.Move(directory.FullName, directory.FullName.Replace("Template", _settings.CampaignName));
 
-                                 File.Move(file.FullName, newFileName);
+                // Rename source files and replace text
+                foreach (var file in destinationSourcePathDirectoryInfo.GetFiles("*.*", SearchOption.AllDirectories))
+                {
+                    var newFileName = file.FullName.Replace("Template", _settings.CampaignName);
 
-                                 var contents = File.ReadAllText(newFileName);
+                    File.Move(file.FullName, newFileName);
 
-                                 contents = contents.Replace("Template", _settings.CampaignName);
+                    var contents = File.ReadAllText(newFileName);
 
-                                 File.WriteAllText(newFileName, contents);
-                             }
+                    contents = contents.Replace("Template", _settings.CampaignName);
 
-                             SetStatus("Preparing batch files...");
+                    File.WriteAllText(newFileName, contents);
+                }
 
-                             // Replace batch script variables
-                             foreach (var file in new DirectoryInfo(destinationBatchScriptPath).GetFiles())
-                             {
-                                 var fileName = file.FullName;
-                                 var contents = File.ReadAllText(fileName);
+                SetStatus("Preparing batch files...");
 
-                                 contents = contents.Replace("{{UE4_PATH}}", _settings.UE4Path);
-                                 contents = contents.Replace("{{PROJECT_PATH}}", _settings.CampaignPath);
-                                 contents = contents.Replace("{{PROJECT_NAME}}", _settings.CampaignName);
-                                 contents = contents.Replace("{{GAME_PATH}}", _settings.GamePath);
-                                 contents = contents.Replace("{{SessionId}}", Guid.NewGuid().ToString().ToUpper());
-                                 contents = contents.Replace("{{SessionOwner}}", Environment.UserName);
+                // Replace batch script variables
+                foreach (var file in new DirectoryInfo(destinationBatchScriptPath).GetFiles())
+                {
+                    var fileName = file.FullName;
+                    var contents = File.ReadAllText(fileName);
 
-                                 File.WriteAllText(fileName, contents);
-                             }
+                    contents = contents.Replace("{{UE4_PATH}}", _settings.UE4Path);
+                    contents = contents.Replace("{{PROJECT_PATH}}", _settings.CampaignPath);
+                    contents = contents.Replace("{{PROJECT_NAME}}", _settings.CampaignName);
+                    contents = contents.Replace("{{GAME_PATH}}", _settings.GamePath);
+                    contents = contents.Replace("{{SessionId}}", Guid.NewGuid().ToString().ToUpper());
+                    contents = contents.Replace("{{SessionOwner}}", Environment.UserName);
 
-                             File.Copy(sourceCampaignJsonFile, destinationCampaignJsonFile, true);
+                    File.WriteAllText(fileName, contents);
+                }
 
-                             // Replace campaign JSON text
-                             var jsonFileInfo = new FileInfo(destinationCampaignJsonFile);
-                             var jsonFileName = jsonFileInfo.FullName;
-                             var jsonContents = File.ReadAllText(jsonFileName);
+                File.Copy(sourceCampaignJsonFile, destinationCampaignJsonFile, true);
 
-                             jsonContents = jsonContents.Replace("Template", _settings.CampaignName);
+                // Replace campaign JSON text
+                var jsonFileInfo = new FileInfo(destinationCampaignJsonFile);
+                var jsonFileName = jsonFileInfo.FullName;
+                var jsonContents = File.ReadAllText(jsonFileName);
 
-                             File.WriteAllText(jsonFileName, jsonContents);
+                jsonContents = jsonContents.Replace("Template", _settings.CampaignName);
 
-                             SetStatus($"Done! Campaign '{_settings.CampaignName}' is ready!");
+                File.WriteAllText(jsonFileName, jsonContents);
 
-                             var sb = new StringBuilder().Append(Environment.NewLine);
+                SetStatus($"Done! Campaign '{_settings.CampaignName}' is ready!");
 
-                             sb.Append("Done! Next:").Append(Environment.NewLine).Append(Environment.NewLine);
-                             sb.Append($"1) Execute (as a Windows Administrator user): {Path.Combine(destinationBatchScriptPath, "GenerateProject.bat")}").Append(Environment.NewLine).Append(Environment.NewLine);
-                             sb.Append($"2) Execute (as a Windows Administrator user): {Path.Combine(destinationBatchScriptPath, "Compile.bat")}").Append(Environment.NewLine).Append(Environment.NewLine);
-                             sb.Append("3) Open your UE4 project").Append(Environment.NewLine).Append(Environment.NewLine);
-                             sb.Append("4) If UE4 prompts to \"update project file(s)\", click \"Update\".").Append(Environment.NewLine).Append(Environment.NewLine);
-                             sb.Append("5) If UE4 says there are \"new plugins installed\", click \"Dismiss\".").Append(Environment.NewLine).Append(Environment.NewLine);
-                             sb.Append("6) If not already done: in the UE4 editor \"Content Browser\", click \"View Options\" and turn on \"Show Plugin Content\".").Append(Environment.NewLine).Append(Environment.NewLine);
-                             sb.Append("7) Create at least one level in your UE4 project and save it to the 'Campaign Content' folder").Append(Environment.NewLine).Append(Environment.NewLine);
-                             sb.Append($"8) Edit campaign JSON (make sure your campaign and level name(s) match): {destinationCampaignJsonFile}").Append(Environment.NewLine).Append(Environment.NewLine);
-                             sb.Append("9) All assets used in your campaign *must* be saved in the 'Campaign Content' folder (or they *won't* cook!)").Append(Environment.NewLine).Append(Environment.NewLine);
-                             sb.Append($"10) To cook your campaign, execute (as a Windows Administrator user): {Path.Combine(destinationBatchScriptPath, "Cook.bat")}").Append(Environment.NewLine).Append(Environment.NewLine);
-                             sb.Append($"11) The JSON and PAK files for your campaign will be copied to the Ascentroid game folder: {Path.Combine(_settings.GamePath, "Ascentroid", "Content", "Ascentroid", "Paks")}").Append(Environment.NewLine).Append(Environment.NewLine);
-                             sb.Append("12) If everything worked, you can now test your campaign in the game, Ascentroid!").Append(Environment.NewLine).Append(Environment.NewLine);
-                             sb.Append("13) Visit Github for more documentation: https://github.com/Ascentroid/Ascentroid").Append(Environment.NewLine).Append(Environment.NewLine);
-                             sb.Append("14) Visit YouTube for tutorials: http://youtube.ascentroid.com").Append(Environment.NewLine);
+                var sb = new StringBuilder().Append(Environment.NewLine);
 
-                             MessageBox.Show(sb.ToString());
+                sb.Append("Done! Next:").Append(Environment.NewLine).Append(Environment.NewLine);
+                sb.Append($"1) Execute (as a Windows Administrator user): {Path.Combine(destinationBatchScriptPath, "GenerateProject.bat")}").Append(Environment.NewLine).Append(Environment.NewLine);
+                sb.Append($"2) Execute (as a Windows Administrator user): {Path.Combine(destinationBatchScriptPath, "Compile.bat")}").Append(Environment.NewLine).Append(Environment.NewLine);
+                sb.Append("3) Open your UE4 project").Append(Environment.NewLine).Append(Environment.NewLine);
+                sb.Append("4) If UE4 prompts to \"update project file(s)\", click \"Update\".").Append(Environment.NewLine).Append(Environment.NewLine);
+                sb.Append("5) If UE4 says there are \"new plugins installed\", click \"Dismiss\".").Append(Environment.NewLine).Append(Environment.NewLine);
+                sb.Append("6) If not already done: in the UE4 editor \"Content Browser\", click \"View Options\" and turn on \"Show Plugin Content\".").Append(Environment.NewLine).Append(Environment.NewLine);
+                sb.Append("7) Create at least one level in your UE4 project and save it to the 'Campaign Content' folder").Append(Environment.NewLine).Append(Environment.NewLine);
+                sb.Append($"8) Edit campaign JSON (make sure your campaign and level name(s) match): {destinationCampaignJsonFile}").Append(Environment.NewLine).Append(Environment.NewLine);
+                sb.Append("9) All assets used in your campaign *must* be saved in the 'Campaign Content' folder (or they *won't* cook!)").Append(Environment.NewLine).Append(Environment.NewLine);
+                sb.Append($"10) To cook your campaign, execute (as a Windows Administrator user): {Path.Combine(destinationBatchScriptPath, "Cook.bat")}").Append(Environment.NewLine).Append(Environment.NewLine);
+                sb.Append($"11) The JSON and PAK files for your campaign will be copied to the Ascentroid game folder: {Path.Combine(_settings.GamePath, "Ascentroid", "Content", "Ascentroid", "Paks")}").Append(Environment.NewLine).Append(Environment.NewLine);
+                sb.Append("12) If everything worked, you can now test your campaign in the game, Ascentroid!").Append(Environment.NewLine).Append(Environment.NewLine);
+                sb.Append("13) Visit Github for more documentation: https://github.com/Ascentroid/Ascentroid").Append(Environment.NewLine).Append(Environment.NewLine);
+                sb.Append("14) Visit YouTube for tutorials: http://youtube.ascentroid.com").Append(Environment.NewLine);
 
-                             Save();
-                         }
-                         catch (Exception ex)
-                         {
-                             MessageBox.Show(ex.ToString());
-                         }
-                     });
+                MessageBox.Show(sb.ToString());
+
+                Save();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
         }
 
         private void Save()
@@ -374,16 +379,26 @@ namespace AscMapKitSetup
 
         private void SetStatus(string status)
         {
-            lblStatus.Text = status;
+            void Action()
+            {
+                lblStatus.Text = status;
+                lblStatus.Refresh();
+            }
+
+            lblStatus.Invoke((Action) Action);
         }
 
         private void SetInitButton(bool enabled)
         {
-            btnInit.Enabled = enabled;
-            btnInit.ForeColor = enabled ? Color.Black : Color.Gray;
-            btnInit.BackColor = enabled ? Color.LawnGreen : Color.Gray;
-        }
+            void Action()
+            {
+                btnInit.Enabled = enabled;
+                btnInit.ForeColor = enabled ? Color.Black : Color.Gray;
+                btnInit.BackColor = enabled ? Color.LawnGreen : Color.Gray;
+                btnInit.Refresh();
+            }
 
-        
+            btnInit.Invoke((Action) Action);
+        }
     }
 }
