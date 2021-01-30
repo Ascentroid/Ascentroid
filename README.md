@@ -4,11 +4,11 @@ Current Build Status: <b>Prototype / Experimental</b>
 
 The Ascentroid Map Kit is an Unreal Engine 4 ("UE4") plugin you install into the UE4 editor to assist with the creation of campaigns and levels for Ascentroid.
 
-The map kit, essentially, builds a <b>\*.pak</b> file, which treats your campaign/content like a game <b>MOD</b> for Ascentroid.
+The map kit, essentially, builds a <b>\*.pak</b> file, which treats your campaign/content like a game <b>MOD</b> for Ascentroid. It will also use a custom <b>\*.json</b> file for  important, and required, meta data for your campaign.
 
 What's great about this is that it allows map creators to utilize <b><i>almost all of the full features/capabilities of UE4</i></b>!
 
-### Prerequisites
+## Prerequisites
 
 1) Only <b>Windows</b>, <b>x64</b> is supported right now. Make sure you meet the [required Hardware and Software Specifications for Unreal Engine](https://docs.unrealengine.com/en-US/Basics/RecommendedSpecifications/index.html).
 
@@ -20,15 +20,29 @@ What's great about this is that it allows map creators to utilize <b><i>almost a
 
 3) Install Unreal Engine <b><u>4.24.3</u></b> by following the [official installation guide](https://docs.unrealengine.com/en-US/Basics/InstallingUnrealEngine/index.html). When prompted, select the <b>Publishing License</b>.
 
+* <b>IMPORTANT</b>: You <b>MUST</b> install the specific UE4 version <b><u>4.24.3</u></b>. Do <b>NOT</b> install a different version! Ascentroid is built on <b><u>4.24.3</u></b>. If you use a different version, your campaigns will <b>NOT</b> work! If you create a campaign on the wrong engine version, you will have to delete it and re-create it with the correct engine version!
+
+![Imgur](https://i.imgur.com/rNFZ366.png)
+
+* #1: In the Epics Game Launcher, click "Unreal Engine" on the left menu.
+* #2: Click "Library" on the top menu.
+* #3: Click the "[+]" icon to the right of "Engine Versions".
+* #4: Click the dropdown on the engine version number.
+* #5: Select <b>4.24.3</b> from the dropdown and click install. When the install is finsihed, this is the version that should appear as installed:
+
+![Imgur](https://i.imgur.com/qzo51xe.png)
+
 4) If not already installed, install the [.NET Framework 4.7.2 Runtime](https://dotnet.microsoft.com/download/dotnet-framework/thank-you/net472-web-installer). This is <b>required</b> for the [Ascentroid Map Kit Setup Utility](https://github.com/Ascentroid/Ascentroid/blob/latest-stable/MapKit/Setup/AscMapKitSetup.zip).
 
 Note: you may need to run all installations as a <b>Windows Administrator</b> user.
 
-### Setup
+<br/><br/><br/>
+
+### Setup Your Campaign Project
 
 Install Ascentroid (the game). The latest test builds are posted in the [Ascentroid Discord](https://discord.gg/pktfw78) in the <b>#downloads</b> channel.
 
-Create a new, blank <b>C++</b> UE4 project for your campaign <b>without Starter Content</b>:
+Start UE4 and create a new, blank <b>C++</b> project for your campaign <b>without Starter Content</b>:
 
 ![Imgur](https://i.imgur.com/5Msq0OW.png)
 
@@ -85,6 +99,8 @@ When the map kit setup is complete, it should pop-up a series of steps to help g
 [campaign project root]\_BatchScripts\GenerateProject.bat
 ```
 
+Note: if running this command displays <b>ERROR: Could not find NetFxSDK install dir; this will prevent SwarmInterface from installing. Install a version of .NET Framework SDK at 4.6.0 or higher</b>, you did not install the proper Visual Studio components as instructed in the external tutorial/documentation! However, you can fix it quickly by simply installing the [.NET Framework 4.7.2 Developer Pack](https://dotnet.microsoft.com/download/dotnet-framework/thank-you/net472-developer-pack-offline-installer). After that is installed, run the <b><i>GenerateProject.bat</i></b> script again. It should (hopefully) work now.
+
 2) Execute (as a <b>Windows Administrator</b> user):
 ```
 [campaign project root]\_BatchScripts\Compile.bat
@@ -127,6 +143,8 @@ When the map kit setup is complete, it should pop-up a series of steps to help g
 
 14) Visit YouTube for tutorials: http://youtube.ascentroid.com
 
+<br/><br/><br/>
+
 ## Important Notes
 
 1) All content must be placed in the <b>Campaign Content</b> folder, or it will not get cooked into your <b>\*.pak</b> file!
@@ -136,6 +154,8 @@ When the map kit setup is complete, it should pop-up a series of steps to help g
 3) Ascentroid uses a large scale in order to fix problems with collision. A cube scale of 20m x 20m x 20m is the general standard.
 
 4) Read the [FAQ](#faq).
+
+<br/><br/><br/>
 
 ## How do I build stuff?
 
@@ -151,6 +171,8 @@ When the map kit setup is complete, it should pop-up a series of steps to help g
 * Import 3D meshes: https://www.youtube.com/watch?v=_FgedJWInL0
 * Lighting basics: https://www.youtube.com/watch?v=FsjqVIyr0O4
 * Hierarchical Instanced Static Meshes: https://www.youtube.com/watch?v=GmFYPotzLhc
+
+<br/>
 
 #### If you don't want to learn 3D modeling tools, you can try some Marketplace assets:
 
@@ -229,6 +251,8 @@ Tip: after everything has been moved; if there is a set of empty SuperGrid folde
 
 To reiterate: see <b>[Other Marketplace Content](#other-marketplace-content)</b> for details on why these steps are absolutely necessary.
 
+<br/>
+
 ##### Built-In Editor UE4 Mesh Plugins - <i>highly recommended!</i>
 
 UE4 has a few plugins included (free!) you can enable which will allow you to work with 3D meshes directly in the editor. Just go to Edit -> Plugins and enable them:
@@ -243,6 +267,8 @@ Here are some tutorial videos on how to use some of these free UE4 plugins:
 * https://www.youtube.com/watch?v=P75oIsxrYlY
 * https://www.youtube.com/watch?v=UqR6rnZEidg
 * https://www.youtube.com/watch?v=hdk5Bf4zZwk
+
+<br/>
 
 ##### <a name="mesh-tool"></a>[Mesh Tool](https://forums.unrealengine.com/unreal-engine/marketplace/107840-mesh-tool-a-mesh-editor) - <i>highly recommended</i>!
 
@@ -269,6 +295,8 @@ Mesh Tool links:
 
 Tip: Keep an eye out for asset sales. Sometimes you can get a helpful tool for less, or even sometimes <i>free</i>, during a sale.
 
+<br/>
+
 ##### <a name="mesh-tool"></a>[Instance Tool](https://www.unrealengine.com/marketplace/en-US/product/instance-tool) - <i>highly recommended</i>!
 
 [Instance Tool](https://www.unrealengine.com/marketplace/en-US/product/instance-tool) is a commercial (paid) UE4 plugin which allows you to quickly select/edit/convert Instanced Static Meshes in editor viewports. This is a good tool to have for [performance/optimization](#performance-optimization).
@@ -276,6 +304,10 @@ Tip: Keep an eye out for asset sales. Sometimes you can get a helpful tool for l
 ![Imgur](https://cdn1.epicgames.com/ue/item/InstanceTool_screenshot_7-1920x1080-ce11e1497e8f0529bc734ab6f46b2d18.jpg?resize=1&w=1600)
 
 * [Get Instance Tool on the Marketplace](https://www.unrealengine.com/marketplace/en-US/product/instance-tool)
+
+Tip: Keep an eye out for asset sales. Sometimes you can get a helpful tool for less, or even sometimes <i>free</i>, during a sale.
+
+<br/>
 
 ##### <a name="other-marketplace-content"></a>Other Marketplace Content
 
@@ -326,6 +358,8 @@ Note: this may or may not have adverse affects on different types of assets cont
 
 Tip: remember, if you would like to save disk space for your UE4 campaign project, analyze all marketplace assets and delete assets which are unnecessary.
 
+<br/>
+
 #### <a name="3d-tools"></a>Use 3D tools:
 
 * [Blender](https://www.blender.org/) (free)
@@ -340,6 +374,8 @@ Tip: remember, if you would like to save disk space for your UE4 campaign projec
 * [Substance Designer](https://www.substance3d.com/products/substance-designer/) (paid)
 * [Houdini](https://www.sidefx.com/products/houdini/houdini-indie/) (paid)
 * Want more tools listed here? [Contact me](mailto:ascentroid@gmail.com)
+
+<br/>
 
 #### Import levels from other games
 
@@ -373,7 +409,9 @@ Descent 1 and 2:
 
 * You should be able to cook your UE4 campaign project and play your level in Ascentroid!
 
-#### <a name="map-kit-usage"></a>Ascentroid Map Kit Usage
+<br/><br/><br/>
+
+### <a name="map-kit-usage"></a>Ascentroid Map Kit Usage
 
 <b>Overview</b>
 
@@ -475,7 +513,9 @@ It's important to remember, in general, that not all actor properties are enable
 
 If you have any questions about the map kit content, properties, etc, please [email me](mailto:ascentroid@gmail.com), or find me on the [Ascentroid Discord](https://discord.gg/pktfw78).
 
-#### <a name="performance-optimization"></a>Keep in mind performance/optimization
+<br/><br/><br/>
+
+### <a name="performance-optimization"></a>Keep in mind performance/optimization
 
 * <b><i><u>Use baked lighting</u></i></b>. Avoid full dynamic lighting. What I've learned to do is to use full dynamic lighting while developing a level and testing it out. When I get close to finishing a level, I will switch all of the lighting from dynamic to baked. When ready for production, I'll change the <b>Lighting Quality</b> to <b>Production</b>, and change all of my static mesh asset's <b>Lightmap Resolutions</b> to <b>1024</b> (or higher). <i>Caution</i>: baking lights requires lightmap UVs to be setup on your static meshes, and none of them can be overlapping. Different kinds of [3D Tools](#3d-tools) handle this by placing the lightmap UVs on a separate channel. Due to the subjective nature of this process, you will have to handle this on your own. You should be able to find tutorials on [YouTube](https://www.youtube.com/results?search_query=ue4+blender+lightmap) to figure out how to do this.
 
@@ -488,6 +528,8 @@ If you have any questions about the map kit content, properties, etc, please [em
 * If your level static meshes are high-poly, it would be a good idea to break them apart into several smaller mesh pieces (instead of one big mesh). If you are using per-poly collision for your level mesh, a giant mesh will require more computation and likely affect game performance. Smaller meshes should perform better. However, if your level is small and doesn't have many polygons, a single mesh is probably fine. You will have to test it out and decide for yourself.
 
 * If you have more performance/optimization tips you'd like added, please [email me](mailto:ascentroid@gmail.com), or find me on the [Ascentroid Discord](https://discord.gg/pktfw78).
+
+<br/><br/><br/>
 
 #### Scripting is possible, however...
 
@@ -506,6 +548,8 @@ The trigger deactivation <i>is</i> an explicit network command sent by the Ascen
 In the future, I may add generic [RPC-like](https://en.wikipedia.org/wiki/Remote_procedure_call) features for Blueprint-only network communication (depending on how things go).
 
 Lastly, you don't <i>have</i> to use Blueprints. Since the Ascentroid map kit treats your UE4 campaign project like a <b>MOD</b>, you could also use C++ (if you want).
+
+<br/><br/><br/>
 
 ## <a name="faq"></a>FAQ
 
@@ -565,6 +609,8 @@ I have more questions, what should I do?
 
 `See:` [Contact](#contact)
 
+<br/><br/><br/>
+
 ## Version Control
 
 You should keep your UE4 campaign projects saved somewhere!
@@ -582,6 +628,8 @@ At the bare minimum, using something as simple as [Google Drive](https://www.goo
 You decide.
 
 Note: when Ascentroid gets updated, sometimes I have to upgrade <i><u>UE4 core engine versions</u></i>. This will impact the Ascentroid map kit, <b>and your campaign project(s)</b>! Keep your campaign projects backed up <i>somewhere</i>, because you will be required to go through these upgrades in the future, too, if you want your maps to be compatible with upgrades! I don't have all the details on how this will work yet, but when I do, I'll be adding more information to this documentation. The main thing is, for now: keep your campaign projects backed up!
+
+<br/><br/><br/>
 
 ## Acknowledgments
 

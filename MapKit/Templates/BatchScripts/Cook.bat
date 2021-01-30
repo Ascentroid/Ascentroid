@@ -1,6 +1,6 @@
 @echo off
 
-call Settings.bat
+call %~dp0\Settings.bat
 
 rem Create the release
 start "1 Primary Cook" /wait /max /d "%UE4_PATH%\Engine\Build\BatchFiles\" RunUAT.bat -ScriptsForProject="%UPROJECT_FILE%" BuildCookRun -project="%UPROJECT_FILE%" -noP4 -clientconfig=Shipping -serverconfig=Shipping -nocompileeditor -ue4exe=UE4Editor-Cmd.exe -utf8output -platform=Win64 -targetplatform=Win64 -build -cook -map=Empty -unversionedcookedcontent -pak -createreleaseversion=1.0 -compressed -stage -package -cmdline="Empty -Messaging" -addcmdline="-SessionId=0D0A64B94E0441EA86FFE9ADA0DD82DA -SessionOwner='jvukovich' -SessionName='Primary Cook' " -compile
