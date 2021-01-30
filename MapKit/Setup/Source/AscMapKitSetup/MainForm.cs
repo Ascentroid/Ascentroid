@@ -176,6 +176,9 @@ namespace AscMapKitSetup
 
                 var tempZip = Path.Combine(tempPath, "latest-stable.zip");
 
+                ServicePointManager.Expect100Continue = true;
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | SecurityProtocolType.Ssl3;
+
                 var webRequest = (HttpWebRequest) WebRequest.Create("https://github.com/Ascentroid/Ascentroid/archive/latest-stable.zip");
 
                 webRequest.CachePolicy = new HttpRequestCachePolicy(HttpRequestCacheLevel.NoCacheNoStore);
