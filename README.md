@@ -24,9 +24,9 @@ What's great about this is that it allows map creators to utilize <b><i>almost a
 
 ![Imgur](https://i.imgur.com/rNFZ366.png)
 
-* #1: In the Epics Game Launcher, click "Unreal Engine" on the left menu.
-* #2: Click "Library" on the top menu.
-* #3: Click the "[+]" icon to the right of "Engine Versions".
+* #1: In the Epic Games Launcher, click <b>Unreal Engine</b> on the left menu.
+* #2: Click <b>Library</b> on the top menu.
+* #3: Click the <b>[+]</b> icon to the right of <b>Engine Versions</b>.
 * #4: Click the dropdown on the engine version number.
 * #5: Select <b>4.24.3</b> from the dropdown and click install. When the install is finsihed, this is the version that should appear as installed:
 
