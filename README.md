@@ -48,7 +48,7 @@ Start UE4 and create a new, blank <b>C++</b> project for your campaign <b>withou
 
 ![Imgur](https://i.imgur.com/IxDBZi9.png)
 
-![Imgur](https://i.imgur.com/2eAJmm4.png)
+![Imgur](https://i.imgur.com/YGuy48Z.png)
 
 Open your UE4 campaign project if it doesn't automatically open after you create it.
 
@@ -70,11 +70,11 @@ Unzip anywhere and execute <b>AscMapKitSetup.exe</b>. Run as a <b>Windows Admini
 
 ![Imgur](https://i.imgur.com/6iVNY0e.png)
 
-![Imgur](https://i.imgur.com/TAqg8EV.png)
+![Imgur](https://i.imgur.com/G9vad3v.png)
 
 Follow the steps and provide the folder/file locations as requested in the utility. When ready, click the <b>Initialize Now!</b> button.
 
-![Imgur](https://i.imgur.com/rNKmKjK.png)
+![Imgur](https://i.imgur.com/Nzo9LjJ.png)
 
 The utility will perform the following in the background:
 
@@ -92,7 +92,7 @@ The utility will perform the following in the background:
 
 When the map kit setup is complete, it should pop-up a series of steps to help guide you through the final setup:
 
-![Imgur](https://i.imgur.com/zn6Mi4x.png)
+![Imgur](https://i.imgur.com/WnqplxD.png)
 
 1) Execute (as a <b>Windows Administrator</b> user):
 ```
@@ -116,32 +116,30 @@ Note: if running this command displays <b>ERROR: Could not find NetFxSDK install
 
 ![Imgur](https://i.imgur.com/NFjatG5.png)
 
-6) If not already done: in the UE4 editor <b>Content Browser</b>, click <b>View Options</b> and turn on <b>Show Plugin Content</b>.
+6) Create at least one level in your UE4 project and save it to the <b>Campaign Content</b> folder.
 
-7) Create at least one level in your UE4 project and save it to the <b>Campaign Content</b> folder.
-
-8) Edit campaign <b>*.json</b> (make sure your campaign and level name(s) match):
+7) Edit campaign <b>*.json</b> (make sure your campaign and level name(s) match):
 ```
 [campaign project root]\[campaign project name].json
 ```
 
-9) All assets used in your campaign <b>must</b> be saved in the <b>Campaign Content</b> folder (or they won't cook!).
+8) All assets used in your campaign <b>must</b> be saved in the <b>Campaign Content</b> folder (or they won't cook!).
 
-10) To cook your campaign, execute (as a <b>Windows Administrator</b> user):
+9) To cook your campaign, execute (as a <b>Windows Administrator</b> user):
 ```
 [campaign project root]\_BatchScripts\Cook.bat
 ```
 
-11) The <b>\*.json</b> and <b>\*.pak</b> files for your campaign will be copied to the Ascentroid game folder:
+10) The <b>\*.json</b> and <b>\*.pak</b> files for your campaign will be copied to the Ascentroid game folder:
 ```
 [game root]\Ascentroid\Content\Ascentroid\Paks
 ```
 
-12) If everything worked, you can now test your campaign in the game, Ascentroid!
+11) If everything worked, you can now test your campaign in the game, Ascentroid!
 
-13) Visit Github for more documentation: https://github.com/Ascentroid/Ascentroid
+12) Visit Github for more documentation: https://github.com/Ascentroid/Ascentroid
 
-14) Visit YouTube for tutorials: http://youtube.ascentroid.com
+13) Visit YouTube for tutorials: http://youtube.ascentroid.com
 
 <br/><br/><br/>
 
@@ -161,6 +159,7 @@ Note: if running this command displays <b>ERROR: Could not find NetFxSDK install
 
 #### You may want to learn some basics about Unreal Engine:
 
+* https://www.informit.com/articles/article.aspx?p=2819033&seqNum=3
 * https://docs.unrealengine.com/en-US/index.html
 * https://docs.unrealengine.com/en-US/WorkingWithContent/index.html
 * https://docs.unrealengine.com/en-US/WorkingWithContent/Importing/FBX/StaticMeshes/index.html
@@ -375,7 +374,23 @@ Tip: remember, if you would like to save disk space for your UE4 campaign projec
 * [Houdini](https://www.sidefx.com/products/houdini/houdini-indie/) (paid)
 * Want more tools listed here? [Contact me](mailto:ascentroid@gmail.com)
 
-<br/>
+<br/><br/><br/>
+
+#### <a name="import-3d-meshes"></a>Importing 3D Meshes into UE4
+
+If you want per-poly collision on the 3D mesh you are going to import into UE4:
+
+* When importing your FBX, uncheck <b>Auto Generate Collision</b>:
+
+![Imgur](https://i.imgur.com/A5zVOvi.png)
+
+* Once it has been imported, edit your mesh in UE4 and go to the collision properties. Set the <i>Collision Complexity</i> to <b>Use Complex Collision As Simple</b>. This tells the engine to use per-poly collision on this mesh.
+
+![Imgur](https://i.imgur.com/6ei4Tg7.png)
+
+* Note: keep in mind any additional work you may need to consider for [performance/optimization](#performance-optimization).
+
+<br/><br/><br/>
 
 #### Import levels from other games
 
@@ -397,7 +412,7 @@ Descent 1 and 2:
 
 * Import your level 3D mesh into your UE4 campaign project. Remember: all assets used in your campaign <b>must</b> be saved in the <b>Campaign Content</b> folder (or they won't cook!).
 
-* <b>Optional, subjective</b>: When you import your level 3D mesh into the UE4 editor, you will probably want to disable collision generation. After it has been imported, edit the level 3D mesh and enable per-poly collision by setting <i>Collision Complexity</i> to <b>Use Complex Collision as Simple</b>:
+* <b>Optional, subjective</b>: When you [import your level 3D mesh](#import-3d-meshes) into the UE4 editor, you will probably want to disable collision generation. After it has been imported, edit the level 3D mesh and enable per-poly collision by setting <i>Collision Complexity</i> to <b>Use Complex Collision as Simple</b>:
 
 ![Imgur](https://i.imgur.com/PbdjoPb.png)
 
