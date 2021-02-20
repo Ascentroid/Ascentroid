@@ -23,6 +23,25 @@ struct ASCMAPKIT_API FAscMapKitDoorPropertiesCustomNonDestructibleStruct
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     FVector PlayerInteractBoundingBoxExtent;
 
+    // If for any reason the collision for the door needs to be disabled when it opens, check this option.
+    // * UE4 does not currently have a way to disable separate body collision for a skeletal mesh. It might be coming in the future.
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    bool DisableEntireCollisionOnOpen;
+
+    // If this is unchecked and no bone names are provided for "Toggle Collision Bone Names", the game runtime will automatically try to detect and behave upon collision toggling on bone names "DoorLeft" and "DoorRight".
+    // * If "Disable Entire Collision On Open" is checked, it will take precedence over this setting.
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    bool DisableDefaultToggleCollisionBoneNames;
+
+    // Provide a list of bone names to toggle collision for when the door opens (disables collision on these bones), and closes (enables collision on these bones).
+    // * If no bone names are provided, the game runtime will automatically try to detect and behave upon bone names "DoorLeft" and "DoorRight".
+    // * To disable this, check "Disable Default Toggle Collision Bone Names".
+    // * The values provided here are case sensitive.
+    // * Currently, only box shapes are supported. This may change in the future.
+    // * If "Disable Entire Collision On Open" is checked, it will take precendence over this setting.
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    TArray<FString> ToggleCollisionBoneNames;
+    
     // The animation blueprint used for the door. The parent class must be UAscMapKitDoorAnimInstance.
     // * todo: See online documentation for more details.
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
@@ -37,3 +56,4 @@ struct ASCMAPKIT_API FAscMapKitDoorPropertiesCustomNonDestructibleStruct
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     FTransform SkeletalMeshRelativeTransform;
 };
+
