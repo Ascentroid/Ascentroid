@@ -566,6 +566,22 @@ Lastly, you don't <i>have</i> to use Blueprints. Since the Ascentroid map kit tr
 
 <br/><br/><br/>
 
+## Demo Campaign Project
+
+A UE4 demo campaign project has been created, which you can download and inspect for learning purposes. It includes three levels and various free content sources. Be sure to read the included <b>Readme.txt</b> file.
+
+Download the UE4 demo campaign project zip file from here:
+https://drive.google.com/file/d/1zlutTZXBK4Vy-YLGeMa7izCC1L5hhVVt/view?usp=sharing
+
+![Imgur](https://i.imgur.com/Wr0BNjx.png)
+
+![Imgur](https://i.imgur.com/wpUXtgC.png)
+
+![Imgur](https://i.imgur.com/mYw42eb.png)
+
+<br/><br/><br/>
+
+
 ## <a name="faq"></a>FAQ
 
 Where can I learn more about the game?
