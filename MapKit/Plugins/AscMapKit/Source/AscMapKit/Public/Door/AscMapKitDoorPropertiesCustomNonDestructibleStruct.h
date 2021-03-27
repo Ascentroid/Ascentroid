@@ -28,10 +28,20 @@ struct ASCMAPKIT_API FAscMapKitDoorPropertiesCustomNonDestructibleStruct
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     bool DisableEntireCollisionOnOpen;
 
+    // If "Disable Entire Collision On Open" is checked, this property value will delay the collision changes in second(s).
+    // * If set to zero (or less), the changes will occur immediately.
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    float DisableEntireCollisionOnOpenDelaySeconds;
+
     // If this is unchecked and no bone names are provided for "Toggle Collision Bone Names", the game runtime will automatically try to detect and behave upon collision toggling on bone names "DoorLeft" and "DoorRight".
     // * If "Disable Entire Collision On Open" is checked, it will take precedence over this setting.
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     bool DisableDefaultToggleCollisionBoneNames;
+
+    // If "Disable Default Toggle Collision Bone Names" is checked, this property value will delay the collision changes in second(s).
+    // * If set to zero (or less), the changes will occur immediately.
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    float DisableDefaultToggleCollisionBoneNamesDelaySeconds;
 
     // Provide a list of bone names to toggle collision for when the door opens (disables collision on these bones), and closes (enables collision on these bones).
     // * If no bone names are provided, the game runtime will automatically try to detect and behave upon bone names "DoorLeft" and "DoorRight".

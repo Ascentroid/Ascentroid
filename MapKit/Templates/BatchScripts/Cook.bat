@@ -47,7 +47,7 @@ rem Copy the json file to our game content
 echo Copying JSON from "%PROJECT_PATH%\%PROJECT_NAME%.json" to "%GAME_PATH%\%PROJECT_NAME%.json"
 copy /y "%PROJECT_PATH%\%PROJECT_NAME%.json" "%GAME_PATH%\%PROJECT_NAME%.json"
 
-pause
+if "%NOPAUSE%"=="" pause
 
 :end
 exit
