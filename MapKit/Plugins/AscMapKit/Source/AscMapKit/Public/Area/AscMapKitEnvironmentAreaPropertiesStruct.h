@@ -15,6 +15,7 @@
 #include "AscMapKit/Public/Area/AscMapKitEnvironmentAreaPropertiesProjectileMovementModifierStruct.h"
 #include "AscMapKit/Public/Area/AscMapKitEnvironmentAreaPropertiesSplashDamageStruct.h"
 #include "AscMapKit/Public/Area/AscMapKitEnvironmentAreaPropertiesWaterDripsStruct.h"
+#include "AscMapKit/Public/Area/AscMapKitEnvironmentAreaPropertiesWaterDripsCockpitStruct.h"
 #include "AscMapKit/Public/Area/AscMapKitEnvironmentAreaTypeEnum.h"
 
 // Generated
@@ -29,7 +30,7 @@ struct ASCMAPKIT_API FAscMapKitEnvironmentAreaPropertiesStruct
     // This will also override the Damage Event Type (under Damage Shared) used for HUD messages.
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     FString EnvironmentAreaName;
-    
+
     // Used by the game runtime to identify the environment area type.
     // * If you specify "Power Station without Effects", the game runtime will force the environment area to behave as a Power Station, and will ignore any custom effects specified from other map kit properties.
     // * If you specify "Power Station with Effects", the game runtime will force the environment area to behave as a Power Station, but you can also apply custom effects specified from other map kit properties.
@@ -42,12 +43,15 @@ struct ASCMAPKIT_API FAscMapKitEnvironmentAreaPropertiesStruct
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     FAscMapKitEnvironmentAreaPropertiesPowerStationStruct PowerStation;
-    
+
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     FAscMapKitEnvironmentAreaPropertiesPostProcessStruct PostProcess;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     FAscMapKitEnvironmentAreaPropertiesWaterDripsStruct WaterDrips;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    FAscMapKitEnvironmentAreaPropertiesWaterDripsCockpitStruct WaterDripsCockpit;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     FAscMapKitEnvironmentAreaPropertiesPlayerShakingStruct PlayerShaking;
