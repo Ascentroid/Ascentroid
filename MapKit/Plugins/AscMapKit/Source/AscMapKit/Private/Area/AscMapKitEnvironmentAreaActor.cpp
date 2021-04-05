@@ -75,10 +75,10 @@ AAscMapKitEnvironmentAreaActor::AAscMapKitEnvironmentAreaActor()
 
     MapKit.EnvironmentAreaType = EAscMapKitEnvironmentAreaTypeEnum::Water;
     MapKit.Collision.CollisionType = EAscMapKitEnvironmentAreaCollisionTypeEnum::Box;
-    
-    MapKit.PostProcess.EnableForPlayer = true;
-    MapKit.WaterDrips.EnableForPlayerOnOverlapEnd = true;
 
+    MapKit.PostProcess.EnableForPlayer = true;
+
+    MapKit.WaterDrips.EnableForPlayerOnOverlapEnd = true;
     MapKit.WaterDrips.SpecularScale = 0.3f;
     MapKit.WaterDrips.SpecularPower = 100.f;
     MapKit.WaterDrips.SpecularLightDirection = FLinearColor(0.25f, -0.14f, 1.0f, 0.f);
@@ -88,6 +88,28 @@ AAscMapKitEnvironmentAreaActor::AAscMapKitEnvironmentAreaActor()
     MapKit.WaterDrips.PostTintMaskPower = 1.f;
     MapKit.WaterDrips.PostTintColor = FLinearColor::White;
     MapKit.WaterDrips.FadeOutDelaySeconds = 0.1f;
+
+    MapKit.WaterDripsCockpit.EnableForPlayerOnOverlapEnd = true;
+    MapKit.WaterDripsCockpit.FadeOutDelaySeconds = 0.01f;
+    MapKit.WaterDripsCockpit.RefractionFadeOutRate = 0.001f;
+    MapKit.WaterDripsCockpit.OpacityFadeOutRate = 0.002f;
+    MapKit.WaterDripsCockpit.RefractionAmount = 1.5f;
+    MapKit.WaterDripsCockpit.OpacityAmount = 1.f;
+    MapKit.WaterDripsCockpit.EmitColor = FLinearColor(0.f, 1.f, 10.f, 1.f);
+    MapKit.WaterDripsCockpit.EmitColorMultiplier = 30.f;
+    MapKit.WaterDripsCockpit.BottomLayerFlowSpeed = 0.25f;
+    MapKit.WaterDripsCockpit.BottomMaskFlowSpeed = 0.25f;
+    MapKit.WaterDripsCockpit.GeneralFlowSpeed = 0.08f;
+    MapKit.WaterDripsCockpit.MaskGeneralFlowSpeed = 1.2f;
+    MapKit.WaterDripsCockpit.MiddleLayerFlowSpeed = 0.5f;
+    MapKit.WaterDripsCockpit.MiddleMaskFlowSpeed = 0.5f;
+    MapKit.WaterDripsCockpit.SpecularAmount = 0.f;
+    MapKit.WaterDripsCockpit.StaticSpeed = 0.002f;
+    MapKit.WaterDripsCockpit.StaticDropOn = 0.f;
+    MapKit.WaterDripsCockpit.StaticDropSpeed = 0.5f;
+    MapKit.WaterDripsCockpit.TopLayerFlowSpeed = 1.f;
+    MapKit.WaterDripsCockpit.TopMaskFlowSpeed = 1.f;
+    MapKit.WaterDripsCockpit.UVMultiplier = 0.05681f;
 
     MapKit.PlayerShaking.Enable = true;
     MapKit.PlayerShaking.Factor = 8.f;

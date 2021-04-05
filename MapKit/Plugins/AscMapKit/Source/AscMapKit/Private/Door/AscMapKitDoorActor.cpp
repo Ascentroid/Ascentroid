@@ -87,8 +87,11 @@ AAscMapKitDoorActor::AAscMapKitDoorActor()
     MapKit.Destructible.OnHitRadius = 5000.f;
     MapKit.Destructible.OnHitImpulseStrength = 80000.f;
 
+    MapKit.Custom.NonDestructible.DisableEntireCollisionOnOpenDelaySeconds = 0.3f;
+    MapKit.Custom.NonDestructible.DisableDefaultToggleCollisionBoneNamesDelaySeconds = 0.3f;
+
     MapKit.Custom.NonDestructible.PlayerInteractBoundingBoxExtent = FVector(1200.f, 1200.f, 1200.f);
-    
+
 #if !(UE_BUILD_SHIPPING)
     StaticMeshComponent->SetHiddenInGame(false);
     MapKit.Custom.NonDestructible.PlayerInteractBoundingBox->SetHiddenInGame(false);
