@@ -36,6 +36,7 @@ enum class EAscMapKitPowerupTypeEnum : uint8
     AuxConceal,
     AuxInvincible,
     AuxLaserCoupler,
+    AuxNavmapReveal,
     AuxPower,
     AuxPowerTransfer,
     AuxShield

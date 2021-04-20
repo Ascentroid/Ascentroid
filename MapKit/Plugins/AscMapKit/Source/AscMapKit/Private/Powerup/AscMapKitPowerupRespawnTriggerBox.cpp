@@ -35,6 +35,7 @@ AAscMapKitPowerupRespawnTriggerBox::AAscMapKitPowerupRespawnTriggerBox()
     AuxConceal = true;
     AuxInvincible = true;
     AuxLaserCoupler = true;
+    AuxNavmapReveal = true;
     AuxAmmo = true;
     AuxAmmoCache = true;
     AuxBoost = true;
@@ -115,6 +116,8 @@ bool AAscMapKitPowerupRespawnTriggerBox::Supports(const EAscMapKitPowerupTypeEnu
             return AuxInvincible;
         case EAscMapKitPowerupTypeEnum::AuxLaserCoupler:
             return AuxLaserCoupler;
+        case EAscMapKitPowerupTypeEnum::AuxNavmapReveal:
+            return AuxNavmapReveal;
         case EAscMapKitPowerupTypeEnum::AuxAmmo:
             return AuxAmmo;
         case EAscMapKitPowerupTypeEnum::AuxAmmoCache:
