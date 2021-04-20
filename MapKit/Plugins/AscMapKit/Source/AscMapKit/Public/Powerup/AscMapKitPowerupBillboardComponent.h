@@ -43,6 +43,9 @@ private:
 
     UPROPERTY()
     UTexture2D *AuxLaserCouplerTexture;
+    
+    UPROPERTY()
+    UTexture2D *AuxNavmapRevealTexture;
 
     UPROPERTY()
     UTexture2D *AuxPowerTexture;

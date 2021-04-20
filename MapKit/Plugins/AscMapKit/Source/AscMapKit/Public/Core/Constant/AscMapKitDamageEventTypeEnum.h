@@ -13,12 +13,12 @@ enum class EAscMapKitDamageEventTypeEnum : uint8
 	Debris,
     Electricity,
 	Enemy,
-    Explosion,
     Fire,
 	Forcefield,
 	Lava,
 	NeutronOvercharging,
 	Plasma,
+	PlayerDeathExplosion,
 	Sludge,
 	SuicideCheat,
 	_End

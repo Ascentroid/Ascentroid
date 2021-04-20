@@ -10,6 +10,7 @@ UAscMapKitPowerupBillboardComponent::UAscMapKitPowerupBillboardComponent()
     const ConstructorHelpers::FObjectFinder<UTexture2D> AuxConcealTextureRef(TEXT("Texture2D'/AscMapKit/Editor/Sprites/Player/Powerup/T_Editor_Sprites_Player_Powerup_Auxiliary_Conceal.T_Editor_Sprites_Player_Powerup_Auxiliary_Conceal'"));
     const ConstructorHelpers::FObjectFinder<UTexture2D> AuxInvincibleTextureRef(TEXT("Texture2D'/AscMapKit/Editor/Sprites/Player/Powerup/T_Editor_Sprites_Player_Powerup_Auxiliary_Invincible.T_Editor_Sprites_Player_Powerup_Auxiliary_Invincible'"));
     const ConstructorHelpers::FObjectFinder<UTexture2D> AuxLaserCouplerTextureRef(TEXT("Texture2D'/AscMapKit/Editor/Sprites/Player/Powerup/T_Editor_Sprites_Player_Powerup_Auxiliary_LaserCoupler.T_Editor_Sprites_Player_Powerup_Auxiliary_LaserCoupler'"));
+    const ConstructorHelpers::FObjectFinder<UTexture2D> AuxNavmapRevealTextureRef(TEXT("Texture2D'/AscMapKit/Editor/Sprites/Player/Powerup/T_Editor_Sprites_Player_Powerup_Auxiliary_NavmapReveal.T_Editor_Sprites_Player_Powerup_Auxiliary_NavmapReveal'"));
     const ConstructorHelpers::FObjectFinder<UTexture2D> AuxPowerTextureRef(TEXT("Texture2D'/AscMapKit/Editor/Sprites/Player/Powerup/T_Editor_Sprites_Player_Powerup_Auxiliary_Power.T_Editor_Sprites_Player_Powerup_Auxiliary_Power'"));
     const ConstructorHelpers::FObjectFinder<UTexture2D> AuxPowerTransferTextureRef(TEXT("Texture2D'/AscMapKit/Editor/Sprites/Player/Powerup/T_Editor_Sprites_Player_Powerup_Auxiliary_PowerTransfer.T_Editor_Sprites_Player_Powerup_Auxiliary_PowerTransfer'"));
     const ConstructorHelpers::FObjectFinder<UTexture2D> AuxShieldTextureRef(TEXT("Texture2D'/AscMapKit/Editor/Sprites/Player/Powerup/T_Editor_Sprites_Player_Powerup_Auxiliary_Shield.T_Editor_Sprites_Player_Powerup_Auxiliary_Shield'"));
@@ -54,6 +55,9 @@ UAscMapKitPowerupBillboardComponent::UAscMapKitPowerupBillboardComponent()
 
     if (AuxLaserCouplerTextureRef.Succeeded())
         AuxLaserCouplerTexture = AuxLaserCouplerTextureRef.Object;
+
+    if (AuxNavmapRevealTextureRef.Succeeded())
+        AuxNavmapRevealTexture = AuxNavmapRevealTextureRef.Object;
 
     if (AuxPowerTextureRef.Succeeded())
         AuxPowerTexture = AuxPowerTextureRef.Object;
@@ -161,6 +165,9 @@ void UAscMapKitPowerupBillboardComponent::EditorUpdatePowerupType(const EAscMapK
             break;
         case EAscMapKitPowerupTypeEnum::AuxLaserCoupler:
             SetSprite(AuxLaserCouplerTexture);
+            break;
+        case EAscMapKitPowerupTypeEnum::AuxNavmapReveal:
+            SetSprite(AuxNavmapRevealTexture);
             break;
         case EAscMapKitPowerupTypeEnum::AuxPower:
             SetSprite(AuxPowerTexture);

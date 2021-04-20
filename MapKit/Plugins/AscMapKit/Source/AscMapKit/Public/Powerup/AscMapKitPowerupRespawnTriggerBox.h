@@ -109,6 +109,9 @@ public:
 	UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Auxiliary Laser Coupler", AllowPrivateAccess = "true"))
 	bool AuxLaserCoupler;
 
+	UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Auxiliary Navmap Reveal", AllowPrivateAccess = "true"))
+	bool AuxNavmapReveal;
+
 	UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Auxiliary Ammo", AllowPrivateAccess = "true"))
 	bool AuxAmmo;
 
