@@ -17,6 +17,7 @@ AAscMapKitDoorActor::AAscMapKitDoorActor()
     const ConstructorHelpers::FObjectFinder<UMaterialInterface> Destructible20x20mBasic001MaterialRef(TEXT("Material'/AscMapKit/Editor/Materials/Doors/M_Editor_Door_Destructible_20x20m_Basic_001.M_Editor_Door_Destructible_20x20m_Basic_001'"));
     
     EmptyRootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("EmptyRootComponent"));
+    EmptyRootComponent->SetMobility(EComponentMobility::Static);
 
     RootComponent = EmptyRootComponent;
 
@@ -81,11 +82,14 @@ AAscMapKitDoorActor::AAscMapKitDoorActor()
 
     MapKit.Destructible.MaxShields = 300.f;
     MapKit.Destructible.LifetimeSeconds = 20.f;
-    MapKit.Destructible.ExplosionDamageInterations = 2;
-    MapKit.Destructible.ExplosionRecurringDamageSeconds = 1.f;
-    MapKit.Destructible.ExplosionRecurringDamageInitialDelaySeconds = 0.25f;
-    MapKit.Destructible.OnHitRadius = 5000.f;
-    MapKit.Destructible.OnHitImpulseStrength = 80000.f;
+
+    MapKit.Destructible.Shared.PlayerDamage.Enable = true;
+    MapKit.Destructible.Shared.PlayerDamage.Amount = 3.f;
+    MapKit.Destructible.Shared.PlayerDamage.DelaySeconds = 1.f;
+    
+    MapKit.Destructible.Shared.EnemyDamage.Enable = true;
+    MapKit.Destructible.Shared.EnemyDamage.Amount = 3.f;
+    MapKit.Destructible.Shared.EnemyDamage.DelaySeconds = 1.f;
 
     MapKit.Custom.NonDestructible.DisableEntireCollisionOnOpenDelaySeconds = 0.3f;
     MapKit.Custom.NonDestructible.DisableDefaultToggleCollisionBoneNamesDelaySeconds = 0.3f;

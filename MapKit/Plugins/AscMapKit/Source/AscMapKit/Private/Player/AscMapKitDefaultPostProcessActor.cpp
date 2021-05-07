@@ -1,5 +1,4 @@
 #include "AscMapKit/Public/Player/AscMapKitDefaultPostProcessActor.h"
-#include "Runtime/Engine/Classes/Components/ArrowComponent.h"
 
 AAscMapKitDefaultPostProcessActor::AAscMapKitDefaultPostProcessActor(const FObjectInitializer &ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -16,11 +15,13 @@ AAscMapKitDefaultPostProcessActor::AAscMapKitDefaultPostProcessActor(const FObje
 	PostProcessComponent->Settings.bOverride_BloomIntensity = true;
 	PostProcessComponent->Settings.BloomIntensity = 1.5f;
 
-	PostProcessComponent->Settings.bOverride_AutoExposureMinBrightness = true;
-	PostProcessComponent->Settings.AutoExposureMinBrightness = 0.2f;
+	// 4.26.2 upgrade, removed
+	//PostProcessComponent->Settings.bOverride_AutoExposureMinBrightness = true;
+	//PostProcessComponent->Settings.AutoExposureMinBrightness = 0.2f;
 
-	PostProcessComponent->Settings.bOverride_AutoExposureMaxBrightness = true;
-	PostProcessComponent->Settings.AutoExposureMaxBrightness = 0.2f;
+	// 4.26.2 upgrade, removed
+	//PostProcessComponent->Settings.bOverride_AutoExposureMaxBrightness = true;
+	//PostProcessComponent->Settings.AutoExposureMaxBrightness = 0.2f;
 
 	PostProcessComponent->Settings.bOverride_DepthOfFieldFstop = true;
 	PostProcessComponent->Settings.DepthOfFieldFstop = 32.f;

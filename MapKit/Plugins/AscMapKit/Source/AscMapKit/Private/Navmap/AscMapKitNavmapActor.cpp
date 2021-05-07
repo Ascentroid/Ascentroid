@@ -3,6 +3,7 @@
 AAscMapKitNavmapActor::AAscMapKitNavmapActor()
 {
     EmptyRootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("EmptyRootComponent"));
+    EmptyRootComponent->SetMobility(EComponentMobility::Static);
 
     RootComponent = EmptyRootComponent;
 

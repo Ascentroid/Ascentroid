@@ -1,6 +1,7 @@
 #pragma once
 
 // Ascentroid
+#include "AscMapKit/Public/Destructible/AscMapKitDestructiblePropertiesStruct.h"
 #include "AscMapKit/Public/Enemy/AscMapKitEnemyDefaultGameRuntimeBoundingBox.h"
 #include "AscMapKit/Public/Enemy/AscMapKitEnemyPropertiesColorsStruct.h"
 #include "AscMapKit/Public/Enemy/AscMapKitEnemyPropertiesDodgeStruct.h"
@@ -44,6 +45,9 @@ struct ASCMAPKIT_API FAscMapKitEnemyPropertiesStruct
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     FAscMapKitEnemyPropertiesColorsStruct Colors;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    FAscMapKitDestructiblePropertiesStruct Destructible;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     FAscMapKitEnemyPropertiesMeleeStruct Melee;

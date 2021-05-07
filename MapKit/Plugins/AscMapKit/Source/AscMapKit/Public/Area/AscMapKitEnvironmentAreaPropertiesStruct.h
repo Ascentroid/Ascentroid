@@ -5,6 +5,7 @@
 #include "AscMapKit/Public/Area/AscMapKitEnvironmentAreaPropertiesDamageEnemiesStruct.h"
 #include "AscMapKit/Public/Area/AscMapKitEnvironmentAreaPropertiesDamagePlayersStruct.h"
 #include "AscMapKit/Public/Area/AscMapKitEnvironmentAreaPropertiesDamageSharedStruct.h"
+#include "AscMapKit/Public/Area/AscMapKitEnvironmentAreaPropertiesDestructibleChunkMovementModifierStruct.h"
 #include "AscMapKit/Public/Area/AscMapKitEnvironmentAreaPropertiesEnemyMovementModifierStruct.h"
 #include "AscMapKit/Public/Area/AscMapKitEnvironmentAreaPropertiesOtherEffects.h"
 #include "AscMapKit/Public/Area/AscMapKitEnvironmentAreaPropertiesPlayerMovementModifierStruct.h"
@@ -67,6 +68,9 @@ struct ASCMAPKIT_API FAscMapKitEnvironmentAreaPropertiesStruct
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     FAscMapKitEnvironmentAreaPropertiesEnemyMovementModifierStruct EnemyMovementModifier;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    FAscMapKitEnvironmentAreaPropertiesDestructibleChunkMovementModifierStruct DestructibleChunkMovementModifier;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     FAscMapKitEnvironmentAreaPropertiesDamageSharedStruct DamageShared;

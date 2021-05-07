@@ -6,6 +6,7 @@ AAscMapKitDecorActor::AAscMapKitDecorActor()
     const ConstructorHelpers::FObjectFinder<UStaticMesh> CubeStaticMeshRef(TEXT("StaticMesh'/Engine/BasicShapes/Cube.Cube'"));
 
     EmptyRootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("EmptyRootComponent"));
+	EmptyRootComponent->SetMobility(EComponentMobility::Static);
 
     RootComponent = EmptyRootComponent;
 

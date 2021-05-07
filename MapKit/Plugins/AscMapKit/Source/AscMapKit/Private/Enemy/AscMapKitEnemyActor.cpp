@@ -9,6 +9,7 @@ AAscMapKitEnemyActor::AAscMapKitEnemyActor()
     const ConstructorHelpers::FObjectFinder<UMaterialInterface> EmitColorMaterialRef(TEXT("Material'/AscMapKit/Editor/Materials/M_Shared_Emit.M_Shared_Emit'"));
 
     EmptyRootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("EmptyRootComponent"));
+    EmptyRootComponent->SetMobility(EComponentMobility::Movable);
 
     RootComponent = EmptyRootComponent;
 

@@ -6,6 +6,7 @@ AAscMapKitFanActor::AAscMapKitFanActor()
     const ConstructorHelpers::FObjectFinder<UStaticMesh> Animated20x20mBasic001StaticMeshRef(TEXT("StaticMesh'/AscMapKit/Editor/Meshes/Fans/SM_Fan_Animated_20x20m_Basic_001.SM_Fan_Animated_20x20m_Basic_001'"));
     
     EmptyRootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("EmptyRootComponent"));
+    EmptyRootComponent->SetMobility(EComponentMobility::Static);
 
     RootComponent = EmptyRootComponent;
 

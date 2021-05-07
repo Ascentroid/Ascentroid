@@ -26,16 +26,16 @@ public:
     USceneComponent *EmptyRootComponent;
 
     UPROPERTY()
-    UArrowComponent *ArrowComponent; // todo: need for facing direction
+    UArrowComponent *ArrowComponent;
 
     UPROPERTY()
     UStaticMeshComponent *StaticMeshComponent;
 
     UFUNCTION()
-    void OnConstruction(const FTransform &Transform) override;
+    virtual void OnConstruction(const FTransform &Transform) override;
 
     UFUNCTION()
-    void BeginPlay() override;
+    virtual void BeginPlay() override;
 
 #if WITH_EDITOR
     virtual void PostEditChangeProperty(struct FPropertyChangedEvent &PropertyChangedEvent) override;
