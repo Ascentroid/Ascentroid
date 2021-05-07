@@ -7,6 +7,7 @@ AAscMapKitForcefieldActor::AAscMapKitForcefieldActor()
     const ConstructorHelpers::FObjectFinder<UMaterialInterface> PrimaryColorMaterialRef(TEXT("MaterialInstanceConstant'/AscMapKit/Editor/Materials/Forcefields/MI_Forcefield_001.MI_Forcefield_001'"));
     
     EmptyRootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("EmptyRootComponent"));
+    EmptyRootComponent->SetMobility(EComponentMobility::Static);
 
     RootComponent = EmptyRootComponent;
 

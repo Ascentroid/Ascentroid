@@ -3,6 +3,7 @@
 AAscMapKitPowerupActor::AAscMapKitPowerupActor()
 {
     EmptyRootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("EmptyRootComponent"));
+    EmptyRootComponent->SetMobility(EComponentMobility::Movable);
 
     RootComponent = EmptyRootComponent;
 

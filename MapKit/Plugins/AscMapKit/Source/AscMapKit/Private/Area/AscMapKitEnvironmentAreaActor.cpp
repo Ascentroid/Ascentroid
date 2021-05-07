@@ -3,20 +3,24 @@
 AAscMapKitEnvironmentAreaActor::AAscMapKitEnvironmentAreaActor()
 {
     EmptyRootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("EmptyRootComponent"));
+    EmptyRootComponent->SetMobility(EComponentMobility::Static);
 
     RootComponent = EmptyRootComponent;
 
     ArrowComponent = CreateDefaultSubobject<UArrowComponent>(TEXT("ArrowComponent"));
     ArrowComponent->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+    ArrowComponent->SetMobility(EComponentMobility::Static);
     ArrowComponent->ArrowColor = FColor::White;
     ArrowComponent->ArrowSize = 10.f;
 
     BillboardComponent = CreateDefaultSubobject<UAscMapKitEnvironmentAreaBillboardComponent>(TEXT("BillboardComponent"));
     BillboardComponent->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+    BillboardComponent->SetMobility(EComponentMobility::Static);
     BillboardComponent->SetSprite(nullptr);
 
     Box = CreateDefaultSubobject<UBoxComponent>(TEXT("Box"));
     Box->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+    Box->SetMobility(EComponentMobility::Static);
     Box->SetRelativeLocation(FVector(0.f, 0.f, 0.f));
     Box->SetBoxExtent(FVector(1000.f, 1000.f, 1000.f));
     Box->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
@@ -27,6 +31,7 @@ AAscMapKitEnvironmentAreaActor::AAscMapKitEnvironmentAreaActor()
 
     StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
     StaticMesh->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+    StaticMesh->SetMobility(EComponentMobility::Static);
     StaticMesh->CastShadow = false;
     StaticMesh->bCastStaticShadow = false;
     StaticMesh->bCastDynamicShadow = false;
@@ -127,6 +132,9 @@ AAscMapKitEnvironmentAreaActor::AAscMapKitEnvironmentAreaActor()
 
     MapKit.EnemyMovementModifier.Enable = true;
     MapKit.EnemyMovementModifier.MaxSpeedFactor = 0.4f;
+
+    MapKit.DestructibleChunkMovementModifier.Enable = true;
+    MapKit.DestructibleChunkMovementModifier.Factor = 0.4f;
 
     MapKit.DamageShared.BeginPlayActivateDamageDelaySeconds = 1.f;
 
