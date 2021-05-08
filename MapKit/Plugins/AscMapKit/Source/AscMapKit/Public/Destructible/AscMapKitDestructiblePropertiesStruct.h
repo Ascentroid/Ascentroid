@@ -2,6 +2,7 @@
 
 // Ascentroid
 #include "AscMapKit/Public/Destructible/AscMapKitDestructibleDamagePropertiesStruct.h"
+#include "AscMapKit/Public/Destructible/AscMapKitDestructibleDisappearPropertiesStruct.h"
 
 // Generated
 #include "AscMapKitDestructiblePropertiesStruct.generated.h"
@@ -10,6 +11,10 @@ USTRUCT(Blueprintable, BlueprintType)
 struct ASCMAPKIT_API FAscMapKitDestructiblePropertiesStruct
 {
     GENERATED_BODY()
+
+    // If checked, the destructible system will be turned off and not execute.
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    bool Disable;
 
     // Required class type which contains the static mesh components for the chunks/pieces of the destructible actor.
     // * This is typically a Blueprint class you create and must sub-class "AAscMapKitDestructibleActor".
@@ -50,39 +55,6 @@ struct ASCMAPKIT_API FAscMapKitDestructiblePropertiesStruct
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     float DestroyByProjectileStartShieldAmount;
 
-    // If checked, the chunks/pieces will disappear (over time, using delay property values).
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
-    bool Disappear;
-
-    // The iteration speed, in seconds, the disappear timer loop will execute at.
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
-    float DisappearIterationDelaySeconds;
-
-    // The random range minimum before the chunk/piece disappear execution occurs.
-    // * If you want a constant value, set both minimum and maximum values to the same value. 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
-    float DisappearDelaySecondsRangeMin;
-
-    // The random range maximum before the chunk/piece disappear execution occurs.
-    // * If you want a constant value, set both minimum and maximum values to the same value.
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
-    float DisappearDelaySecondsRangeMax;
-
-    // If you want to give the chunk/piece some time to execute its effects, you can add a delay here (in seconds).
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
-    float DisappearEffectsDelaySeconds;
-
-    // A particle will be randomly selected from this list when effects are executed.
-    // * If you need control over the chunk/piece relative location of this particle, you can create a socket on the chunk/piece static mesh called "EffectsSocket" (case sensitive, no whitespace). If the socket exists, it will automatically attempt to attach to it.
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
-    TArray<UParticleSystem *> DisappearEffectParticles;
-
-    // All materials on the chunk/piece will be replaced with this material when effects are executed.
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
-    UMaterialInterface *DisappearEffectMaterial;
-
-    // A sound will be played when effects are executed.
-    // * If you need control over the chunk/piece relative location of this sound, you can create a socket on the chunk/piece static mesh called "EffectsSocket" (case sensitive, no whitespace). If the socket exists, it will automatically attempt to attach to it.
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
-    USoundBase *DisappearEffectSoundCue;
+    FAscMapKitDestructibleDisappearPropertiesStruct Disappear;    
 };

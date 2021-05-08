@@ -23,9 +23,9 @@ AAscMapKitDestructibleActor::AAscMapKitDestructibleActor()
     MapKit.AllowDestroyByProjectile = true;
     MapKit.DestroyByProjectileStartShieldAmount = 30.f;
 
-    MapKit.Disappear = true;
-    MapKit.DisappearIterationDelaySeconds = 0.3f;
-    MapKit.DisappearDelaySecondsRangeMin = 0.3f;
-    MapKit.DisappearDelaySecondsRangeMax = 0.5f;
-    MapKit.DisappearEffectsDelaySeconds = 0.5f;
+    MapKit.Disappear.Enable = true;
+    MapKit.Disappear.IterationDelaySeconds = 0.3f;
+    MapKit.Disappear.DelaySecondsRangeMin = 0.3f;
+    MapKit.Disappear.DelaySecondsRangeMax = 0.5f;
+    MapKit.Disappear.EffectsDelaySeconds = 0.5f;
 }
