@@ -18,19 +18,19 @@ What's great about this is that it allows map creators to utilize <b><i>almost a
 
 * <b><i>Option 2</i></b> (free, larger download size): Install [Visual Studio 2019 or 2017 Community Edition](https://visualstudio.microsoft.com/downloads/) following this [installation tutorial](https://docs.unrealengine.com/en-US/ProductionPipelines/DevelopmentSetup/VisualStudioSetup/index.html).
 
-3) Install Unreal Engine <b><u>4.24.3</u></b> by following the [official installation guide](https://docs.unrealengine.com/en-US/Basics/InstallingUnrealEngine/index.html). When prompted, select the <b>Publishing License</b>.
+3) Install Unreal Engine <b><u>4.26.2</u></b> by following the [official installation guide](https://docs.unrealengine.com/en-US/Basics/InstallingUnrealEngine/index.html). When prompted, select the <b>Publishing License</b>.
 
-* <b>IMPORTANT</b>: You <b>MUST</b> install the specific UE4 version <b><u>4.24.3</u></b>. Do <b>NOT</b> install a different version! Ascentroid is built on <b><u>4.24.3</u></b>. If you use a different version, your campaigns will <b>NOT</b> work! If you create a campaign on the wrong engine version, you will have to delete it and re-create it with the correct engine version!
+* <b>IMPORTANT</b>: You <b>MUST</b> install the specific UE4 version <b><u>4.26.2</u></b>. Do <b>NOT</b> install a different version! Ascentroid is built on <b><u>4.26.2</u></b>. If you use a different version, your campaigns will <b>NOT</b> work! If you create a campaign on the wrong engine version, you will have to delete it and re-create it with the correct engine version!
 
-![Imgur](https://i.imgur.com/rNFZ366.png)
+![Imgur](https://i.imgur.com/6P5kjij.png)
 
 * #1: In the Epic Games Launcher, click <b>Unreal Engine</b> on the left menu.
 * #2: Click <b>Library</b> on the top menu.
 * #3: Click the <b>[+]</b> icon to the right of <b>Engine Versions</b>.
 * #4: Click the dropdown on the engine version number.
-* #5: Select <b>4.24.3</b> from the dropdown and click install. When the install is finsihed, this is the version that should appear as installed:
+* #5: Select <b>4.26.2</b> from the dropdown and click install. When the install is finsihed, this is the version that should appear as installed:
 
-![Imgur](https://i.imgur.com/qzo51xe.png)
+![Imgur](https://i.imgur.com/w4ats9o.png)
 
 4) If not already installed, install the [.NET Framework 4.7.2 Runtime](https://dotnet.microsoft.com/download/dotnet-framework/thank-you/net472-web-installer). This is <b>required</b> for the [Ascentroid Map Kit Setup Utility](https://github.com/Ascentroid/Ascentroid/blob/latest-stable/MapKit/Setup/AscMapKitSetup.zip).
 
