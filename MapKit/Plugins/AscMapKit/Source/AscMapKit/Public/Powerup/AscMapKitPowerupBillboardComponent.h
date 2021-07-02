@@ -108,6 +108,9 @@ private:
     UTexture2D *SecAftershockTexture;
 
     UPROPERTY()
+    UTexture2D *TetChaffTexture;
+    
+    UPROPERTY()
     UTexture2D *TetBioTexture;
 
     UPROPERTY()

@@ -31,6 +31,7 @@ enum class EAscMapKitProjWeapTypeEnum : uint8
     Sec_Aftershock_Mini,
     Tet_Flare,
     Tet_Radial,
+    Tet_Bio,
     Tet_Howler,
-    Tet_Bio
+    Tet_Chaff
 };

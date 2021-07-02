@@ -91,7 +91,8 @@ AAscMapKitDoorActor::AAscMapKitDoorActor()
     MapKit.Destructible.Shared.EnemyDamage.Amount = 3.f;
     MapKit.Destructible.Shared.EnemyDamage.DelaySeconds = 1.f;
 
-    MapKit.Custom.NonDestructible.DisableEntireCollisionOnOpenDelaySeconds = 0.3f;
+    MapKit.Custom.NonDestructible.DisableEntireCollisionOnOpen = true;
+    MapKit.Custom.NonDestructible.DisableEntireCollisionOnOpenDelaySeconds = 0.f;
     MapKit.Custom.NonDestructible.DisableDefaultToggleCollisionBoneNamesDelaySeconds = 0.3f;
 
     MapKit.Custom.NonDestructible.PlayerInteractBoundingBoxExtent = FVector(1200.f, 1200.f, 1200.f);
