@@ -26,10 +26,11 @@ AAscMapKitPowerupRespawnTriggerBox::AAscMapKitPowerupRespawnTriggerBox()
     WeaponSecAftershock = true;
     WeaponTetRadial = true;
     WeaponTetRadialPack = true;
-    WeaponTetHowler = true;
-    WeaponTetHowlerPack = true;
     WeaponTetBio = true;
     WeaponTetBioPack = true;
+    WeaponTetHowler = true;
+    WeaponTetHowlerPack = true;
+    WeaponTetChaff = true;
     AuxPower = true;
     AuxShield = true;
     AuxConceal = true;
@@ -98,14 +99,16 @@ bool AAscMapKitPowerupRespawnTriggerBox::Supports(const EAscMapKitPowerupTypeEnu
             return WeaponTetRadial;
         case EAscMapKitPowerupTypeEnum::TetRadialPack:
             return WeaponTetRadialPack;
-        case EAscMapKitPowerupTypeEnum::TetHowler:
-            return WeaponTetHowler;
-        case EAscMapKitPowerupTypeEnum::TetHowlerPack:
-            return WeaponTetHowlerPack;
         case EAscMapKitPowerupTypeEnum::TetBio:
             return WeaponTetBio;
         case EAscMapKitPowerupTypeEnum::TetBioPack:
             return WeaponTetBioPack;
+        case EAscMapKitPowerupTypeEnum::TetHowler:
+            return WeaponTetHowler;
+        case EAscMapKitPowerupTypeEnum::TetHowlerPack:
+            return WeaponTetHowlerPack;
+        case EAscMapKitPowerupTypeEnum::TetChaff:
+            return WeaponTetChaff;
         case EAscMapKitPowerupTypeEnum::AuxPower:
             return AuxPower;
         case EAscMapKitPowerupTypeEnum::AuxShield:

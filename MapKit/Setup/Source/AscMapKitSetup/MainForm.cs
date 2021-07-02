@@ -274,12 +274,17 @@ namespace AscMapKitSetup
 
                 SetStatus("Preparing config files...");
 
-                var configFile = Path.Combine(destinationConfigPath, "DefaultEngine.ini");
-                var configContents = File.ReadAllText(configFile);
+                var engineConfigFile = Path.Combine(destinationConfigPath, "DefaultEngine.ini");
+                var gameConfigFile = Path.Combine(destinationConfigPath, "DefaultGame.ini");
+                
+                var engineConfigContents = File.ReadAllText(engineConfigFile);
+                var gameConfigContents = File.ReadAllText(gameConfigFile);
 
-                configContents = configContents.Replace("Template", _settings.CampaignName);
+                engineConfigContents = engineConfigContents.Replace("Template", _settings.CampaignName);
+                gameConfigContents = gameConfigContents.Replace("{{ProjectID}}", Guid.NewGuid().ToString().ToUpper());
 
-                File.WriteAllText(configFile, configContents);
+                File.WriteAllText(engineConfigFile, engineConfigContents);
+                File.WriteAllText(gameConfigFile, gameConfigContents);
 
                 SetStatus("Preparing source files...");
 

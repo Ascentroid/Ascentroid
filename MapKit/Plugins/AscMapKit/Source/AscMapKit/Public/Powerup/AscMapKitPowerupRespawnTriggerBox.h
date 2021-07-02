@@ -82,17 +82,20 @@ public:
     UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Weapon Tertiary Radial", AllowPrivateAccess = "true"))
     bool WeaponTetRadialPack;
 
-	UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Weapon Tertiary Howler", AllowPrivateAccess = "true"))
-	bool WeaponTetHowler;
-
-    UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Weapon Tertiary Howler", AllowPrivateAccess = "true"))
-    bool WeaponTetHowlerPack;
-
     UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Weapon Tertiary Bio", AllowPrivateAccess = "true"))
     bool WeaponTetBio;
 
     UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Weapon Tertiary Bio", AllowPrivateAccess = "true"))
     bool WeaponTetBioPack;
+
+	UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Weapon Tertiary Howler", AllowPrivateAccess = "true"))
+	bool WeaponTetHowler;
+
+	UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Weapon Tertiary Howler", AllowPrivateAccess = "true"))
+	bool WeaponTetHowlerPack;
+
+	UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Weapon Tertiary Chaff", AllowPrivateAccess = "true"))
+	bool WeaponTetChaff;
 
 	UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Auxiliary Power", AllowPrivateAccess = "true"))
 	bool AuxPower;

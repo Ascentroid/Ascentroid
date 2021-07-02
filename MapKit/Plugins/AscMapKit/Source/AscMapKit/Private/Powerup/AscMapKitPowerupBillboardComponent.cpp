@@ -31,6 +31,7 @@ UAscMapKitPowerupBillboardComponent::UAscMapKitPowerupBillboardComponent()
     const ConstructorHelpers::FObjectFinder<UTexture2D> SecDeadeyePackTextureRef(TEXT("Texture2D'/AscMapKit/Editor/Sprites/Player/Powerup/T_Editor_Sprites_Player_Powerup_Weapon_Sec_Deadeye_Pack.T_Editor_Sprites_Player_Powerup_Weapon_Sec_Deadeye_Pack'"));
     const ConstructorHelpers::FObjectFinder<UTexture2D> SecVexTextureRef(TEXT("Texture2D'/AscMapKit/Editor/Sprites/Player/Powerup/T_Editor_Sprites_Player_Powerup_Weapon_Sec_Vex.T_Editor_Sprites_Player_Powerup_Weapon_Sec_Vex'"));
     const ConstructorHelpers::FObjectFinder<UTexture2D> SecAftershockTextureRef(TEXT("Texture2D'/AscMapKit/Editor/Sprites/Player/Powerup/T_Editor_Sprites_Player_Powerup_Weapon_Sec_Aftershock.T_Editor_Sprites_Player_Powerup_Weapon_Sec_Aftershock'"));
+    const ConstructorHelpers::FObjectFinder<UTexture2D> TetChaffTextureRef(TEXT("Texture2D'/AscMapKit/Editor/Sprites/Player/Powerup/T_Editor_Sprites_Player_Powerup_Weapon_Tet_Chaff.T_Editor_Sprites_Player_Powerup_Weapon_Tet_Chaff'"));
     const ConstructorHelpers::FObjectFinder<UTexture2D> TetBioTextureRef(TEXT("Texture2D'/AscMapKit/Editor/Sprites/Player/Powerup/T_Editor_Sprites_Player_Powerup_Weapon_Tet_Bio.T_Editor_Sprites_Player_Powerup_Weapon_Tet_Bio'"));
     const ConstructorHelpers::FObjectFinder<UTexture2D> TetBioPackTextureRef(TEXT("Texture2D'/AscMapKit/Editor/Sprites/Player/Powerup/T_Editor_Sprites_Player_Powerup_Weapon_Tet_Bio_Pack.T_Editor_Sprites_Player_Powerup_Weapon_Tet_Bio_Pack'"));
     const ConstructorHelpers::FObjectFinder<UTexture2D> TetHowlerTextureRef(TEXT("Texture2D'/AscMapKit/Editor/Sprites/Player/Powerup/T_Editor_Sprites_Player_Powerup_Weapon_Tet_Howler.T_Editor_Sprites_Player_Powerup_Weapon_Tet_Howler'"));
@@ -123,6 +124,9 @@ UAscMapKitPowerupBillboardComponent::UAscMapKitPowerupBillboardComponent()
 
     if (TetBioTextureRef.Succeeded())
         TetBioTexture = TetBioTextureRef.Object;
+    
+    if (TetChaffTextureRef.Succeeded())
+        TetChaffTexture = TetChaffTextureRef.Object;
 
     if (TetBioPackTextureRef.Succeeded())
         TetBioPackTexture = TetBioPackTextureRef.Object;
@@ -229,6 +233,9 @@ void UAscMapKitPowerupBillboardComponent::EditorUpdatePowerupType(const EAscMapK
             break;
         case EAscMapKitPowerupTypeEnum::SecAftershock:
             SetSprite(SecAftershockTexture);
+            break;
+        case EAscMapKitPowerupTypeEnum::TetChaff:
+            SetSprite(TetChaffTexture);
             break;
         case EAscMapKitPowerupTypeEnum::TetBio:
             SetSprite(TetBioTexture);
