@@ -5,6 +5,7 @@ AAscMapKitPowerupRespawnTriggerBox::AAscMapKitPowerupRespawnTriggerBox()
     // todo: @reminder: update as powerups change
     // todo: @reminder: this volume uses the "Trigger" collision channel in UE4 by default
     // todo: @reminder: keep in mind, we may need a custom collision channel in the future if we end up building more trigger volumes
+    RootComponent->SetMobility(EComponentMobility::Static);
 
     WeaponPriLaser = true;
     WeaponPriShred = true;

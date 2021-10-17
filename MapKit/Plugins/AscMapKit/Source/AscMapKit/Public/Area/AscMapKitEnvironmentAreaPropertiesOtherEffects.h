@@ -11,6 +11,10 @@ struct ASCMAPKIT_API FAscMapKitEnvironmentAreaPropertiesOtherEffects
 {
 	GENERATED_BODY()
 
+	// To save on performance, projectile lights are disabled in environment areas (except flares). Check this to force enable projectile lights for this environment area.
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+	bool ForceEnableProjectileLights;
+	
     // If particles aren't provided, the default game assets will be used at runtime.
     // However, if you disable it here, then no particles will be used.
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)

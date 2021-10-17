@@ -106,11 +106,6 @@ AAscMapKitDoorActor::AAscMapKitDoorActor()
 void AAscMapKitDoorActor::OnConstruction(const FTransform &Transform)
 {
     Super::OnConstruction(Transform);
-
-#if WITH_EDITOR
-    EditorUpdateDoorType(MapKit.DoorType);
-    EditorUpdatePlayerInteractBoundingBoxExtent(MapKit.Custom.NonDestructible.PlayerInteractBoundingBoxExtent);
-#endif
 }
 
 void AAscMapKitDoorActor::BeginPlay()
@@ -119,6 +114,14 @@ void AAscMapKitDoorActor::BeginPlay()
 }
 
 #if WITH_EDITOR
+void AAscMapKitDoorActor::PostInitializeComponents()
+{
+    Super::PostInitializeComponents();
+
+    EditorUpdateDoorType(MapKit.DoorType);
+    EditorUpdatePlayerInteractBoundingBoxExtent(MapKit.Custom.NonDestructible.PlayerInteractBoundingBoxExtent);
+}
+
 void AAscMapKitDoorActor::PostEditChangeProperty(struct FPropertyChangedEvent &PropertyChangedEvent)
 {
     Super::PostEditChangeProperty(PropertyChangedEvent);
@@ -193,6 +196,7 @@ void AAscMapKitDoorActor::EditorUpdateDoorType(const EAscMapKitDoorTypeEnum Door
 
 void AAscMapKitDoorActor::EditorUpdatePlayerInteractBoundingBoxExtent(const FVector Arg)
 {
-    MapKit.Custom.NonDestructible.PlayerInteractBoundingBox->SetBoxExtent(Arg);
+    if (MapKit.Custom.NonDestructible.PlayerInteractBoundingBox)
+        MapKit.Custom.NonDestructible.PlayerInteractBoundingBox->SetBoxExtent(Arg);
 }
 #endif

@@ -37,6 +37,8 @@ public:
     void BeginPlay() override;
 
 #if WITH_EDITOR
+    virtual void PostInitializeComponents() override;
+    
     virtual void PostEditChangeProperty(struct FPropertyChangedEvent &PropertyChangedEvent) override;
 
     void EditorUpdateDoorType(EAscMapKitDoorTypeEnum DoorType);

@@ -48,10 +48,11 @@ public:
     UPROPERTY()
     UAscMapKitEnvironmentAreaBillboardComponent *BillboardComponent;
 
-    UFUNCTION()
-    void OnConstruction(const FTransform &Transform) override;
+    virtual void OnConstruction(const FTransform &Transform) override;
 
 #if WITH_EDITOR
+    virtual void PostInitializeComponents() override;
+    
     virtual void PostEditChangeProperty(struct FPropertyChangedEvent &PropertyChangedEvent) override;
 #endif
 };
