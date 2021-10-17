@@ -162,14 +162,17 @@ AAscMapKitEnvironmentAreaActor::AAscMapKitEnvironmentAreaActor()
 void AAscMapKitEnvironmentAreaActor::OnConstruction(const FTransform &Transform)
 {
     Super::OnConstruction(Transform);
-
-#if WITH_EDITOR
-    if (BillboardComponent != nullptr)
-        BillboardComponent->EditorUpdateEnvironmentAreaType(MapKit.EnvironmentAreaType);
-#endif
 }
 
 #if WITH_EDITOR
+void AAscMapKitEnvironmentAreaActor::PostInitializeComponents()
+{
+    Super::PostInitializeComponents();
+
+    if (BillboardComponent != nullptr)
+        BillboardComponent->EditorUpdateEnvironmentAreaType(MapKit.EnvironmentAreaType);
+}
+
 void AAscMapKitEnvironmentAreaActor::PostEditChangeProperty(struct FPropertyChangedEvent &PropertyChangedEvent)
 {
     Super::PostEditChangeProperty(PropertyChangedEvent);

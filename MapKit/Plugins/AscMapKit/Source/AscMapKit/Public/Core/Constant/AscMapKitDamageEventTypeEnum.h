@@ -21,5 +21,6 @@ enum class EAscMapKitDamageEventTypeEnum : uint8
 	PlayerDeathExplosion,
 	Sludge,
 	SuicideCheat,
+	Weapon,
 	_End
 };
