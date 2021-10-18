@@ -39,6 +39,18 @@ struct ASCMAPKIT_API FAscMapKitDestructiblePropertiesStruct
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     float OverrideOnHitImpulseStrength;
 
+    // If checked, when the actor is hit, this will check to see if a minimal impulse has been applied to the actor yet, and, if not, it will apply a minimum.
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    bool UseMinimalImpulse;
+
+    // If enabled, when the actor is hit, if the minimal impulse strength is below the threshold, this is the radius value used to apply the minimum impulse.
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    float MinimalImpulseRadius;
+
+    // If enabled, when the actor is hit, if the minimal impulse strength is below this value threshold, this is the strength value used to apply the minimum impulse.
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    float MinimalImpulseStrength;
+
     // Player Damage
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     FAscMapKitDestructibleDamagePropertiesStruct PlayerDamage;
