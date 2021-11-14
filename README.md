@@ -92,7 +92,7 @@ The utility will perform the following in the background:
 
 When the map kit setup is complete, it should pop-up a series of steps to help guide you through the final setup:
 
-![Imgur](https://i.imgur.com/WnqplxD.png)
+![Imgur](https://i.imgur.com/uOW4G5o.png)
 
 1) Execute (as a <b>Windows Administrator</b> user):
 ```
@@ -132,7 +132,7 @@ Note: if running this command displays <b>ERROR: Could not find NetFxSDK install
 
 10) The <b>\*.json</b> and <b>\*.pak</b> files for your campaign will be copied to the Ascentroid game folder:
 ```
-[game root]\Ascentroid\Content\Ascentroid\Paks
+[game root]\Ascentroid\Content\Ascentroid\Campaigns
 ```
 
 11) If everything worked, you can now test your campaign in the game, Ascentroid!
