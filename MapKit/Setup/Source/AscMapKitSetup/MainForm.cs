@@ -32,16 +32,16 @@ namespace AscMapKitSetup
                 MessageBox.Show(e.ToString());
             }
         }
-        
+
         private void MainForm_Load(object sender, EventArgs e)
         {
             LoadForm();
         }
 
         private void LoadForm()
-        { 
+        {
             SetInitButton(false);
-            
+
             txtBoxUE4Path.Text = _settings.UE4Path;
 
             var hasGamePath = !string.IsNullOrWhiteSpace(_settings.GamePath);
@@ -108,7 +108,7 @@ namespace AscMapKitSetup
                 ValidateUE4Path();
             }
         }
-        
+
         private void ValidateUE4Path()
         {
             if (string.IsNullOrWhiteSpace(txtBoxUE4Path.Text))
@@ -276,7 +276,7 @@ namespace AscMapKitSetup
 
                 var engineConfigFile = Path.Combine(destinationConfigPath, "DefaultEngine.ini");
                 var gameConfigFile = Path.Combine(destinationConfigPath, "DefaultGame.ini");
-                
+
                 var engineConfigContents = File.ReadAllText(engineConfigFile);
                 var gameConfigContents = File.ReadAllText(gameConfigFile);
 
@@ -351,7 +351,7 @@ namespace AscMapKitSetup
                 sb.Append($"7) Edit campaign JSON (make sure your campaign and level name(s) match): {destinationCampaignJsonFile}").Append(Environment.NewLine).Append(Environment.NewLine);
                 sb.Append("8) All assets used in your campaign *must* be saved in the 'Campaign Content' folder (or they *won't* cook!)").Append(Environment.NewLine).Append(Environment.NewLine);
                 sb.Append($"9) To cook your campaign, execute (as a Windows Administrator user): {Path.Combine(destinationBatchScriptPath, "Cook.bat")}").Append(Environment.NewLine).Append(Environment.NewLine);
-                sb.Append($"10) The JSON and PAK files for your campaign will be copied to the Ascentroid game folder: {Path.Combine(_settings.GamePath, "Ascentroid", "Content", "Ascentroid", "Paks")}").Append(Environment.NewLine).Append(Environment.NewLine);
+                sb.Append($"10) The JSON and PAK files for your campaign will be copied to the Ascentroid game folder: {Path.Combine(_settings.GamePath, "Ascentroid", "Content", "Ascentroid", "Campaigns")}").Append(Environment.NewLine).Append(Environment.NewLine);
                 sb.Append("11) If everything worked, you can now test your campaign in the game, Ascentroid!").Append(Environment.NewLine).Append(Environment.NewLine);
                 sb.Append("12) Visit Github for more documentation: https://github.com/Ascentroid/Ascentroid").Append(Environment.NewLine).Append(Environment.NewLine);
                 sb.Append("13) Visit YouTube for tutorials: http://youtube.ascentroid.com").Append(Environment.NewLine);
