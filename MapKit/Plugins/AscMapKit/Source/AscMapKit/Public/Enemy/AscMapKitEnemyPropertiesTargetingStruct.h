@@ -14,6 +14,11 @@ struct ASCMAPKIT_API FAscMapKitEnemyPropertiesTargetingStruct
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     int32 ChanceToAttackEnemyWhoHitUs;
 
+    // If enabled, non-melee enemies will attack multiple targets simultaneously.
+    // * This would typically be used for really aggressive enemies, and/or bosses.
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    bool AttackMultipleTargets;
+    
     // The size of the cone for the enemy to use for target/attack checking. You may need to tweak this value depending on how aggressive, or passive, you want the enemy to be.
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     float AttackCheckConeAngle;
@@ -21,4 +26,9 @@ struct ASCMAPKIT_API FAscMapKitEnemyPropertiesTargetingStruct
     // The distance in front of the enemy, within scope of the cone angle, for the enemy to use for targeting/attacking. You may need to tweak this value depending on how aggressive, or passive, you want the enemy to be.
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     float AttackCheckMaxSearchRadius;
+
+    // The time, in second(s), an enemy will delay looking at one target to another target.
+    // * This helps give enemies a more natural appearance when detecting and looking at different targets.
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    float LookAtProgressSeconds;
 };
