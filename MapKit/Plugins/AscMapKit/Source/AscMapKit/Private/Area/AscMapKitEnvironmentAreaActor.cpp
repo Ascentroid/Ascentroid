@@ -92,10 +92,10 @@ AAscMapKitEnvironmentAreaActor::AAscMapKitEnvironmentAreaActor()
     MapKit.WaterDrips.PostTintFactor = 0.f;
     MapKit.WaterDrips.PostTintMaskPower = 1.f;
     MapKit.WaterDrips.PostTintColor = FLinearColor::White;
-    MapKit.WaterDrips.FadeOutDelaySeconds = 0.1f;
+    MapKit.WaterDrips.FadeOutDelaySeconds = 0.05f;
 
     MapKit.WaterDripsCockpit.EnableForPlayerOnOverlapEnd = true;
-    MapKit.WaterDripsCockpit.FadeOutDelaySeconds = 0.01f;
+    MapKit.WaterDripsCockpit.FadeOutDelaySeconds = 0.0025f;
     MapKit.WaterDripsCockpit.RefractionFadeOutRate = 0.001f;
     MapKit.WaterDripsCockpit.OpacityFadeOutRate = 0.002f;
     MapKit.WaterDripsCockpit.RefractionAmount = 1.5f;

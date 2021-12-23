@@ -57,6 +57,7 @@ AAscMapKitEnemyActor::AAscMapKitEnemyActor()
     MapKit.Status.StartShields.Hard = 120.f;
     MapKit.Status.StartShields.Impossible = 150.f;
     MapKit.Status.MaxSpeed = 3000.f;
+    MapKit.Status.ResetToIdleSeconds = 5.f;
 
     MapKit.Colors.PrimaryColor = FLinearColor(1.f, 0.679045f, 0.312106f, 1.f);
     MapKit.Colors.EmitColor = FLinearColor(2.f, 0.024212f, 0.031170f, 1.f);
@@ -71,12 +72,30 @@ AAscMapKitEnemyActor::AAscMapKitEnemyActor()
     MapKit.Turret.TrackSpeed = 1.f;
     MapKit.Turret.SetExplosionAtRootComponent = true;
 
+    MapKit.Weapons.ChanceToAttackWithPrediction.Easy = 25;
+    MapKit.Weapons.ChanceToAttackWithPrediction.Moderate = 35;
+    MapKit.Weapons.ChanceToAttackWithPrediction.Normal = 40;
+    MapKit.Weapons.ChanceToAttackWithPrediction.Hard = 55;
+    MapKit.Weapons.ChanceToAttackWithPrediction.Impossible = 65;
+
+    MapKit.Weapons.AttackPredictionDistanceModMinimum = 0.25f;
+    MapKit.Weapons.AttackPredictionDistanceModMaximum = 0.75f;
+    
     MapKit.Weapons.ChanceToAttackWithMultipleWeapons.Easy = 35;
     MapKit.Weapons.ChanceToAttackWithMultipleWeapons.Moderate = 45;
     MapKit.Weapons.ChanceToAttackWithMultipleWeapons.Normal = 50;
     MapKit.Weapons.ChanceToAttackWithMultipleWeapons.Hard = 75;
     MapKit.Weapons.ChanceToAttackWithMultipleWeapons.Impossible = 95;
 
+    MapKit.Weapons.AttackMultipleTimes.Easy = 1;
+    MapKit.Weapons.AttackMultipleTimes.Moderate = 1;
+    MapKit.Weapons.AttackMultipleTimes.Normal = 1;
+    MapKit.Weapons.AttackMultipleTimes.Hard = 2;
+    MapKit.Weapons.AttackMultipleTimes.Impossible = 3;
+
+    MapKit.Weapons.AttackMultipleTimesMinimumDelaySeconds = 0.4f;
+    MapKit.Weapons.AttackMultipleTimesMaximumDelaySeconds = 0.8f;
+    
     auto DefaultWeaponSocket = FAscMapKitEnemyPropertiesWeaponStruct();
     DefaultWeaponSocket.WeaponType = EAscMapKitProjWeapTypeEnum::Pri_L1_Fluorine;
     DefaultWeaponSocket.ChanceToFire = 95;
@@ -98,6 +117,7 @@ AAscMapKitEnemyActor::AAscMapKitEnemyActor()
     MapKit.Targeting.ChanceToAttackEnemyWhoHitUs = 100.f; // todo: @future: change to 0 after testing is done
     MapKit.Targeting.AttackCheckConeAngle = 1.1f;
     MapKit.Targeting.AttackCheckMaxSearchRadius = 17500.0f;
+    MapKit.Targeting.LookAtProgressSeconds = 1.f;
 
     MapKit.Pursue.TargetDistanceMinimum = 3000.f;
     MapKit.Pursue.TargetDistanceMaximum = 15000.f;

@@ -34,4 +34,9 @@ struct ASCMAPKIT_API FAscMapKitEnemyPropertiesStatusStruct
 	// The enemy will be forced to a maximum movement speed.
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     float MaxSpeed;
+
+	// How long, in second(s), to reset the enemy to idle if nothing is keeping the enemy aware/active.
+	// Idle enemies are good for performance, because it lowers the enemy tick rate in the game engine.
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+	float ResetToIdleSeconds;
 };
