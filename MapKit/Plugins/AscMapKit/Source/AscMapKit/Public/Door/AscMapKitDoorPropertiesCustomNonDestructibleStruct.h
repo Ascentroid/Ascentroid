@@ -5,6 +5,7 @@
 
 // Ascentroid
 #include "AscMapKit/Public/Door/AscMapKitDoorPlayerInteractBoundingBox.h"
+#include "AscMapKit/Public/Door/AscMapKitDoorPropertiesCustomMaterialStruct.h"
 
 // Generated
 #include "AscMapKitDoorPropertiesCustomNonDestructibleStruct.generated.h"
@@ -65,5 +66,8 @@ struct ASCMAPKIT_API FAscMapKitDoorPropertiesCustomNonDestructibleStruct
     // If you need to modify the skeletal mesh transform, you can do it here.
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     FTransform SkeletalMeshRelativeTransform;
-};
 
+    // If you need to override skeletal mesh materials, you can do it here.
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    TArray<FAscMapKitDoorPropertiesCustomMaterialStruct> OverrideMaterials;
+};

@@ -19,3 +19,27 @@ AAscMapKitDecorActor::AAscMapKitDecorActor()
     if (CubeStaticMeshRef.Succeeded())
         StaticMeshComponent->SetStaticMesh(CubeStaticMeshRef.Object);
 }
+
+void AAscMapKitDecorActor::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (StaticMeshComponent && MapKit.OverrideMaterials.Num() > 0)
+	{
+		for (const auto &Item : MapKit.OverrideMaterials)
+		{
+			if (!Item.OverrideMaterial)
+				continue;
+
+			if (Item.Material == nullptr)
+				continue;
+
+			const auto MaterialInstance = UMaterialInstanceDynamic::Create(Item.Material, nullptr);
+
+			if (Item.SlotName.TrimStartAndEnd().IsEmpty())
+				StaticMeshComponent->SetMaterial(Item.MaterialIndex, MaterialInstance);
+			else
+				StaticMeshComponent->SetMaterialByName(FName(Item.SlotName), MaterialInstance);
+		}
+	}
+}

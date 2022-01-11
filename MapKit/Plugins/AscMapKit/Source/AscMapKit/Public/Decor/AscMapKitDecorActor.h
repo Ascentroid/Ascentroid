@@ -3,6 +3,9 @@
 // UE4
 #include "Runtime/Engine/Classes/Components/StaticMeshComponent.h"
 
+// Ascentroid
+#include "AscMapKit/Public/Decor/AscMapKitDecorPropertiesStruct.h"
+
 // Generated
 #include "AscMapKitDecorActor.generated.h"
 
@@ -14,6 +17,13 @@ class ASCMAPKIT_API AAscMapKitDecorActor : public AActor
 public:
     AAscMapKitDecorActor();
 
+    UFUNCTION()
+    virtual void BeginPlay() override;
+    
+    // Edit the majority of the map kit actor properties here.
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category="Ascentroid")
+    FAscMapKitDecorPropertiesStruct MapKit;
+    
     UPROPERTY()
     USceneComponent *EmptyRootComponent;
 
