@@ -10,15 +10,15 @@ What's great about this is that it allows map creators to utilize <b><i>almost a
 
 ## Prerequisites
 
-1) Only <b>Windows</b>, <b>x64</b> is supported right now. Make sure you meet the [required Hardware and Software Specifications for Unreal Engine](https://docs.unrealengine.com/en-US/Basics/RecommendedSpecifications/index.html).
+1) Only <b>Windows</b>, <b>x64</b> is supported <i>right now</i>. Make sure you meet the [required Hardware and Software Specifications for Unreal Engine](https://docs.unrealengine.com/4.26/en-US/Basics/InstallingUnrealEngine/RecommendedSpecifications/).
 
 2) Since UE4 treats a campaign like a <b>MOD</b>, it <b>requires Microsoft's C++ compiler</b>. You have two options:
 
-* <b><i>Option #1</i></b> (free, smaller download size): Install [Visual Studio Code](https://visualstudio.microsoft.com/downloads/) + [Visual Studio 2019 Build Tools](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16) following this [installation tutorial](https://anasrar.github.io/blog/post/my-visual-studio-code-set-up-for-unreal-engine-4).
+* <b><i>Option #1</i></b> (free, smaller download size): Install [Visual Studio Code](https://code.visualstudio.com/docs/?dv=win) + [Visual Studio 2019 Build Tools](https://visualstudio.microsoft.com/vs/older-downloads/) following this [installation tutorial](http://jollymonsterstudio.com/2018/11/02/unreal-c-with-visual-studio-code/). ✅ <b><u>RECOMMENDED</u></b>
 
-* <b><i>Option 2</i></b> (free, larger download size): Install [Visual Studio 2019 or 2017 Community Edition](https://visualstudio.microsoft.com/downloads/) following this [installation tutorial](https://docs.unrealengine.com/en-US/ProductionPipelines/DevelopmentSetup/VisualStudioSetup/index.html).
+* <b><i>Option 2</i></b> (free, larger download size): Install [Visual Studio 2019 or 2017 Community Edition](https://visualstudio.microsoft.com/downloads/) following this [installation tutorial](https://docs.unrealengine.com/4.26/en-US/ProductionPipelines/DevelopmentSetup/VisualStudioSetup/). ❌ <b><u>NOT RECOMMENDED</u></b>
 
-3) Install Unreal Engine <b><u>4.26.2</u></b> by following the [official installation guide](https://docs.unrealengine.com/en-US/Basics/InstallingUnrealEngine/index.html). When prompted, select the <b>Publishing License</b>.
+3) Install Unreal Engine <b><u>4.26.2</u></b> by following the [official installation guide](https://docs.unrealengine.com/4.26/en-US/installing-unreal-engine/). When prompted, select the <b>Publishing License</b>.
 
 * <b>IMPORTANT</b>: You <b>MUST</b> install the specific UE4 version <b><u>4.26.2</u></b>. Do <b>NOT</b> install a different version! Ascentroid is built on <b><u>4.26.2</u></b>. If you use a different version, your campaigns will <b>NOT</b> work! If you create a campaign on the wrong engine version, you will have to delete it and re-create it with the correct engine version!
 
@@ -273,15 +273,9 @@ Here are some tutorial videos on how to use some of these free UE4 plugins:
 
 [Mesh Tool](https://forums.unrealengine.com/unreal-engine/marketplace/107840-mesh-tool-a-mesh-editor) is a commercial (paid) UE4 plugin which allows you to edit mesh assets and prototype props and levels without leaving the UE4 Editor. It also includes basic UV mapping tools!
 
-![MeshTool](https://forums.unrealengine.com/filedata/fetch?id=1221390&d=1508023041)
+![MeshTool](https://d3kjluh73b9h9o.cloudfront.net/original/3X/5/3/53e2d19b206094fc4216cbdd4e95c5769c93dd91.jpeg)
 
-![MeshTool](https://forums.unrealengine.com/filedata/fetch?id=1221391&d=1508023040)
-
-![MeshTool](https://forums.unrealengine.com/filedata/fetch?id=1221394&d=1508023040)
-
-![Meshtool](https://forums.unrealengine.com/filedata/fetch?id=1221396&d=1508023040)
-
-![Meshtool](https://forums.unrealengine.com/filedata/fetch?id=1221398&d=1508158807)
+![MeshTool](https://d3kjluh73b9h9o.cloudfront.net/original/3X/c/4/c4df8cfb5c1d52ecf550af5708bbf162b2bc9a8e.jpeg)
 
 Mesh Tool links:
 
