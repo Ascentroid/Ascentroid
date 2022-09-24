@@ -12,9 +12,11 @@ AAscMapKitDecorActor::AAscMapKitDecorActor()
 
     StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
     StaticMeshComponent->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	StaticMeshComponent->SetMobility(EComponentMobility::Static);
     StaticMeshComponent->SetRelativeScale3D(FVector(1.f, 1.f, 1.f));
 	StaticMeshComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	StaticMeshComponent->SetCollisionProfileName(TEXT("BlockAll"));
+	StaticMeshComponent->LightmapType = ELightmapType::ForceSurface; // note: necessary, otherwise lightmaps won't bake!!
 
     if (CubeStaticMeshRef.Succeeded())
         StaticMeshComponent->SetStaticMesh(CubeStaticMeshRef.Object);

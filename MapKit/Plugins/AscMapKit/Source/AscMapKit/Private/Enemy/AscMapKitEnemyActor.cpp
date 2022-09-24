@@ -51,11 +51,11 @@ AAscMapKitEnemyActor::AAscMapKitEnemyActor()
 
     MapKit.DisplayName = TEXT("Enemy");
 
-    MapKit.Status.StartShields.Easy = 50.f;
-    MapKit.Status.StartShields.Moderate = 70.f;
-    MapKit.Status.StartShields.Normal = 100.f;
-    MapKit.Status.StartShields.Hard = 120.f;
-    MapKit.Status.StartShields.Impossible = 150.f;
+    MapKit.Status.StartShields.Easy = 200.f;
+    MapKit.Status.StartShields.Moderate = 250.f;
+    MapKit.Status.StartShields.Normal = 300.f;
+    MapKit.Status.StartShields.Hard = 350.f;
+    MapKit.Status.StartShields.Impossible = 400.f;
     MapKit.Status.MaxSpeed = 3000.f;
     MapKit.Status.ResetToIdleSeconds = 5.f;
 
@@ -72,20 +72,20 @@ AAscMapKitEnemyActor::AAscMapKitEnemyActor()
     MapKit.Turret.TrackSpeed = 1.f;
     MapKit.Turret.SetExplosionAtRootComponent = true;
 
-    MapKit.Weapons.ChanceToAttackWithPrediction.Easy = 25;
-    MapKit.Weapons.ChanceToAttackWithPrediction.Moderate = 35;
+    MapKit.Weapons.ChanceToAttackWithPrediction.Easy = 20;
+    MapKit.Weapons.ChanceToAttackWithPrediction.Moderate = 30;
     MapKit.Weapons.ChanceToAttackWithPrediction.Normal = 40;
-    MapKit.Weapons.ChanceToAttackWithPrediction.Hard = 55;
-    MapKit.Weapons.ChanceToAttackWithPrediction.Impossible = 65;
+    MapKit.Weapons.ChanceToAttackWithPrediction.Hard = 50;
+    MapKit.Weapons.ChanceToAttackWithPrediction.Impossible = 60;
 
     MapKit.Weapons.AttackPredictionDistanceModMinimum = 0.25f;
     MapKit.Weapons.AttackPredictionDistanceModMaximum = 0.75f;
     
-    MapKit.Weapons.ChanceToAttackWithMultipleWeapons.Easy = 35;
-    MapKit.Weapons.ChanceToAttackWithMultipleWeapons.Moderate = 45;
-    MapKit.Weapons.ChanceToAttackWithMultipleWeapons.Normal = 50;
-    MapKit.Weapons.ChanceToAttackWithMultipleWeapons.Hard = 75;
-    MapKit.Weapons.ChanceToAttackWithMultipleWeapons.Impossible = 95;
+    MapKit.Weapons.ChanceToAttackWithMultipleWeapons.Easy = 5;
+    MapKit.Weapons.ChanceToAttackWithMultipleWeapons.Moderate = 10;
+    MapKit.Weapons.ChanceToAttackWithMultipleWeapons.Normal = 15;
+    MapKit.Weapons.ChanceToAttackWithMultipleWeapons.Hard = 20;
+    MapKit.Weapons.ChanceToAttackWithMultipleWeapons.Impossible = 25;
 
     MapKit.Weapons.AttackMultipleTimes.Easy = 1;
     MapKit.Weapons.AttackMultipleTimes.Moderate = 1;
@@ -93,12 +93,12 @@ AAscMapKitEnemyActor::AAscMapKitEnemyActor()
     MapKit.Weapons.AttackMultipleTimes.Hard = 2;
     MapKit.Weapons.AttackMultipleTimes.Impossible = 3;
 
-    MapKit.Weapons.AttackMultipleTimesMinimumDelaySeconds = 0.4f;
-    MapKit.Weapons.AttackMultipleTimesMaximumDelaySeconds = 0.8f;
+    MapKit.Weapons.AttackMultipleTimesMinimumDelaySeconds = 0.3f;
+    MapKit.Weapons.AttackMultipleTimesMaximumDelaySeconds = 0.9f;
     
     auto DefaultWeaponSocket = FAscMapKitEnemyPropertiesWeaponStruct();
     DefaultWeaponSocket.WeaponType = EAscMapKitProjWeapTypeEnum::Pri_L1_Fluorine;
-    DefaultWeaponSocket.ChanceToFire = 95;
+    DefaultWeaponSocket.ChanceToFire = 50;
 
     MapKit.Weapons.Sockets.Add(DefaultWeaponSocket);
 
@@ -127,6 +127,10 @@ AAscMapKitEnemyActor::AAscMapKitEnemyActor()
     MapKit.Dodge.Chance = 50;
     MapKit.Dodge.DistanceMin = 2000.f;
     MapKit.Dodge.DistanceMax = 4000.f;
+    MapKit.Dodge.TurnRoll = true;
+    MapKit.Dodge.TurnRollStrengthMinimum = 5.f;
+    MapKit.Dodge.TurnRollStrengthMaximum = 30.f;
+    MapKit.Dodge.TurnRollInterpSpeed = 3.f;
 
     MapKit.Stun.Enable = true;
     MapKit.Stun.ForSeconds.Easy = 0.4f;
@@ -150,7 +154,7 @@ AAscMapKitEnemyActor::AAscMapKitEnemyActor()
     MapKit.SplashDamage.ImpulseInterpSpeedAgainstEnemy = 3.f;
 
     MapKit.Howlers.EnableAttraction = true;
-    MapKit.Howlers.DistanceLineOfSightNotRequiredRadiusCheck = 3000.f;
+    MapKit.Howlers.DistanceLineOfSightNotRequiredRadiusCheck = 2000.f;
     MapKit.Howlers.DistanceLineOfSightRequiredRadiusCheck = 17500.f;
 
     MapKit.OtherEffects.PlayTalkSoundCueRepeatWaitMinimumSeconds = 5;

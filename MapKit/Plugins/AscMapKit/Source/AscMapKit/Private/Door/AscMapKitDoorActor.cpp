@@ -181,7 +181,6 @@ void AAscMapKitDoorActor::EditorUpdateDoorType(const EAscMapKitDoorTypeEnum Door
     if (DoorType == EAscMapKitDoorTypeEnum::Custom && MapKit.Custom.StaticMeshPreview != nullptr)
     {
         StaticMeshComponent->SetStaticMesh(MapKit.Custom.StaticMeshPreview);
-        StaticMeshComponent->SetRelativeTransform(MapKit.Custom.StaticMeshPreviewRelativeTransform);
 
         if (MapKit.Custom.StaticMeshPreviewMaterial != nullptr)
             StaticMeshComponent->SetMaterial(0, MapKit.Custom.StaticMeshPreviewMaterial);

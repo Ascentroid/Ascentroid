@@ -9,6 +9,7 @@
 #include "AscMapKit/Public/Enemy/AscMapKitEnemyPropertiesMeleeStruct.h"
 #include "AscMapKit/Public/Enemy/AscMapKitEnemyPropertiesOtherEffectsStruct.h"
 #include "AscMapKit/Public/Enemy/AscMapKitEnemyPropertiesPointsStruct.h"
+#include "AscMapKit/Public/Enemy/AscMapKitEnemyPropertiesPowerupStruct.h"
 #include "AscMapKit/Public/Enemy/AscMapKitEnemyPropertiesPursueStruct.h"
 #include "AscMapKit/Public/Enemy/AscMapKitEnemyPropertiesSplashDamageStruct.h"
 #include "AscMapKit/Public/Enemy/AscMapKitEnemyPropertiesStatusStruct.h"
@@ -78,6 +79,9 @@ struct ASCMAPKIT_API FAscMapKitEnemyPropertiesStruct
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     FAscMapKitEnemyPropertiesHowlersStruct Howlers;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    FAscMapKitEnemyPropertiesPowerupStruct Powerups;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     FAscMapKitEnemyPropertiesOtherEffectsStruct OtherEffects;

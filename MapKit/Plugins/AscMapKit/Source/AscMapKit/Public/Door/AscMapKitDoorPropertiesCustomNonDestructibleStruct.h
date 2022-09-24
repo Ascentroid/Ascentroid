@@ -63,10 +63,6 @@ struct ASCMAPKIT_API FAscMapKitDoorPropertiesCustomNonDestructibleStruct
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     USkeletalMesh *SkeletalMesh;
 
-    // If you need to modify the skeletal mesh transform, you can do it here.
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
-    FTransform SkeletalMeshRelativeTransform;
-
     // If you need to override skeletal mesh materials, you can do it here.
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     TArray<FAscMapKitDoorPropertiesCustomMaterialStruct> OverrideMaterials;

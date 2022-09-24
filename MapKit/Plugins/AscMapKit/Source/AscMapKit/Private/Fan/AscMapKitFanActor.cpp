@@ -77,7 +77,6 @@ void AAscMapKitFanActor::EditorUpdateFanType(const EAscMapKitFanTypeEnum FanType
     if (FanType == EAscMapKitFanTypeEnum::Custom && MapKit.Custom.StaticMeshPreview != nullptr)
     {
         StaticMeshComponent->SetStaticMesh(MapKit.Custom.StaticMeshPreview);
-        StaticMeshComponent->SetRelativeTransform(MapKit.Custom.StaticMeshPreviewRelativeTransform);
     
         if (MapKit.Custom.StaticMeshPreviewMaterial != nullptr)
             StaticMeshComponent->SetMaterial(0, MapKit.Custom.StaticMeshPreviewMaterial);

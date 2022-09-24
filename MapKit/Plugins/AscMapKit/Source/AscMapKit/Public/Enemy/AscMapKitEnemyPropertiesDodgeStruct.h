@@ -28,4 +28,20 @@ struct ASCMAPKIT_API FAscMapKitEnemyPropertiesDodgeStruct
     // The maximum distance in which an incoming projectile could be for dodging to engage.
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     float DistanceMax;
+
+    // If checked, the enemy will engage a slight turn/roll while dodging.
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    bool TurnRoll;
+    
+    // When the enemy engages in a turn/roll while dodging, it will generate a random value between this minimum and a maximum.
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    float TurnRollStrengthMinimum;
+
+    // When the enemy engages in a turn/roll while dodging, it will generate a random value between a minimum and this maximum.
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    float TurnRollStrengthMaximum;
+
+    // When the enemy engages in a turn/roll while dodging, this value will be used during the movement interpolation. The higher the number, the faster the interpolation.
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    float TurnRollInterpSpeed;
 };

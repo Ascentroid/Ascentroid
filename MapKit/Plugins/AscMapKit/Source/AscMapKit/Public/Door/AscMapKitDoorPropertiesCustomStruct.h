@@ -16,10 +16,6 @@ struct ASCMAPKIT_API FAscMapKitDoorPropertiesCustomStruct
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     UStaticMesh *StaticMeshPreview;
 
-    // If you need to modify the static mesh preview transform, you can do it here.
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
-    FTransform StaticMeshPreviewRelativeTransform;
-
     // An optional static mesh material, used only for previewing the door in the map editor.
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     UMaterialInterface *StaticMeshPreviewMaterial;
