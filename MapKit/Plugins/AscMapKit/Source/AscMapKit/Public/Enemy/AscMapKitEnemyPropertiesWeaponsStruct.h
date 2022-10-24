@@ -24,7 +24,7 @@ struct ASCMAPKIT_API FAscMapKitEnemyPropertiesWeaponsStruct
     // Example 1: 6000 [distance] * (RandomRange(0.25 [min], 0.75 [max]) = 0.33 [random selection]) = 1980
     // Example 2: 6000 [distance] * (RandomRange(0.25 [min], 0.75 [max]) = 0.45 [random selection]) = 2700
     // Example 3: 6000 [distance] * (RandomRange(0.25 [min], 0.75 [max]) = 0.7 [random selection]) = 4200
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, SaveGame)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     float AttackPredictionDistanceModMinimum;
 
     // When the enemy uses attack prediction, it will calculate the attack target velocity and estimate lead/distance based on the trajectory.
@@ -33,7 +33,7 @@ struct ASCMAPKIT_API FAscMapKitEnemyPropertiesWeaponsStruct
     // Example 1: 6000 [distance] * (RandomRange(0.25 [min], 0.75 [max]) = 0.33 [random selection]) = 1980
     // Example 2: 6000 [distance] * (RandomRange(0.25 [min], 0.75 [max]) = 0.45 [random selection]) = 2700
     // Example 3: 6000 [distance] * (RandomRange(0.25 [min], 0.75 [max]) = 0.7 [random selection]) = 4200
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, SaveGame)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     float AttackPredictionDistanceModMaximum;
     
     // If the enemy has multiple weapon sockets, this percentage value will be used to determine the chance that the weapons fire simultaneously.
@@ -50,16 +50,16 @@ struct ASCMAPKIT_API FAscMapKitEnemyPropertiesWeaponsStruct
 
     // The minimum range for how long to delay, in second(s), between multiple attacks (when the chance to attack is triggered).
     // * This does not apply to melee enemies.
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, SaveGame)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     float AttackMultipleTimesMinimumDelaySeconds;
 
     // The maximum range for how long to delay, in second(s), between multiple attacks (when the chance to attack is triggered).
     // * This does not apply to melee enemies.
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, SaveGame)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     float AttackMultipleTimesMaximumDelaySeconds;
 
     // * This does not apply to melee enemies.
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, SaveGame)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     int32 NumberOfSockets;
 
     // Depending on how many weapon sockets are configured for this enemy, designate the number of weapon sockets and the weapon type for each here.

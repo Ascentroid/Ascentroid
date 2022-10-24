@@ -18,11 +18,14 @@ goto :end
 exit
 
 :ok
+rem Cook lights
+if "%NOCOOKLIGHTS%"=="" start "1 Light Cook" /wait /max /d "%UE4_PATH%\Engine\Binaries\Win64\" UE4Editor-Cmd.exe "%UPROJECT_FILE%" -run=resavepackages -buildlighting -quality=Production -allowcommandletrendering -map=%PROJECT_NAME%
+
 rem Create the release
-start "1 Primary Cook" /wait /max /d "%UE4_PATH%\Engine\Build\BatchFiles\" RunUAT.bat -ScriptsForProject="%UPROJECT_FILE%" BuildCookRun -project="%UPROJECT_FILE%" -noP4 -clientconfig=Shipping -serverconfig=Shipping -rocket -nocompile -ue4exe=UE4Editor-Cmd.exe -utf8output -platform=Win64 -targetplatform=Win64 -build -cook -map=Empty -unversionedcookedcontent -pak -createreleaseversion=1.0 -compressed -stage -package -cmdline="Empty -Messaging" -addcmdline="-SessionId=0D0A64B94E0441EA86FFE9ADA0DD82DA -SessionOwner='jvukovich' -SessionName='Primary Cook' "
+start "2 Primary Cook" /wait /max /d "%UE4_PATH%\Engine\Build\BatchFiles\" RunUAT.bat -ScriptsForProject="%UPROJECT_FILE%" BuildCookRun -project="%UPROJECT_FILE%" -noP4 -clientconfig=Shipping -serverconfig=Shipping -rocket -nocompile -ue4exe=UE4Editor-Cmd.exe -utf8output -platform=Win64 -targetplatform=Win64 -build -cook -map=Empty -unversionedcookedcontent -SkipCookingEditorContent -pak -createreleaseversion=1.0 -compressed -stage -package -cmdline="Empty -Messaging" -addcmdline="-SessionId=0D0A64B94E0441EA86FFE9ADA0DD82DA -SessionOwner='jvukovich' -SessionName='Primary Cook' "
 
 rem Cook the campaign for the release
-start "2 Campaign Cook" /wait /max /d "%UE4_PATH%\Engine\Build\BatchFiles\" RunUAT.bat -ScriptsForProject="%UPROJECT_FILE%" BuildCookRun -project="%UPROJECT_FILE%" -noP4 -clientconfig=Shipping -serverconfig=Shipping -rocket -nocompile -ue4exe=UE4Editor-Cmd.exe -utf8output -platform=Win64 -targetplatform=Win64 -build -cook -map= -unversionedcookedcontent -pak -dlcname=Campaign -DLCIncludeEngineContent -basedonreleaseversion=1.0 -stagebasereleasepaks -stage -compressed
+start "3 Campaign Cook" /wait /max /d "%UE4_PATH%\Engine\Build\BatchFiles\" RunUAT.bat -ScriptsForProject="%UPROJECT_FILE%" BuildCookRun -project="%UPROJECT_FILE%" -noP4 -clientconfig=Shipping -serverconfig=Shipping -rocket -nocompile -ue4exe=UE4Editor-Cmd.exe -utf8output -platform=Win64 -targetplatform=Win64 -build -cook -map= -unversionedcookedcontent -SkipCookingEditorContent -pak -dlcname=Campaign -DLCIncludeEngineContent -basedonreleaseversion=1.0 -stagebasereleasepaks -stage -compressed
 
 rem This is where the pak file gets cooked / built
 

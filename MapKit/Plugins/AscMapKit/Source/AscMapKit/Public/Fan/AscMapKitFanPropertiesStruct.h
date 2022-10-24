@@ -21,6 +21,10 @@ struct ASCMAPKIT_API FAscMapKitFanPropertiesStruct
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     FString DisplayName;
 
+    // Used by the game runtime to disable all collision on the fan.
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    bool DisableCollision;
+
     // Controls the animation speed for the skeletal mesh. A custom skeletal mesh will override this (setup what you want in your custom skeletal mesh).
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     float AnimationSpeed;
