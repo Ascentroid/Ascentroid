@@ -50,6 +50,10 @@ rem Copy the json file to our game content
 echo Copying JSON from "%PROJECT_PATH%\%PROJECT_NAME%.json" to "%GAME_PATH%\%PROJECT_NAME%.json"
 copy /y "%PROJECT_PATH%\%PROJECT_NAME%.json" "%GAME_PATH%\%PROJECT_NAME%.json"
 
+rem Copy any MP4 movie files to our game content
+echo Copying MP4 from "%PROJECT_PATH%\*.mp4" to "%GAME_PATH%\"
+copy /y "%PROJECT_PATH%\*.mp4" "%GAME_PATH%\"
+
 if "%NOPAUSE%"=="" pause
 
 :end
