@@ -7,7 +7,7 @@
 // Generated
 #include "AscMapKitDefaultPostProcessActor.generated.h"
 
-UCLASS(HideCategories=("Activation", "Actor", "Asset User Data", "Collision", "Cooking", "HLOD", "Input", "LOD", "Lighting", "Mobile", "Physics", "Rendering", "Replication", "Sprite", "Tags", "Virtual Texture"))
+UCLASS(HideCategories=("Activation", "Asset User Data", "Collision", "Cooking", "HLOD", "Input", "LOD", "Lighting", "Mobile", "Physics", "Rendering", "Replication", "Sprite", "Tags", "Virtual Texture"))
 class ASCMAPKIT_API AAscMapKitDefaultPostProcessActor : public AActor
 {
     GENERATED_BODY()
