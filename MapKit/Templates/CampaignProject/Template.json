@@ -6,7 +6,7 @@
   "FileNameWindows": "Template-Windows.pak",
   "FileNameMac": "Template-Mac.pak",
   "FileNameLinux": "Template-Linux.pak",
-  "TargetAscGameVersion": "0.0.1.P.CSMA",
+  "TargetAscGameVersion": "0.0.1.P",
   "SupportedGameModes": [
     "Deathmatch"
   ],
