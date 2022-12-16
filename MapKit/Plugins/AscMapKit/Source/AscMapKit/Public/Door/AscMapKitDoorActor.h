@@ -60,6 +60,9 @@ private:
     UMaterialInterface *Animated20x20mBasic004Material;
 
     UPROPERTY()
+    UMaterialInterface *Animated20x20mBasic005Material;
+
+    UPROPERTY()
     UMaterialInterface *Animated20x20mSciFiDoorsDoor1Material;
 
     UPROPERTY()

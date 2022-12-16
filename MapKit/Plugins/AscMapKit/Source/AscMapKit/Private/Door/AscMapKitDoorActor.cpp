@@ -8,6 +8,7 @@ AAscMapKitDoorActor::AAscMapKitDoorActor()
     const ConstructorHelpers::FObjectFinder<UMaterialInterface> Animated20x20mBasic002MaterialRef(TEXT("Material'/AscMapKit/Editor/Materials/Doors/M_Editor_Door_Animated_20x20m_Basic_002.M_Editor_Door_Animated_20x20m_Basic_002'"));
     const ConstructorHelpers::FObjectFinder<UMaterialInterface> Animated20x20mBasic003MaterialRef(TEXT("Material'/AscMapKit/Editor/Materials/Doors/M_Editor_Door_Animated_20x20m_Basic_003.M_Editor_Door_Animated_20x20m_Basic_003'"));
     const ConstructorHelpers::FObjectFinder<UMaterialInterface> Animated20x20mBasic004MaterialRef(TEXT("Material'/AscMapKit/Editor/Materials/Doors/M_Editor_Door_Animated_20x20m_Basic_004.M_Editor_Door_Animated_20x20m_Basic_004'"));
+    const ConstructorHelpers::FObjectFinder<UMaterialInterface> Animated20x20mBasic005MaterialRef(TEXT("Material'/AscMapKit/Editor/Materials/Doors/M_Editor_Door_Animated_20x20m_Basic_005.M_Editor_Door_Animated_20x20m_Basic_005'"));
     const ConstructorHelpers::FObjectFinder<UMaterialInterface> Animated20x20mSciFiDoorsDoor1MaterialRef(TEXT("Material'/AscMapKit/Editor/Materials/Doors/M_Editor_Door_Animated_20x20m_SciFiDoors_Door_1.M_Editor_Door_Animated_20x20m_SciFiDoors_Door_1'"));
     const ConstructorHelpers::FObjectFinder<UMaterialInterface> Animated20x20mSciFiDoorsDoor2MaterialRef(TEXT("Material'/AscMapKit/Editor/Materials/Doors/M_Editor_Door_Animated_20x20m_SciFiDoors_Door_2.M_Editor_Door_Animated_20x20m_SciFiDoors_Door_2'"));
     const ConstructorHelpers::FObjectFinder<UMaterialInterface> Animated20x20mSciFiDoorsDoor4MaterialRef(TEXT("Material'/AscMapKit/Editor/Materials/Doors/M_Editor_Door_Animated_20x20m_SciFiDoors_Door_4.M_Editor_Door_Animated_20x20m_SciFiDoors_Door_4'"));
@@ -43,6 +44,9 @@ AAscMapKitDoorActor::AAscMapKitDoorActor()
 
     if (Animated20x20mBasic004MaterialRef.Succeeded())
         Animated20x20mBasic004Material = Animated20x20mBasic004MaterialRef.Object;
+
+    if (Animated20x20mBasic005MaterialRef.Succeeded())
+        Animated20x20mBasic005Material = Animated20x20mBasic005MaterialRef.Object;
 
     if (Animated20x20mSciFiDoorsDoor1MaterialRef.Succeeded())
         Animated20x20mSciFiDoorsDoor1Material = Animated20x20mSciFiDoorsDoor1MaterialRef.Object;
@@ -152,6 +156,9 @@ void AAscMapKitDoorActor::EditorUpdateDoorType(const EAscMapKitDoorTypeEnum Door
             break;
         case EAscMapKitDoorTypeEnum::Animated20x20mBasic004:
             UseMaterial = Animated20x20mBasic004Material;
+            break;
+        case EAscMapKitDoorTypeEnum::Animated20x20mBasic005:
+            UseMaterial = Animated20x20mBasic005Material;
             break;
         case EAscMapKitDoorTypeEnum::Animated20x20mSciFiDoorsDoor1:
             UseMaterial = Animated20x20mSciFiDoorsDoor1Material;
