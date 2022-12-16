@@ -11,6 +11,7 @@ enum class EAscMapKitDoorTypeEnum : uint8
     Animated20x20mBasic002,
     Animated20x20mBasic003,
     Animated20x20mBasic004,
+    Animated20x20mBasic005,
     Animated20x20mSciFiDoorsDoor1,
     Animated20x20mSciFiDoorsDoor2,
     Animated20x20mSciFiDoorsDoor4,
