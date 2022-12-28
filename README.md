@@ -2,17 +2,17 @@
 
 Current Build Status: <b>Prototype / Experimental</b>
 
-The Ascentroid Map Kit is an Unreal Engine 4 ("UE4") plugin you install into the UE4 editor to assist with the creation of campaigns and levels for Ascentroid.
+The Ascentroid Map Kit is an Unreal Engine 4 ("UE") plugin you install into the UE editor to assist with the creation of campaigns and levels for Ascentroid.
 
 The map kit, essentially, builds a <b>\*.pak</b> file, which treats your campaign/content like a game <b>MOD</b> for Ascentroid. It will also use a custom <b>\*.json</b> file for  important, and required, meta data for your campaign.
 
-What's great about this is that it allows map creators to utilize <b><i>almost all of the full features/capabilities of UE4</i></b>!
+What's great about this is that it allows map creators to utilize <b><i>almost all of the full features/capabilities of UE</i></b>!
 
 ## Prerequisites
 
 1) Only <b>Windows</b>, <b>x64</b> is supported <i>right now</i>. Make sure you meet the [required Hardware and Software Specifications for Unreal Engine](https://docs.unrealengine.com/4.26/en-US/Basics/InstallingUnrealEngine/RecommendedSpecifications/).
 
-2) Since UE4 treats a campaign like a <b>MOD</b>, it <b>requires Microsoft's C++ compiler</b>. You have two options:
+2) Since UE treats a campaign like a <b>MOD</b>, it <b>requires Microsoft's C++ compiler</b>. You have two options:
 
 * <b><i>Option #1</i></b> (free, smaller download size): Install [Visual Studio Code](https://code.visualstudio.com/docs/?dv=win) + [Visual Studio 2019 Build Tools](https://visualstudio.microsoft.com/vs/older-downloads/) following this [installation tutorial](http://jollymonsterstudio.com/2018/11/02/unreal-c-with-visual-studio-code/). ✅ <b><u>RECOMMENDED</u></b>
 
@@ -20,7 +20,7 @@ What's great about this is that it allows map creators to utilize <b><i>almost a
 
 3) Install Unreal Engine <b><u>4.26.2</u></b> by following the [official installation guide](https://docs.unrealengine.com/4.26/en-US/installing-unreal-engine/). When prompted, select the <b>Publishing License</b>.
 
-* <b>IMPORTANT</b>: You <b>MUST</b> install the specific UE4 version <b><u>4.26.2</u></b>. Do <b>NOT</b> install a different version! Ascentroid is built on <b><u>4.26.2</u></b>. If you use a different version, your campaigns will <b>NOT</b> work! If you create a campaign on the wrong engine version, you will have to delete it and re-create it with the correct engine version!
+* <b>IMPORTANT</b>: You <b>MUST</b> install the specific UE version <b><u>4.26.2</u></b>. Do <b>NOT</b> install a different version! Ascentroid is built on <b><u>4.26.2</u></b>. If you use a different version, your campaigns will <b>NOT</b> work! If you create a campaign on the wrong engine version, you will have to delete it and re-create it with the correct engine version!
 
 ![Imgur](https://i.imgur.com/6P5kjij.png)
 
@@ -42,7 +42,7 @@ Note: you may need to run all installations as a <b>Windows Administrator</b> us
 
 Install Ascentroid (the game). The latest test builds are posted in the [Ascentroid Discord](https://discord.gg/pktfw78) in the <b>#downloads</b> channel.
 
-Start UE4 and create a new, blank <b>C++</b> project for your campaign <b>without Starter Content</b>:
+Start UE and create a new, blank <b>C++</b> project for your campaign <b>without Starter Content</b>:
 
 ![Imgur](https://i.imgur.com/5Msq0OW.png)
 
@@ -50,7 +50,7 @@ Start UE4 and create a new, blank <b>C++</b> project for your campaign <b>withou
 
 ![Imgur](https://i.imgur.com/YGuy48Z.png)
 
-Open your UE4 campaign project if it doesn't automatically open after you create it.
+Open your UE campaign project if it doesn't automatically open after you create it.
 
 Once open, click the <b>Show Sources</b> icon in the <b>Content Browser</b>:
 
@@ -60,7 +60,7 @@ In the lower, right-hand corner of the <b>Content Browser</b>, click the <b>View
 
 ![Imgur](https://i.imgur.com/j7PETD7.png)
 
-Now, close the UE4 campaign project.
+Now, close the UE campaign project.
 
 Download the [Ascentroid Map Kit Setup Utility](https://github.com/Ascentroid/Ascentroid/blob/latest-stable/MapKit/Setup/AscMapKitSetup.zip) (requires [.NET Framework 4.7.2 Runtime](https://dotnet.microsoft.com/download/dotnet-framework/thank-you/net472-web-installer)):
 
@@ -78,17 +78,17 @@ Follow the steps and provide the folder/file locations as requested in the utili
 
 The utility will perform the following in the background:
 
-1) Downloads the UE4 map kit source files and extracts them to the appropriate campaign project folders.
+1) Downloads the UE map kit source files and extracts them to the appropriate campaign project folders.
 
-2) It will install a <b>AscMapKit</b> plugin into your UE4 campaign project. These files contain map kit content and C++ actors you can use in your levels (grates, fans, signs, doors, enemies, powerups, and more).
+2) It will install a <b>AscMapKit</b> plugin into your UE campaign project. These files contain map kit content and C++ actors you can use in your levels (grates, fans, signs, doors, enemies, powerups, and more).
 
-3) It will install a <b>Campaign</b> plugin in your UE4 campaign project. This plugin is <b>required</b> in order to <b>cook</b> a <b>*.pak</b> file, which will contain all of your campaign content to be used by the Ascentroid game runtime.
+3) It will install a <b>Campaign</b> plugin in your UE campaign project. This plugin is <b>required</b> in order to <b>cook</b> a <b>*.pak</b> file, which will contain all of your campaign content to be used by the Ascentroid game runtime.
 
-4) It will place an <b>Empty.umap</b> level file into your UE4 campaign project <b>Content</b> folder. This empty level, and file name, is <b>required</b> in order for the <b>cook</b> process to work. <i>I don't know why... it's some kind of wonky UE4 thing.</i>
+4) It will place an <b>Empty.umap</b> level file into your UE campaign project <b>Content</b> folder. This empty level, and file name, is <b>required</b> in order for the <b>cook</b> process to work. <i>I don't know why... it's some kind of wonky UE thing.</i>
 
-5) It will create a <b>_BatchScripts</b> folder at the root of your UE4 campaign project. It will contain a few batch files you will need to use later.
+5) It will create a <b>_BatchScripts</b> folder at the root of your UE campaign project. It will contain a few batch files you will need to use later.
 
-6) It will create a <b>*.json</b> file at the root of your UE4 campaign project. This file contains important, and required, meta data used by the Ascentroid game runtime.
+6) It will create a <b>*.json</b> file at the root of your UE campaign project. This file contains important, and required, meta data used by the Ascentroid game runtime.
 
 When the map kit setup is complete, it should pop-up a series of steps to help guide you through the final setup:
 
@@ -106,17 +106,17 @@ Note: if running this command displays <b>ERROR: Could not find NetFxSDK install
 [campaign project root]\_BatchScripts\Compile.bat
 ```
 
-3) Open your UE4 campaign project.
+3) Open your UE campaign project.
 
-4) If UE4 prompts to update the project, click <b>Update</b>:
+4) If UE prompts to update the project, click <b>Update</b>:
 
 ![Imgur](https://i.imgur.com/c6JXMUB.png)
 
-5) If UE4 prompts about new plugins being available, click <b>Dismiss</b>:
+5) If UE prompts about new plugins being available, click <b>Dismiss</b>:
 
 ![Imgur](https://i.imgur.com/NFjatG5.png)
 
-6) Create at least one level in your UE4 project and save it to the <b>Campaign Content</b> folder.
+6) Create at least one level in your UE project and save it to the <b>Campaign Content</b> folder.
 
 7) Edit campaign <b>*.json</b> (make sure your campaign and level name(s) match):
 ```
@@ -159,6 +159,7 @@ Note: if running this command displays <b>ERROR: Could not find NetFxSDK install
 
 #### You may want to learn some basics about Unreal Engine:
 
+* Tutorial to convert old levels using Blender and Unreal Engine: https://www.youtube.com/watch?v=H6XOQAU8rJ8
 * https://www.informit.com/articles/article.aspx?p=2819033&seqNum=3
 * https://docs.unrealengine.com/en-US/index.html
 * https://docs.unrealengine.com/en-US/WorkingWithContent/index.html
@@ -181,7 +182,7 @@ Note: if running this command displays <b>ERROR: Could not find NetFxSDK install
 
 If you want to make maps quickly without having to learn a 3D modeling program, I highly recommend [SuperGrid](https://www.unrealengine.com/marketplace/en-US/product/supergrid-starter-pack) (which is free!).
 
-Download it from the UE4 Marketplace here: https://www.unrealengine.com/marketplace/en-US/product/supergrid-starter-pack
+Download it from the UE Marketplace here: https://www.unrealengine.com/marketplace/en-US/product/supergrid-starter-pack
 
 SuperGrid has a series of preview videos here: https://www.youtube.com/playlist?list=PLx7zxUeK-7HiAsH4DyaklZW0NAIyKGc2N
 
@@ -220,7 +221,7 @@ To:
 
 ![Imgur](https://i.imgur.com/qy563ms.png)
 
-4) Now, open your UE4 campaign project.
+4) Now, open your UE campaign project.
 
 5) If it worked, you should now see the <b>SuperGrid</b> folder in the <b>Content Browser</b> under the root <b>Content</b> folder:
 
@@ -236,7 +237,7 @@ Note: You <b>cannot</b> start using SuperGrid yet! The next steps are <b>critica
 
 ![Imgur](https://i.imgur.com/9LNKNwE.png)
 
-8) The UE4 editor will begin migrating assets to your <b>Campaign Content</b> folder:
+8) The UE editor will begin migrating assets to your <b>Campaign Content</b> folder:
 
 ![Imgur](https://i.imgur.com/JvoW17Z.png)
 
@@ -252,15 +253,15 @@ To reiterate: see <b>[Other Marketplace Content](#other-marketplace-content)</b>
 
 <br/>
 
-##### Built-In Editor UE4 Mesh Plugins - <i>highly recommended!</i>
+##### Built-In Editor UE Mesh Plugins - <i>highly recommended!</i>
 
-UE4 has a few plugins included (free!) you can enable which will allow you to work with 3D meshes directly in the editor. Just go to Edit -> Plugins and enable them:
+UE has a few plugins included (free!) you can enable which will allow you to work with 3D meshes directly in the editor. Just go to Edit -> Plugins and enable them:
 
 ![Imgur](https://i.imgur.com/5nxvjrM.png)
 
 ![Imgur](https://i.imgur.com/apsfsvk.png)
 
-Here are some tutorial videos on how to use some of these free UE4 plugins:
+Here are some tutorial videos on how to use some of these free UE plugins:
 
 * https://www.youtube.com/watch?v=7Ff0zZcHmaU
 * https://www.youtube.com/watch?v=P75oIsxrYlY
@@ -271,7 +272,7 @@ Here are some tutorial videos on how to use some of these free UE4 plugins:
 
 ##### <a name="mesh-tool"></a>[Mesh Tool](https://forums.unrealengine.com/unreal-engine/marketplace/107840-mesh-tool-a-mesh-editor) - <i>highly recommended</i>!
 
-[Mesh Tool](https://forums.unrealengine.com/unreal-engine/marketplace/107840-mesh-tool-a-mesh-editor) is a commercial (paid) UE4 plugin which allows you to edit mesh assets and prototype props and levels without leaving the UE4 Editor. It also includes basic UV mapping tools!
+[Mesh Tool](https://forums.unrealengine.com/unreal-engine/marketplace/107840-mesh-tool-a-mesh-editor) is a commercial (paid) UE plugin which allows you to edit mesh assets and prototype props and levels without leaving the UE Editor. It also includes basic UV mapping tools!
 
 ![MeshTool](https://d3kjluh73b9h9o.cloudfront.net/original/3X/5/3/53e2d19b206094fc4216cbdd4e95c5769c93dd91.jpeg)
 
@@ -292,7 +293,7 @@ Tip: Keep an eye out for asset sales. Sometimes you can get a helpful tool for l
 
 ##### <a name="mesh-tool"></a>[Instance Tool](https://www.unrealengine.com/marketplace/en-US/product/instance-tool) - <i>highly recommended</i>!
 
-[Instance Tool](https://www.unrealengine.com/marketplace/en-US/product/instance-tool) is a commercial (paid) UE4 plugin which allows you to quickly select/edit/convert Instanced Static Meshes in editor viewports. This is a good tool to have for [performance/optimization](#performance-optimization).
+[Instance Tool](https://www.unrealengine.com/marketplace/en-US/product/instance-tool) is a commercial (paid) UE plugin which allows you to quickly select/edit/convert Instanced Static Meshes in editor viewports. This is a good tool to have for [performance/optimization](#performance-optimization).
 
 ![Imgur](https://cdn1.epicgames.com/ue/item/InstanceTool_screenshot_7-1920x1080-ce11e1497e8f0529bc734ab6f46b2d18.jpg?resize=1&w=1600)
 
@@ -304,17 +305,17 @@ Tip: Keep an eye out for asset sales. Sometimes you can get a helpful tool for l
 
 ##### <a name="other-marketplace-content"></a>Other Marketplace Content
 
-You can try using more [Marketplace](https://www.unrealengine.com/marketplace) assets from the UE4 Marketplace here: https://www.unrealengine.com/marketplace
+You can try using more [Marketplace](https://www.unrealengine.com/marketplace) assets from the UE Marketplace here: https://www.unrealengine.com/marketplace
 
 Epic has a lot of free assets available as well: https://www.unrealengine.com/marketplace/en-US/free
 
-When using assets from the UE4 Marketplace, be sure to follow these guidelines:
+When using assets from the UE Marketplace, be sure to follow these guidelines:
 
-* If the asset requires the creation of a UE4 project, always create the default project somewhere temporary, first, and then manually copy the assets to the <b>Content</b> folder of your UE4 project.
+* If the asset requires the creation of a UE project, always create the default project somewhere temporary, first, and then manually copy the assets to the <b>Content</b> folder of your UE project.
 
-* If the asset is able to install directly into your UE4 campaign project, the asset should always get installed to the <b>Content</b> folder of your UE4 project, first (this is typically the default anyway).
+* If the asset is able to install directly into your UE campaign project, the asset should always get installed to the <b>Content</b> folder of your UE project, first (this is typically the default anyway).
 
-* The reason assets need to go in the <b>Content</b> folder first is because UE4 uses an internal <b>reference path</b> system to associate dependencies between assets.
+* The reason assets need to go in the <b>Content</b> folder first is because UE uses an internal <b>reference path</b> system to associate dependencies between assets.
 
 * For example, let's say you have an asset pack called <b>SomeMarketplaceAssetPack</b> with a material and a texture inside of it:
 
@@ -331,7 +332,7 @@ When using assets from the UE4 Marketplace, be sure to follow these guidelines:
 
 * If you made the mistake of only copying/moving <b>M_SomeMaterial</b> to your <b>Campaign Content</b> folder, but not <b>T_SomeTexture</b>, then <b>M_SomeMaterial</b> would still be referencing the wrong <b>absolute path</b> (above). This means the asset <b><i>will not be cooked</i></b>!
 
-* To make sure the paths are migrated to the <b>Campaign Content</b> folder properly, you can follow a few steps and the UE4 editor <b><i>will automatically fix/resolve most of the dependencies for the absolute paths for you</i></b>!
+* To make sure the paths are migrated to the <b>Campaign Content</b> folder properly, you can follow a few steps and the UE editor <b><i>will automatically fix/resolve most of the dependencies for the absolute paths for you</i></b>!
 
 * Drag and drop the marketplace asset folder from the <b>Content</b> folder to the <b>Campaign Content</b> folder (optionally, if you want to place marketplace asset into sub-folder(s) under <b>Campaign Content</b>, create them and move the assets there):
 
@@ -341,7 +342,7 @@ When using assets from the UE4 Marketplace, be sure to follow these guidelines:
 
 ![Imgur](https://i.imgur.com/9LNKNwE.png)
 
-* The UE4 editor will begin migrating assets to your <b>Campaign Content</b> folder. It's at this point the editor <b><i>will automatically fix/resolve all of the dependencies for the absolute paths for you</i></b>.
+* The UE editor will begin migrating assets to your <b>Campaign Content</b> folder. It's at this point the editor <b><i>will automatically fix/resolve all of the dependencies for the absolute paths for you</i></b>.
 
 ![Imgur](https://i.imgur.com/JvoW17Z.png)
 
@@ -349,7 +350,7 @@ When using assets from the UE4 Marketplace, be sure to follow these guidelines:
 
 Note: this may or may not have adverse affects on different types of assets contained within the marketplace content (for example: Blueprint dependencies). It has not been fully tested and results may vary, depending on how complicated the marketplace asset(s) you are working with are. You <i>may</i> have to perform additional manual work to make certain things compatible when moving things over to the <b>Campaign Content</b> folder. It's up to you to decide how advanced you want to make things.
 
-Tip: remember, if you would like to save disk space for your UE4 campaign project, analyze all marketplace assets and delete assets which are unnecessary.
+Tip: remember, if you would like to save disk space for your UE campaign project, analyze all marketplace assets and delete assets which are unnecessary.
 
 <br/>
 
@@ -370,15 +371,15 @@ Tip: remember, if you would like to save disk space for your UE4 campaign projec
 
 <br/><br/><br/>
 
-#### <a name="import-3d-meshes"></a>Importing 3D Meshes into UE4
+#### <a name="import-3d-meshes"></a>Importing 3D Meshes into UE
 
-If you want per-poly collision on the 3D mesh you are going to import into UE4:
+If you want per-poly collision on the 3D mesh you are going to import into UE:
 
 * When importing your FBX, uncheck <b>Auto Generate Collision</b>:
 
 ![Imgur](https://i.imgur.com/A5zVOvi.png)
 
-* Once it has been imported, edit your mesh in UE4 and go to the collision properties. Set the <i>Collision Complexity</i> to <b>Use Complex Collision As Simple</b>. This tells the engine to use per-poly collision on this mesh.
+* Once it has been imported, edit your mesh in UE and go to the collision properties. Set the <i>Collision Complexity</i> to <b>Use Complex Collision As Simple</b>. This tells the engine to use per-poly collision on this mesh.
 
 ![Imgur](https://i.imgur.com/6ei4Tg7.png)
 
@@ -390,9 +391,14 @@ If you want per-poly collision on the 3D mesh you are going to import into UE4:
 
 Descent 1 and 2:
 
-* Setup a [Windows 98](https://winworldpc.com/product/windows-98/98-second-edition) virtual machine (consider using [VirtualBox](https://www.virtualbox.org/), which is free).
+Tutorial to convert old levels using Blender and Unreal Engine:
+* https://www.youtube.com/watch?v=H6XOQAU8rJ8
 
-* [Download](https://drive.google.com/file/d/1E4M43I8zox58ODjqulhXaBSMnyYJu2z5/view?usp=sharing) and setup [LVLVIEW32](https://drive.google.com/file/d/1E4M43I8zox58ODjqulhXaBSMnyYJu2z5/view?usp=sharing) on your Windows 98 virtual machine (instructions/details are not included here; you will have to sort that out yourself since the process can be subjective depending on how you setup your environment).
+It's even *easier* to convert a level using [Mesh Tool](https://www.unrealengine.com/marketplace/en-US/product/mesh-tool), a commercial Unreal Engine plugin ($50). We will create a tutorial video for this plugin in the near future.
+
+* Setup [OTDVM](http://www.columbia.edu/~em36/otvdm.html) (easy), **OR** (harder) setup a [Windows 98](https://winworldpc.com/product/windows-98/98-second-edition) virtual machine (consider using [VirtualBox](https://www.virtualbox.org/), which is free).
+
+* [Download](https://drive.google.com/file/d/1E4M43I8zox58ODjqulhXaBSMnyYJu2z5/view?usp=sharing) and setup [LVLVIEW32](https://drive.google.com/file/d/1E4M43I8zox58ODjqulhXaBSMnyYJu2z5/view?usp=sharing) with OTDVM, **OR** on your Windows 98 virtual machine. Instructions/details are not included here; you will have to sort that out yourself since the process can be subjective depending on how you setup your environment.
 
 * In [LVLVIEW32](https://drive.google.com/file/d/1E4M43I8zox58ODjqulhXaBSMnyYJu2z5/view?usp=sharing), export your level to a DXF file.
 
@@ -404,19 +410,44 @@ Descent 1 and 2:
 
 * Texture your level 3D mesh by setting up UV mapping. You can use a [3D tool](#3d-tools), or [Mesh Tool](#mesh-tool).
 
-* Import your level 3D mesh into your UE4 campaign project. Remember: all assets used in your campaign <b>must</b> be saved in the <b>Campaign Content</b> folder (or they won't cook!).
+* Import your level 3D mesh into your UE campaign project. Remember: all assets used in your campaign <b>must</b> be saved in the <b>Campaign Content</b> folder (or they won't cook!).
 
-* <b>Optional, subjective</b>: When you [import your level 3D mesh](#import-3d-meshes) into the UE4 editor, you will probably want to disable collision generation. After it has been imported, edit the level 3D mesh and enable per-poly collision by setting <i>Collision Complexity</i> to <b>Use Complex Collision as Simple</b>:
+* <b>Optional, subjective</b>: When you [import your level 3D mesh](#import-3d-meshes) into the UE editor, you will probably want to disable collision generation. After it has been imported, edit the level 3D mesh and enable per-poly collision by setting <i>Collision Complexity</i> to <b>Use Complex Collision as Simple</b>:
 
 ![Imgur](https://i.imgur.com/PbdjoPb.png)
 
-* Add lighting (see: [UE4 Lighting documentation](https://docs.unrealengine.com/en-US/Resources/ContentExamples/Lighting/index.html))
-
-* Keep in mind any additional work you may need to consider for [performance/optimization](#performance-optimization).
-
-* Add Ascentroid map kit actors (see: [Ascentroid Map Kit Usage](#map-kit-usage))
-
-* You should be able to cook your UE4 campaign project and play your level in Ascentroid!
+Common steps in Unreal Engine's editor (not in order) to perform a level conversion:
+* Unreal Engine project settings: Generate project a ID, otherwise the campaign won't cook
+* Unreal Engine world settings: Set num skylights to 0 (this saves some light build processing time)
+* Unreal Engine world settings: Check "Force no precompute lights" (this sets lights to fully dynamic, so you can build without having to light build)
+* Unreal Engine level: Place global items and effects (copy from Template campaign)
+* Unreal Engine level: Place global lights, amount, positioning (copy from Template campaign)
+* Unreal Engine level: Setup navmap, positioning, sizing to encompass the level with some padding (necessary, otherwise the navmap fog of war won't work)
+* Unreal Engine world outliner: Folder organization!
+* Unreal Engine content manager: Folder organization!
+* Unreal Engine content manager: Import FBX of your level and review the import options
+* Unreal Engine content manager: Update your level static mesh to set Collision Complexity to "Use Complex Collision as Simple"
+* Unreal Engine content manager: Update your level static mesh Light Map Resolution to something high like "1024" or "2048" ("1024" is usually high enough)
+* Unreal Engine content manager: Move textures to its own content folder
+* Unreal Engine content manager: Move materials to its own content folder
+* Unreal Engine content manager: Edit materials (for cartoony style, set Metallic and Specular to "0" (zero), and Roughness to "1")
+* Unreal Engine level: Add player starts from the map kit
+* Unreal Engine level: Add powerup respawn triggers from the map kit
+* Unreal Engine level: Add doors from the map kit (remember to set unique IDs for all!)
+* Unreal Engine level: Add decor (grates, signs, etc)
+* Unreal Engine level: Add lights (copy from template campaign if you want)
+* Unreal Engine level: Add powerups from the map kit
+* Unreal Engine level: Add level author decor letters and lights for them (if you want)
+* Unreal Engine world settings: Uncheck "Force no precompute lights" (turns off dynamic lights to prepare for light building)
+* Unreal Engine level: Add any desired triggers from the map kit (if applicable)
+* Unreal Engine level: Add any desired Blueprint scripting (if applicable)
+* Unreal Engine level: Adjust global lights (lights will be brighter when light building, so turn them down)
+* Unreal Engine light build settings: Set the light build quality to "Production"
+* Unreal Engine level: Build lights
+* Unreal Engine content manager: Fix level light map UVs and resolution if necessary
+* Unreal Engine level: Tweak and build lights repeatedly until you get it right (toggle "Force no precompute lights" in world settings to help; switch from dynamic to static to dynamic to static repeatedly to help figure out good lighting techniques in combination with light building [with the goal of producing final, baked, static lights])
+* Unreal Engine level: Run Cook.bat
+* Finally: Test your campaign in the game. If it looks good, zip the campaign json and pak files, and offer to players (mission database may become available in the future, recommend something like Google Drive in the meantime)
 
 <br/><br/><br/>
 
@@ -424,7 +455,7 @@ Descent 1 and 2:
 
 <b>Overview</b>
 
-The Ascentroid map kit contains pre-fab assets and actors you can use in your UE4 campaign project level(s).
+The Ascentroid map kit contains pre-fab assets and actors you can use in your UE campaign project level(s).
 
 <b>Pre-fab Content</b>
 
@@ -526,9 +557,9 @@ If you have any questions about the map kit content, properties, etc, please [em
 
 ### <a name="performance-optimization"></a>Keep in mind performance/optimization
 
-* <b><i><u>Use baked lighting</u></i></b>. Avoid full dynamic lighting. What I've learned to do is to use full dynamic lighting while developing a level and testing it out. When I get close to finishing a level, I will switch all of the lighting from dynamic to baked. When ready for production, I'll change the <b>Lighting Quality</b> to <b>Production</b>, and change all of my static mesh asset's <b>Lightmap Resolutions</b> to <b>1024</b> (or higher). <i>Caution</i>: baking lights requires lightmap UVs to be setup on your static meshes, and none of them can be overlapping. Different kinds of [3D Tools](#3d-tools) handle this by placing the lightmap UVs on a separate channel. Due to the subjective nature of this process, you will have to handle this on your own. You should be able to find tutorials on [YouTube](https://www.youtube.com/results?search_query=ue4+blender+lightmap) to figure out how to do this.
+* <b><i><u>Use baked lighting</u></i></b>. Avoid full dynamic lighting. What I've learned to do is to use full dynamic lighting while developing a level and testing it out. When I get close to finishing a level, I will switch all of the lighting from dynamic to baked. When ready for production, I'll change the <b>Lighting Quality</b> to <b>Production</b>, and change all of my static mesh asset's <b>Lightmap Resolutions</b> to <b>1024</b> (or higher). <i>Caution</i>: baking lights requires lightmap UVs to be setup on your static meshes, and none of them can be overlapping. Different kinds of [3D Tools](#3d-tools) handle this by placing the lightmap UVs on a separate channel. Due to the subjective nature of this process, you will have to handle this on your own. You should be able to find tutorials on [YouTube](https://www.youtube.com/results?search_query=UE+blender+lightmap) to figure out how to do this.
 
-* If possible, use [Instanced Static Meshes](https://www.google.com/search?q=ue4+instanced+static+mesh+site%3Aanswers.unrealengine.com) and/or [Hierarchical Instanced Static Meshes (HISM)](https://www.google.com/search?q=ue4+hierarchical+instanced+static+mesh+site:answers.unrealengine.com). You can do [amazing optimizations](https://www.youtube.com/watch?v=oMIbV2rQO4k) using these techniques/tools:
+* If possible, use [Instanced Static Meshes](https://www.google.com/search?q=UE+instanced+static+mesh+site%3Aanswers.unrealengine.com) and/or [Hierarchical Instanced Static Meshes (HISM)](https://www.google.com/search?q=UE+hierarchical+instanced+static+mesh+site:answers.unrealengine.com). You can do [amazing optimizations](https://www.youtube.com/watch?v=oMIbV2rQO4k) using these techniques/tools:
 
 ![Imgur](https://i.imgur.com/QrXhiMB.jpg)
 
@@ -556,15 +587,15 @@ The trigger deactivation <i>is</i> an explicit network command sent by the Ascen
 
 In the future, I may add generic [RPC-like](https://en.wikipedia.org/wiki/Remote_procedure_call) features for Blueprint-only network communication (depending on how things go).
 
-Lastly, you don't <i>have</i> to use Blueprints. Since the Ascentroid map kit treats your UE4 campaign project like a <b>MOD</b>, you could also use C++ (if you want).
+Lastly, <i>only</i> Blueprints scripting is supported. Ascentroid does not yet support scripting in C++. This is still being researched.
 
 <br/><br/><br/>
 
 ## Demo Campaign Project
 
-A UE4 demo campaign project has been created, which you can download and inspect for learning purposes. It includes three levels and various free content sources. Be sure to read the included <b>Readme.txt</b> file.
+A UE demo campaign project has been created, which you can download and inspect for learning purposes. It includes three levels and various free content sources. Be sure to read the included <b>Readme.txt</b> file.
 
-Download the UE4 demo campaign project zip file from here:
+Download the UE demo campaign project zip file from here:
 https://drive.google.com/file/d/1zlutTZXBK4Vy-YLGeMa7izCC1L5hhVVt/view?usp=sharing
 
 ![Imgur](https://i.imgur.com/Wr0BNjx.png)
@@ -575,6 +606,16 @@ https://drive.google.com/file/d/1zlutTZXBK4Vy-YLGeMa7izCC1L5hhVVt/view?usp=shari
 
 <br/><br/><br/>
 
+## Template Campaign Project
+
+A UE template campaign project has been created, which you can download and open, then copy and paste assets from into your own campaign! Just have both projects open and you can copy and paste (CTRL+C, CTRL+V) assets from one level to the other seamlessly. Just remember to adjust locations and settings of the assets for your own campaign. Be sure not to delete anything out of the template campaign, or change/save it. If you do, you may have to delete it and re-download it again.
+
+Download the UE template campaign project zip file from here:
+https://drive.google.com/file/d/1jskTpWxB0KLx1hdVMsVNNXpgbg1ElNax/view?usp=share_link
+
+![Imgur](https://i.imgur.com/wUVscgY.png)
+
+<br/><br/><br/>
 
 ## <a name="faq"></a>FAQ
 
@@ -600,7 +641,7 @@ Why is it so difficult to convert levels from other games?
 
 Why do I have to use 3D tools to build maps? Why didn't you build something easier for people?
 
-`UE4 is capable to doing a lot out-of-the-box, however, this means you have to put in the effort and learn how to do things yourself. To get started quickly, I highly recommend using ` [SuperGrid](#supergrid)
+`UE is capable to doing a lot out-of-the-box, however, this means you have to put in the effort and learn how to do things yourself. To get started quickly, I highly recommend using ` [SuperGrid](#supergrid)
 
 Why is the setup so complicated?
 
@@ -638,7 +679,7 @@ I have more questions, what should I do?
 
 ## Version Control
 
-You should keep your UE4 campaign projects saved somewhere!
+You should keep your UE campaign projects saved somewhere!
 
 I highly recommend something like [Git](https://git-scm.com/book/en/v2/Getting-Started-What-is-Git%3F) (with [LFS enabled](https://git-lfs.github.com/)) (and [learning it](https://www.udemy.com/course/intro-to-git/) if you don't know it).
 
@@ -652,7 +693,7 @@ At the bare minimum, using something as simple as [Google Drive](https://www.goo
 
 You decide.
 
-Note: when Ascentroid gets updated, sometimes I have to upgrade <i><u>UE4 core engine versions</u></i>. This will impact the Ascentroid map kit, <b>and your campaign project(s)</b>! Keep your campaign projects backed up <i>somewhere</i>, because you will be required to go through these upgrades in the future, too, if you want your maps to be compatible with upgrades! I don't have all the details on how this will work yet, but when I do, I'll be adding more information to this documentation. The main thing is, for now: keep your campaign projects backed up!
+Note: when Ascentroid gets updated, sometimes I have to upgrade <i><u>UE core engine versions</u></i>. This will impact the Ascentroid map kit, <b>and your campaign project(s)</b>! Keep your campaign projects backed up <i>somewhere</i>, because you will be required to go through these upgrades in the future, too, if you want your maps to be compatible with upgrades! I don't have all the details on how this will work yet, but when I do, I'll be adding more information to this documentation. The main thing is, for now: keep your campaign projects backed up!
 
 <br/><br/><br/>
 
