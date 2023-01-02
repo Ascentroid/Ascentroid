@@ -24,6 +24,7 @@ AAscMapKitDestructibleActor::AAscMapKitDestructibleActor()
     MapKit.DestroyByProjectileStartShieldAmount = 30.f;
 
     MapKit.Disappear.Enable = true;
+    MapKit.Disappear.ChanceDisappearOnStart = 50;
     MapKit.Disappear.IterationDelaySeconds = 0.3f;
     MapKit.Disappear.DelaySecondsRangeMin = 0.3f;
     MapKit.Disappear.DelaySecondsRangeMax = 0.5f;

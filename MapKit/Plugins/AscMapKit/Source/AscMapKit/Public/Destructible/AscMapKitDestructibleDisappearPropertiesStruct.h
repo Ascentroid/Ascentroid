@@ -12,6 +12,10 @@ struct ASCMAPKIT_API FAscMapKitDestructibleDisappearPropertiesStruct
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     bool Enable;
 
+    // A percentage (0 to 100) chance for one of the destructible component chunks to disappear when it is spawned (hidden immediately).
+    // * This can reduce the amount of chunks that appear on initial break up of chunks. Make the chance higher for better performance.
+    int32 ChanceDisappearOnStart;
+
     // The iteration speed, in seconds, the disappear timer loop will execute at.
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     float IterationDelaySeconds;
