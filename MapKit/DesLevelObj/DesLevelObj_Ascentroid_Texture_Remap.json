@@ -1,0 +1,1687 @@
+{
+  "TextureRemap": [
+    {
+      "Textures": [
+        "brig001",
+        "brig002",
+        "brig003",
+        "brig004"
+      ],
+      "RemapTo": {
+        "Material": "MI_Metal_Brown_Scratched_001",
+        "Texture": "T_Metal_Brown_Scratched_001_D"
+      }
+    },
+    {
+      "Textures": [
+        "ceil001",
+        "ceil015",
+        "ceil016",
+        "ceil017",
+        "ceil019"
+      ],
+      "RemapTo": {
+        "Material": "MI_Stone_Gray_001",
+        "Texture": "T_Stone_Gray_001_D"
+      }
+    },
+    {
+      "Textures": [
+        "ceil014",
+        "ceil018"
+      ],
+      "RemapTo": {
+        "Material": "MI_Stone_Gray_002",
+        "Texture": "T_Stone_Gray_002_D"
+      }
+    },
+    {
+      "Textures": [
+        "ceil037",
+        "ceil038"
+      ],
+      "RemapTo": {
+        "Material": "MI_Stone_Gray_003",
+        "Texture": "T_Stone_Gray_003_D"
+      }
+    },
+    {
+      "Textures": [
+        "ceil032",
+        "ceil033"
+      ],
+      "RemapTo": {
+        "Material": "MI_Stone_Green_001",
+        "Texture": "T_Stone_Green_001_D"
+      }
+    },
+    {
+      "Textures": [
+        "exit02"
+      ],
+      "RemapTo": {
+        "Material": "MI_Tile_Brown_001",
+        "Texture": "T_Tile_Brown_001_D"
+      }
+    },
+    {
+      "Textures": [
+        "metl002",
+        "metl003"
+      ],
+      "RemapTo": {
+        "Material": "MI_Metal_Brown_Scratched_002",
+        "Texture": "T_Metal_Brown_Scratched_002_D"
+      }
+    },
+    {
+      "Textures": [
+        "metl045",
+        "metl046",
+        "metl047",
+        "metl048",
+        "metl049",
+        "metl060"
+      ],
+      "RemapTo": {
+        "Material": "MI_Metal_Brown_Scratched_003",
+        "Texture": "T_Metal_Brown_Scratched_003_D"
+      }
+    },
+    {
+      "Textures": [
+        "metl004",
+        "metl008",
+        "metl009",
+        "metl011",
+        "metl012",
+        "metl013",
+        "metl014",
+        "metl015",
+        "metl016",
+        "metl017",
+        "metl018",
+        "metl019",
+        "metl020",
+        "metl021",
+        "metl023",
+        "metl024",
+        "metl026",
+        "metl028",
+        "metl029",
+        "metl030",
+        "metl031",
+        "metl039",
+        "metl040",
+        "metl041",
+        "metl042",
+        "metl043",
+        "metl050",
+        "metl053",
+        "metl054",
+        "metl055",
+        "metl057",
+        "metl058",
+        "metl059",
+        "metl061",
+        "metl063",
+        "metl064",
+        "metl065",
+        "metl066",
+        "metl068",
+        "metl070",
+        "metl071",
+        "metl074",
+        "metl076",
+        "metl077",
+        "metl078",
+        "metl079",
+        "metl080",
+        "metl081",
+        "metl082",
+        "metl083",
+        "metl086",
+        "metl087",
+        "metl088",
+        "metl089",
+        "metl090"
+      ],
+      "RemapTo": {
+        "Material": "MI_Metal_White_Scratched_001",
+        "Texture": "T_Metal_White_Scratched_001_D"
+      }
+    },
+    {
+      "Textures": [
+        "metl033",
+        "metl035",
+        "metl036"
+      ],
+      "RemapTo": {
+        "Material": "MI_Metal_White_Scratched_002",
+        "Texture": "T_Metal_White_Scratched_002_D"
+      }
+    },
+    {
+      "Textures": [
+        "metl097"
+      ],
+      "RemapTo": {
+        "Material": "MI_Scifi_Panel_001",
+        "Texture": "T_Scifi_Panel_001_D"
+      }
+    },
+    {
+      "Textures": [
+        "exit01"
+      ],
+      "RemapTo": {
+        "Material": "MI_Scifi_Panel_002",
+        "Texture": "T_Scifi_Panel_002_D"
+      }
+    },
+    {
+      "Textures": [
+        "metl006"
+      ],
+      "RemapTo": {
+        "Material": "MI_Scifi_Panel_003",
+        "Texture": "T_Scifi_Panel_003_D"
+      }
+    },
+    {
+      "Textures": [
+        "metl105",
+        "metl106",
+        "metl109",
+        "metl110",
+        "metl111",
+        "metl112",
+        "metl113",
+        "metl114",
+        "metl123"
+      ],
+      "RemapTo": {
+        "Material": "MI_Metal_Pink_Scratched_001",
+        "Texture": "T_Metal_Pink_Scratched_001_D"
+      }
+    },
+    {
+      "Textures": [
+        "lava02"
+      ],
+      "RemapTo": {
+        "Material": "MI_Lava_001",
+        "Texture": "T_Lava_001_D"
+      }
+    },
+    {
+      "Textures": [
+        "metl095"
+      ],
+      "RemapTo": {
+        "Material": "MI_Metal_Pink_Squares_001",
+        "Texture": "T_Metal_Pink_Squares_001_D"
+      }
+    },
+    {
+      "Textures": [
+        "misc019"
+      ],
+      "RemapTo": {
+        "Material": "MI_Metal_Gray_Squares_001",
+        "Texture": "T_Metal_Gray_Squares_001_D"
+      }
+    },
+    {
+      "Textures": [
+        "misc059"
+      ],
+      "RemapTo": {
+        "Material": "MI_Metal_Yellow_Squares_001",
+        "Texture": "T_Metal_Yellow_Squares_001_D"
+      }
+    },
+    {
+      "Textures": [
+        "misc11"
+      ],
+      "RemapTo": {
+        "Material": "MI_Lava_002",
+        "Texture": "T_Lava_002_D"
+      }
+    },
+    {
+      "Textures": [
+        "metl140"
+      ],
+      "RemapTo": {
+        "Material": "MI_Concrete_Gray_001",
+        "Texture": "T_Concrete_Gray_001_D"
+      }
+    },
+    {
+      "Textures": [
+        "misc09"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Green_Gray_001",
+        "Texture": "T_Rock_Green_Gray_001_D"
+      }
+    },
+    {
+      "Textures": [
+        "misc16",
+        "misc044"
+      ],
+      "RemapTo": {
+        "Material": "MI_Weird_Purple_001",
+        "Texture": "T_Weird_Purple_001_D"
+      }
+    },
+    {
+      "Textures": [
+        "misc045"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Red_001",
+        "Texture": "T_Rock_Red_001_D"
+      }
+    },
+    {
+      "Textures": [
+        "misc049"
+      ],
+      "RemapTo": {
+        "Material": "MI_Concrete_Gray_Landing_001",
+        "Texture": "T_Concrete_Gray_Landing_001_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock001"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Gray_001",
+        "Texture": "T_Rock_Gray_001_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock002"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Blue_001",
+        "Texture": "T_Rock_Blue_001_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock005"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Purple_001",
+        "Texture": "T_Rock_Purple_001_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock006"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Red_002",
+        "Texture": "T_Rock_Red_002_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock004"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Gray_002",
+        "Texture": "T_Rock_Gray_002_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock019"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Gray_003",
+        "Texture": "T_Rock_Gray_003_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock007"
+      ],
+      "RemapTo": {
+        "Material": "MI_Concrete_Blue_Purple_001",
+        "Texture": "T_Concrete_Blue_Purple_001_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock013"
+      ],
+      "RemapTo": {
+        "Material": "MI_Stone_Gray_004",
+        "Texture": "T_Stone_Gray_004_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock080"
+      ],
+      "RemapTo": {
+        "Material": "MI_Stone_Red_001",
+        "Texture": "T_Stone_Red_001_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock014"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Gray_Black_001",
+        "Texture": "T_Rock_Gray_Black_001_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock020"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Gray_004",
+        "Texture": "T_Rock_Gray_004_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock021"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Gray_005",
+        "Texture": "T_Rock_Gray_005_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock022"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Gray_Blue_001",
+        "Texture": "T_Rock_Gray_Blue_001_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock024"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Gray_Purple_001",
+        "Texture": "T_Rock_Gray_Purple_001_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock025"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Gray_Blue_002",
+        "Texture": "T_Rock_Gray_Blue_002_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock026"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Red_003",
+        "Texture": "T_Rock_Red_003_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock042"
+      ],
+      "RemapTo": {
+        "Material": "MI_Generic_Gradient_001",
+        "Texture": "T_Generic_Gradient_001_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock043"
+      ],
+      "RemapTo": {
+        "Material": "MI_Generic_Gradient_002",
+        "Texture": "T_Generic_Gradient_002_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock097"
+      ],
+      "RemapTo": {
+        "Material": "MI_Bricks_001",
+        "Texture": "T_Bricks_001_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock057"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Gray_006",
+        "Texture": "T_Rock_Gray_006_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock059"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Gray_007",
+        "Texture": "T_Rock_Gray_007_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock060"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Gray_008",
+        "Texture": "T_Rock_Gray_008_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock064"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Gray_009",
+        "Texture": "T_Rock_Gray_009_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock065"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Gray_010",
+        "Texture": "T_Rock_Gray_010_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock066"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Gray_011",
+        "Texture": "T_Rock_Gray_011_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock070"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Gray_012",
+        "Texture": "T_Rock_Gray_012_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock071"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Gray_013",
+        "Texture": "T_Rock_Gray_013_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock072"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Gray_014",
+        "Texture": "T_Rock_Gray_014_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock073"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Gray_015",
+        "Texture": "T_Rock_Gray_015_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock074"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Orange_001",
+        "Texture": "T_Rock_Orange_001_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock081"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Gray_Red_001",
+        "Texture": "T_Rock_Gray_Red_001_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock082"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Red_004",
+        "Texture": "T_Rock_Red_004_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock083"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Gray_Red_002",
+        "Texture": "T_Rock_Gray_Red_002_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock084"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Red_005",
+        "Texture": "T_Rock_Red_005_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock086"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Red_006",
+        "Texture": "T_Rock_Red_006_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock095"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Red_007",
+        "Texture": "T_Rock_Red_007_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock098"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Gray_016",
+        "Texture": "T_Rock_Gray_016_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock100"
+      ],
+      "RemapTo": {
+        "Material": "MI_Tile_Gray_Purple_001",
+        "Texture": "T_Tile_Gray_Purple_001_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock101"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Gray_017",
+        "Texture": "T_Rock_Gray_017_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock102"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Red_008",
+        "Texture": "T_Rock_Red_008_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock105"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Purple_002",
+        "Texture": "T_Rock_Purple_002_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock106"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Red_009",
+        "Texture": "T_Rock_Red_009_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock107"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Red_010",
+        "Texture": "T_Rock_Red_010_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock108"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Red_011",
+        "Texture": "T_Rock_Red_011_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock113"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Gray_018",
+        "Texture": "T_Rock_Gray_018_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock117"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Gray_019",
+        "Texture": "T_Rock_Gray_019_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock131"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Gray_Purple_002",
+        "Texture": "T_Rock_Gray_Purple_002_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock133"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Orange_002",
+        "Texture": "T_Rock_Orange_002_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock134"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Orange_003",
+        "Texture": "T_Rock_Orange_003_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock139"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Brown_001",
+        "Texture": "T_Rock_Brown_001_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock141"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Brown_002",
+        "Texture": "T_Rock_Brown_002_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock142"
+      ],
+      "RemapTo": {
+        "Material": "MI_Lava_003",
+        "Texture": "T_Lava_003_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock143"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Brown_003",
+        "Texture": "T_Rock_Brown_003_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock144"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Purple_003",
+        "Texture": "T_Rock_Purple_003_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock147"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Purple_004",
+        "Texture": "T_Rock_Purple_004_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock149"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Brown_004",
+        "Texture": "T_Rock_Brown_004_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock150"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Gray_021",
+        "Texture": "T_Rock_Gray_021_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock152"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Brown_005",
+        "Texture": "T_Rock_Brown_005_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock155"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Brown_006",
+        "Texture": "T_Rock_Brown_006_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock156"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Brown_007",
+        "Texture": "T_Rock_Brown_007_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock159"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Brown_008",
+        "Texture": "T_Rock_Brown_008_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock160"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Brown_009",
+        "Texture": "T_Rock_Brown_009_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock162"
+      ],
+      "RemapTo": {
+        "Material": "MI_Weird_Cloudy_001",
+        "Texture": "T_Weird_Cloudy_001_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock164"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Gray_022",
+        "Texture": "T_Rock_Gray_022_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock168"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Green_001",
+        "Texture": "T_Rock_Gray_022_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock169"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Green_002",
+        "Texture": "T_Rock_Green_002_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock170"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Green_003",
+        "Texture": "T_Rock_Green_003_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock171"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Green_004",
+        "Texture": "T_Rock_Green_004_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock172"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Brown_010",
+        "Texture": "T_Rock_Brown_010_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock173"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Brown_011",
+        "Texture": "T_Rock_Brown_011_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock174"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Blue_002",
+        "Texture": "T_Rock_Blue_002_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock175"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Blue_003",
+        "Texture": "T_Rock_Blue_003_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock176"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Brown_012",
+        "Texture": "T_Rock_Brown_012_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock177"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Blue_004",
+        "Texture": "T_Rock_Blue_004_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock178"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Brown_013",
+        "Texture": "T_Rock_Brown_013_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock179"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Brown_014",
+        "Texture": "T_Rock_Brown_014_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock180"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Gray_024",
+        "Texture": "T_Rock_Gray_024_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock181"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Blue_005",
+        "Texture": "T_Rock_Blue_005_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock182"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Gray_025",
+        "Texture": "T_Rock_Gray_025_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock184"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Gray_026",
+        "Texture": "T_Rock_Gray_026_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock185"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Purple_005",
+        "Texture": "T_Rock_Purple_005_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock187"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Brown_015",
+        "Texture": "T_Rock_Brown_015_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock165"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Gray_027",
+        "Texture": "T_Rock_Gray_027_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock186"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Blue_006",
+        "Texture": "T_Rock_Blue_006_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock188"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Brown_016",
+        "Texture": "T_Rock_Brown_016_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock189"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Blue_007",
+        "Texture": "T_Rock_Blue_007_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock190"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Brown_017",
+        "Texture": "T_Rock_Brown_017_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock191"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Brown_018",
+        "Texture": "T_Rock_Brown_018_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock192"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Brown_019",
+        "Texture": "T_Rock_Brown_019_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock193"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Brown_020",
+        "Texture": "T_Rock_Brown_020_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock194"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Brown_021",
+        "Texture": "T_Rock_Brown_021_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock195"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Brown_022",
+        "Texture": "T_Rock_Brown_022_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock196"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Brown_023",
+        "Texture": "T_Rock_Brown_023_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock198"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Green_005",
+        "Texture": "T_Rock_Green_005_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock200"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Brown_024",
+        "Texture": "T_Rock_Brown_024_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock201"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Brown_025",
+        "Texture": "T_Rock_Brown_025_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock202"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Brown_026",
+        "Texture": "T_Rock_Brown_026_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock203"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Brown_027",
+        "Texture": "T_Rock_Brown_027_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock204"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Brown_028",
+        "Texture": "T_Rock_Brown_028_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock205"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Brown_029",
+        "Texture": "T_Rock_Brown_029_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock206"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Brown_030",
+        "Texture": "T_Rock_Brown_030_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock207"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Green_006",
+        "Texture": "T_Rock_Green_006_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock208"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Green_007",
+        "Texture": "T_Rock_Green_007_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock209"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Green_008",
+        "Texture": "T_Rock_Green_008_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock210"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Green_009",
+        "Texture": "T_Rock_Green_009_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock211"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Blue_008",
+        "Texture": "T_Rock_Blue_008_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock212"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Green_010",
+        "Texture": "T_Rock_Green_010_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock214"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Green_011",
+        "Texture": "T_Rock_Green_011_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock215"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Green_012",
+        "Texture": "T_Rock_Green_012_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock216"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Green_013",
+        "Texture": "T_Rock_Green_013_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock217"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Green_014",
+        "Texture": "T_Rock_Green_014_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock218"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Green_015",
+        "Texture": "T_Rock_Green_015_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock220"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Brown_031",
+        "Texture": "T_Rock_Brown_031_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock221"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Brown_032",
+        "Texture": "T_Rock_Brown_032_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock222"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Gray_028",
+        "Texture": "T_Rock_Gray_028_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock223"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Gray_029",
+        "Texture": "T_Rock_Gray_029_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock224"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Brown_033",
+        "Texture": "T_Rock_Brown_033_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock225"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Orange_004",
+        "Texture": "T_Rock_Orange_004_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock226"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Green_016",
+        "Texture": "T_Rock_Green_016_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock227"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Pink_001",
+        "Texture": "T_Rock_Pink_001_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock228"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Brown_034",
+        "Texture": "T_Rock_Brown_034_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock229"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Brown_035",
+        "Texture": "T_Rock_Brown_035_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock230"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Blue_009",
+        "Texture": "T_Rock_Blue_009_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock231"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Orange_005",
+        "Texture": "T_Rock_Orange_005_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock232"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Orange_006",
+        "Texture": "T_Rock_Orange_006_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock233"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Orange_007",
+        "Texture": "T_Rock_Orange_007_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock234"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Orange_008",
+        "Texture": "T_Rock_Orange_008_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock235"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Pink_002",
+        "Texture": "T_Rock_Pink_002_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock236"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Pink_003",
+        "Texture": "T_Rock_Pink_003_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock237"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Pink_004",
+        "Texture": "T_Rock_Pink_004_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock239"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Brown_036",
+        "Texture": "T_Rock_Brown_036_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock242"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Pink_005",
+        "Texture": "T_Rock_Pink_005_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock243"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Pink_006",
+        "Texture": "T_Rock_Pink_006_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock244"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Orange_009",
+        "Texture": "T_Rock_Orange_009_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock245"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Red_012",
+        "Texture": "T_Rock_Red_012_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock246"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Pink_007",
+        "Texture": "T_Rock_Pink_007_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock250"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Pink_008",
+        "Texture": "T_Rock_Pink_008_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock259"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Brown_037",
+        "Texture": "T_Rock_Brown_037_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock258"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Brown_038",
+        "Texture": "T_Rock_Brown_038_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock251"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Brown_039",
+        "Texture": "T_Rock_Brown_039_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock252"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Brown_040",
+        "Texture": "T_Rock_Brown_040_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock253"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Blue_010",
+        "Texture": "T_Rock_Blue_010_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock254"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Green_017",
+        "Texture": "T_Rock_Green_017_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock255"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Blue_011",
+        "Texture": "T_Rock_Blue_011_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock257"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Brown_041",
+        "Texture": "T_Rock_Brown_041_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock260"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Brown_042",
+        "Texture": "T_Rock_Brown_042_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock261"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Brown_043",
+        "Texture": "T_Rock_Brown_043_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock262"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Green_018",
+        "Texture": "T_Rock_Green_018_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock263"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Green_019",
+        "Texture": "T_Rock_Green_019_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock264"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Gray_Red_003",
+        "Texture": "T_Rock_Gray_Red_003_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock265"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Yellow_001",
+        "Texture": "T_Rock_Yellow_001_D"
+      }
+    },
+    {
+      "Textures": [
+        "rock269"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Brown_044",
+        "Texture": "T_Rock_Brown_044_D"
+      }
+    },
+    {
+      "Textures": [
+        "steel1"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Gray_030",
+        "Texture": "T_Rock_Gray_030_D"
+      }
+    },
+    {
+      "Textures": [
+        "wall01"
+      ],
+      "RemapTo": {
+        "Material": "MI_Rock_Gray_031",
+        "Texture": "T_Rock_Gray_031_D"
+      }
+    }
+  ]
+}
