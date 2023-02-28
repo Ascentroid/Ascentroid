@@ -2,6 +2,58 @@
   "TextureRemap": [
     {
       "Textures": [
+        "empty",
+        "door01",
+        "door04",
+        "door05",
+        "door11",
+        "door13",
+        "door17",
+        "door18",
+        "door19",
+        "door20",
+        "door21",
+        "door22",
+        "door23",
+        "door24",
+        "door25",
+        "door26",
+        "door29",
+        "door30",
+        "door31",
+        "door32",
+        "door33",
+        "door34",
+        "door35",
+        "door36",
+        "door37",
+        "door38",
+        "door39",
+        "door40",
+        "door41",
+        "door42",
+        "door43",
+        "door44",
+        "door45",
+        "door47",
+        "door48",
+        "door49",
+        "door50",
+        "door51",
+        "door52",
+        "door53",
+        "door54",
+        "door56",
+        "door57",
+        "metl139"
+      ],
+      "RemapTo": {
+        "Material": "MI_Empty",
+        "Texture": "T_Empty_D"
+      }
+    },
+    {
+      "Textures": [
         "brig001",
         "brig002",
         "brig003",
@@ -247,8 +299,17 @@
         "misc11"
       ],
       "RemapTo": {
-        "Material": "MI_Lava_002",
-        "Texture": "T_Lava_002_D"
+        "Material": "MI_Lava_Pool_001",
+        "Texture": "T_Lava_Pool_001_D"
+      }
+    },
+    {
+      "Textures": [
+        "misc073"
+      ],
+      "RemapTo": {
+        "Material": "MI_Lava_Falls_001",
+        "Texture": "T_Lava_Falls_001_D"
       }
     },
     {
@@ -464,8 +525,8 @@
         "rock097"
       ],
       "RemapTo": {
-        "Material": "MI_Bricks_001",
-        "Texture": "T_Bricks_001_D"
+        "Material": "MI_Bricks_002",
+        "Texture": "T_Bricks_002_D"
       }
     },
     {
