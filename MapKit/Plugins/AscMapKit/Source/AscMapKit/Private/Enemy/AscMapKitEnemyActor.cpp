@@ -6,7 +6,7 @@ AAscMapKitEnemyActor::AAscMapKitEnemyActor()
     const ConstructorHelpers::FObjectFinder<UStaticMesh> CubeStaticMeshRef(TEXT("StaticMesh'/Engine/BasicShapes/Cube.Cube'"));
     const ConstructorHelpers::FObjectFinder<UStaticMesh> SphereStaticMeshRef(TEXT("StaticMesh'/Engine/BasicShapes/Sphere.Sphere'"));
     const ConstructorHelpers::FObjectFinder<UMaterialInterface> PrimaryColorMaterialRef(TEXT("Material'/AscMapKit/Editor/Materials/M_Enemy_PrimaryColor.M_Enemy_PrimaryColor'"));
-    const ConstructorHelpers::FObjectFinder<UMaterialInterface> EmitColorMaterialRef(TEXT("Material'/AscMapKit/Editor/Materials/M_Shared_Emit.M_Shared_Emit'"));
+    const ConstructorHelpers::FObjectFinder<UMaterialInterface> EmitColorMaterialRef(TEXT("Material'/AscMapKit/Shared/Materials/M_Shared_Emit.M_Shared_Emit'"));
 
     EmptyRootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("EmptyRootComponent"));
     EmptyRootComponent->SetMobility(EComponentMobility::Movable);
