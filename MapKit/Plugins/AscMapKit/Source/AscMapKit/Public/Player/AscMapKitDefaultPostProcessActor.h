@@ -1,6 +1,6 @@
 #pragma once
 
-// UE4
+// UE
 #include "Runtime/Engine/Classes/Components/PostProcessComponent.h"
 #include "Runtime/Engine/Classes/GameFramework/PlayerStart.h"
 

@@ -1,5 +1,8 @@
 #pragma once
 
+// UE
+#include "NiagaraComponent.h"
+
 // Ascentroid
 #include "AscMapKit/Public/Core/Constant/AscMapKitSoundClassEnum.h"
 
@@ -20,6 +23,7 @@ struct ASCMAPKIT_API FAscMapKitTriggerPropertiesOtherEffectsStruct
     // * For example: for a mechanical trigger, like a metal/spark hit particle.
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     UParticleSystem *ActiveOnHitParticle;
+    //UNiagaraSystem *ActiveOnHitParticle;
 
     // If particles aren't provided, the default game assets will be used at runtime.
     // However, if you disable it here, then no particles will be used.
@@ -30,6 +34,7 @@ struct ASCMAPKIT_API FAscMapKitTriggerPropertiesOtherEffectsStruct
     // * For example: for a mechanical trigger, like an electric explosion particle.
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     UParticleSystem *ActiveMaxExecutionCountReachedParticle;
+    //UNiagaraSystem *ActiveMaxExecutionCountReachedParticle;
 
     // If particles aren't provided, the default game assets will be used at runtime.
     // However, if you disable it here, then no particles will be used.
@@ -40,6 +45,7 @@ struct ASCMAPKIT_API FAscMapKitTriggerPropertiesOtherEffectsStruct
     // * For example: for a mechanical trigger, perhaps smoke since it's no longer active (i.e. destroyed).
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     UParticleSystem *InactiveParticle;
+    //UNiagaraSystem *InactiveParticle;
 
     // If a sound cue is not provided, the default game asset will be used at runtime.
     // However, if you disable it here, then no sound cue will be used.

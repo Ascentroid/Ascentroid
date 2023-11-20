@@ -1,6 +1,6 @@
 #pragma once
 
-// UE4
+// UE
 #include "Runtime/Engine/Classes/Components/BillboardComponent.h"
 
 // Ascentroid
@@ -39,5 +39,5 @@ private:
     UTexture2D *PowerStationTexture;
 
     UPROPERTY()
-    UTexture2D *WaterTexture;
+    UTexture2D *LiquidTexture;
 };

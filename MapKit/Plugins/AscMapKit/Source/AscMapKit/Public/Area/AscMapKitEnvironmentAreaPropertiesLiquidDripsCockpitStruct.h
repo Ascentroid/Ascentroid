@@ -1,14 +1,14 @@
 #pragma once
 
 // Generated
-#include "AscMapKitEnvironmentAreaPropertiesWaterDripsCockpitStruct.generated.h"
+#include "AscMapKitEnvironmentAreaPropertiesLiquidDripsCockpitStruct.generated.h"
 
 USTRUCT(Blueprintable, BlueprintType)
-struct ASCMAPKIT_API FAscMapKitEnvironmentAreaPropertiesWaterDripsCockpitStruct
+struct ASCMAPKIT_API FAscMapKitEnvironmentAreaPropertiesLiquidDripsCockpitStruct
 {
 	GENERATED_BODY()
 
-	// Check to enable water drips when the player overlap ends.
+	// Check to enable liquid drips when the player overlap ends.
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     bool EnableForPlayerOnOverlapEnd;
 

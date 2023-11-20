@@ -1,5 +1,8 @@
 #pragma once
 
+// UE
+#include "NiagaraComponent.h"
+
 // Ascentroid
 #include "AscMapKit/Public/Core/Constant/AscMapKitSoundClassEnum.h"
 
@@ -38,6 +41,7 @@ struct ASCMAPKIT_API FAscMapKitForcefieldPropertiesOtherEffectsStruct
     // * For example: an electrical spark.
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     UParticleSystem *OnHitParticle;
+    //UNiagaraSystem *OnHitParticle;
 
     // Specify a delay, in seconds, to wait before allowing the particle to spawn again after an intial impact.
     // * This is for performance control. You don't want a lot of particles being spawned for a weapon with a high fire rate.
@@ -66,6 +70,7 @@ struct ASCMAPKIT_API FAscMapKitForcefieldPropertiesOtherEffectsStruct
     // Specify a particle to play when this forcefield appears during pulse. Leave empty for game runtime default.
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     UParticleSystem *OnAppearParticle;
+    //UNiagaraSystem *OnAppearParticle;
 
     // Modify the particle scale as necessary.
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
@@ -97,6 +102,7 @@ struct ASCMAPKIT_API FAscMapKitForcefieldPropertiesOtherEffectsStruct
     // Specify a particle to play when this forcefield disappears during pulse. Leave empty for game runtime default.
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     UParticleSystem *OnDisappearParticle;
+    //UNiagaraSystem *OnDisappearParticle;
 
     // Modify the particle scale as necessary.
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
@@ -128,6 +134,7 @@ struct ASCMAPKIT_API FAscMapKitForcefieldPropertiesOtherEffectsStruct
     // Specify a particle to play when this forcefield is disabled. Leave empty for game runtime default.
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     UParticleSystem *OnDisabledParticle;
+    //UNiagaraSystem *OnDisabledParticle;
 
     // Modify the particle scale as necessary.
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)

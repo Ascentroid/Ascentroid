@@ -1,5 +1,8 @@
 #pragma once
 
+// UE
+#include "NiagaraComponent.h"
+
 // Generated
 #include "AscMapKitDestructibleDisappearPropertiesStruct.generated.h"
 
@@ -38,6 +41,7 @@ struct ASCMAPKIT_API FAscMapKitDestructibleDisappearPropertiesStruct
     // * If you need control over the chunk/piece relative location of this particle, you can create a socket on the chunk/piece static mesh called "EffectsSocket" (case sensitive, no whitespace). If the socket exists, it will automatically attempt to attach to it.
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     TArray<UParticleSystem *> EffectParticles;
+    //TArray<UNiagaraSystem *> EffectParticles;
 
     // All materials on the chunk/piece will be replaced with this material when effects are executed.
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)

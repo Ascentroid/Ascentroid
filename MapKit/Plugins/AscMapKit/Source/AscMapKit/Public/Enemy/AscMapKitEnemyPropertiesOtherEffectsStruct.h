@@ -1,5 +1,8 @@
 #pragma once
 
+// UE
+#include "NiagaraComponent.h"
+
 // Ascentroid
 #include "AscMapKit/Public/Core/Constant/AscMapKitSoundClassEnum.h"
 
@@ -21,6 +24,7 @@ struct ASCMAPKIT_API FAscMapKitEnemyPropertiesOtherEffectsStruct
     // * For example: a fiery explosion.
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     TArray<UParticleSystem *> ExplodeRandomParticles;
+    //TArray<UNiagaraSystem *> ExplodeRandomParticles;
 
     // If particles aren't provided, the default game assets will be used at runtime.
     // However, if you disable it here, then no particles will be used.
@@ -32,6 +36,7 @@ struct ASCMAPKIT_API FAscMapKitEnemyPropertiesOtherEffectsStruct
     // * For example: an explosion, or a shield hit effect.
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     TArray<UParticleSystem *> OnHitRandomParticles;
+    //TArray<UNiagaraSystem *> OnHitRandomParticles;
 
     // If a sound cue is not provided, the default game asset will be used at runtime.
     // However, if you disable it here, then no sound cue will be used.

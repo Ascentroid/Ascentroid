@@ -1,6 +1,6 @@
 #pragma once
 
-// UE4
+// UE
 #include "Runtime/Engine/Classes/Components/ArrowComponent.h"
 #include "Runtime/Engine/Classes/Components/BoxComponent.h"
 #include "Runtime/Engine/Classes/Components/StaticMeshComponent.h"

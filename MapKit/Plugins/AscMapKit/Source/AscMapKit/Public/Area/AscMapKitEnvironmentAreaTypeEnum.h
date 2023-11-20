@@ -10,7 +10,7 @@ enum class EAscMapKitEnvironmentAreaTypeEnum : uint8
     Acid,
     Electric,
     Lava,
+    Liquid,
     PowerStationWithoutEffects UMETA(DisplayName = "Power Station without Effects"),
-    PowerStationWithEffects UMETA(DisplayName = "Power Station with Effects"),
-    Water
+    PowerStationWithEffects UMETA(DisplayName = "Power Station with Effects")
 };

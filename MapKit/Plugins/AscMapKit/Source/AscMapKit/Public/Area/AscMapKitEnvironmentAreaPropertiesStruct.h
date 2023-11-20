@@ -15,8 +15,8 @@
 #include "AscMapKit/Public/Area/AscMapKitEnvironmentAreaPropertiesPostProcessStruct.h"
 #include "AscMapKit/Public/Area/AscMapKitEnvironmentAreaPropertiesProjectileMovementModifierStruct.h"
 #include "AscMapKit/Public/Area/AscMapKitEnvironmentAreaPropertiesSplashDamageStruct.h"
-#include "AscMapKit/Public/Area/AscMapKitEnvironmentAreaPropertiesWaterDripsStruct.h"
-#include "AscMapKit/Public/Area/AscMapKitEnvironmentAreaPropertiesWaterDripsCockpitStruct.h"
+#include "AscMapKit/Public/Area/AscMapKitEnvironmentAreaPropertiesLiquidDripsStruct.h"
+#include "AscMapKit/Public/Area/AscMapKitEnvironmentAreaPropertiesLiquidDripsCockpitStruct.h"
 #include "AscMapKit/Public/Area/AscMapKitEnvironmentAreaTypeEnum.h"
 
 // Generated
@@ -49,10 +49,10 @@ struct ASCMAPKIT_API FAscMapKitEnvironmentAreaPropertiesStruct
     FAscMapKitEnvironmentAreaPropertiesPostProcessStruct PostProcess;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
-    FAscMapKitEnvironmentAreaPropertiesWaterDripsStruct WaterDrips;
+    FAscMapKitEnvironmentAreaPropertiesLiquidDripsStruct LiquidDrips;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
-    FAscMapKitEnvironmentAreaPropertiesWaterDripsCockpitStruct WaterDripsCockpit;
+    FAscMapKitEnvironmentAreaPropertiesLiquidDripsCockpitStruct LiquidDripsCockpit;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     FAscMapKitEnvironmentAreaPropertiesPlayerShakingStruct PlayerShaking;
