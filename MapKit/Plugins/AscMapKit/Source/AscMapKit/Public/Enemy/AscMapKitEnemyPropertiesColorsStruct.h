@@ -1,6 +1,6 @@
 #pragma once
 
-// UE4
+// UE
 #include "Engine/Classes/Materials/MaterialInstanceDynamic.h"
 
 // Generated

@@ -41,4 +41,5 @@ struct ASCMAPKIT_API FAscMapKitDoorPropertiesDestructibleStruct
     // * For example: an explosion effect.
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     UParticleSystem *DestroyParticle;
+    //UNiagaraSystem *DestroyParticle;
 };

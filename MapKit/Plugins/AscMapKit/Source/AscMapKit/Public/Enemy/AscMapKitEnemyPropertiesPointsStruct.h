@@ -45,5 +45,5 @@ struct ASCMAPKIT_API FAscMapKitEnemyPropertiesPointsStruct
 
     // todo: what was this for? did we want to support this?
     //UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
-    //UParticleSystem *DeathPointsParticle;
+    //UNiagaraSystem *DeathPointsParticle;
 };

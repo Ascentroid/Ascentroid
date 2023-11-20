@@ -1,5 +1,8 @@
 #pragma once
 
+// UE
+#include "NiagaraComponent.h"
+
 // Ascentroid
 #include "AscMapKit/Public/Core/Constant/AscMapKitSoundClassEnum.h"
 
@@ -32,7 +35,8 @@ struct ASCMAPKIT_API FAscMapKitEnvironmentAreaPropertiesDamagePlayersStruct
 	// * For example: for electricity, some kind of electrical effect.
 	// * Another example: for lava, a fire effect.
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
-    UParticleSystem *Particle;
+	UParticleSystem *Particle;
+    //UNiagaraSystem *Particle;
 
 	// Specify a local offset for the particle when it executes. This is helpful in case you want to relocate the particle relative to the actor.
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)

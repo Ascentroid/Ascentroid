@@ -12,7 +12,8 @@ public class AscMapKit : ModuleRules
         PublicDependencyModuleNames.AddRange(
 			new []
 			{
-				"Core"
+				"Core",
+				"Niagara"
 			});
 
         PrivateDependencyModuleNames.AddRange(

@@ -1,6 +1,6 @@
 #pragma once
 
-// UE4
+// UE
 #include "Runtime/Engine/Classes/Components/PostProcessComponent.h"
 
 // Generated

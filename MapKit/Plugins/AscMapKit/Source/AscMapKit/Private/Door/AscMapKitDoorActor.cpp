@@ -79,9 +79,8 @@ AAscMapKitDoorActor::AAscMapKitDoorActor()
     MapKit.Id = TEXT("001");
 	
     MapKit.Status.CloseTimeoutSeconds = 4.f;
+    MapKit.Status.CheckIntervalSeconds = 1.f;
 
-    MapKit.Lock.HasCode = true;
-    MapKit.Lock.RandomizeCode = true;
     MapKit.Lock.OpenLockedDoorDelaySeconds = 0.4f;
 
     MapKit.Destructible.MaxShields = 300.f;

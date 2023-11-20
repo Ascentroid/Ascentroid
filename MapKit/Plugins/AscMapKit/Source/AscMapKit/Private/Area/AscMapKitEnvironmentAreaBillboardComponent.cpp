@@ -8,7 +8,7 @@ UAscMapKitEnvironmentAreaBillboardComponent::UAscMapKitEnvironmentAreaBillboardC
     const ConstructorHelpers::FObjectFinder<UTexture2D> ElectricTextureRef(TEXT("Texture2D'/AscMapKit/Editor/Sprites/Area/T_Editor_Sprites_Area_EnvironmentArea_Electric.T_Editor_Sprites_Area_EnvironmentArea_Electric'"));
     const ConstructorHelpers::FObjectFinder<UTexture2D> LavaTextureRef(TEXT("Texture2D'/AscMapKit/Editor/Sprites/Area/T_Editor_Sprites_Area_EnvironmentArea_Lava.T_Editor_Sprites_Area_EnvironmentArea_Lava'"));
     const ConstructorHelpers::FObjectFinder<UTexture2D> PowerStationTextureRef(TEXT("Texture2D'/AscMapKit/Editor/Sprites/Area/T_Editor_Sprites_Area_EnvironmentArea_PowerStation.T_Editor_Sprites_Area_EnvironmentArea_PowerStation'"));
-    const ConstructorHelpers::FObjectFinder<UTexture2D> WaterTextureRef(TEXT("Texture2D'/AscMapKit/Editor/Sprites/Area/T_Editor_Sprites_Area_EnvironmentArea_Water.T_Editor_Sprites_Area_EnvironmentArea_Water'"));
+    const ConstructorHelpers::FObjectFinder<UTexture2D> LiquidTextureRef(TEXT("Texture2D'/AscMapKit/Editor/Sprites/Area/T_Editor_Sprites_Area_EnvironmentArea_Liquid.T_Editor_Sprites_Area_EnvironmentArea_Liquid'"));
 
     if (UnknownTextureRef.Succeeded())
         UnknownTexture = UnknownTextureRef.Object;
@@ -25,8 +25,8 @@ UAscMapKitEnvironmentAreaBillboardComponent::UAscMapKitEnvironmentAreaBillboardC
     if (PowerStationTextureRef.Succeeded())
         PowerStationTexture = PowerStationTextureRef.Object;
 
-    if (WaterTextureRef.Succeeded())
-        WaterTexture = WaterTextureRef.Object;
+    if (LiquidTextureRef.Succeeded())
+        LiquidTexture = LiquidTextureRef.Object;
 }
 
 #if WITH_EDITOR
@@ -52,8 +52,8 @@ void UAscMapKitEnvironmentAreaBillboardComponent::EditorUpdateEnvironmentAreaTyp
         case EAscMapKitEnvironmentAreaTypeEnum::PowerStationWithEffects:
             SetSprite(PowerStationTexture);
             break;
-        case EAscMapKitEnvironmentAreaTypeEnum::Water:
-            SetSprite(WaterTexture);
+        case EAscMapKitEnvironmentAreaTypeEnum::Liquid:
+            SetSprite(LiquidTexture);
             break;
     }
 }

@@ -1,5 +1,8 @@
 #pragma once
 
+// UE
+#include "NiagaraComponent.h"
+
 // Ascentroid
 #include "AscMapKit/Public/Core/Constant/AscMapKitSoundClassEnum.h"
 
@@ -24,7 +27,8 @@ struct ASCMAPKIT_API FAscMapKitEnvironmentAreaPropertiesOtherEffects
 	// * If the collection is empty, it will be ignored.
 	// * For example: a water splash upon actor (projectile, player, enemy) entry.
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
-    TArray<UParticleSystem *> OnOverlapRandomParticles;
+	TArray<UParticleSystem *> OnOverlapRandomParticles;
+    //TArray<UNiagaraSystem *> OnOverlapRandomParticles;
 
     // If particles aren't provided, the default game assets will be used at runtime.
     // However, if you disable it here, then no particles will be used.
@@ -35,7 +39,8 @@ struct ASCMAPKIT_API FAscMapKitEnvironmentAreaPropertiesOtherEffects
 	// * If the collection is empty, it will be ignored.
 	// * For example: a water splash upon actor (projectile, player, enemy) exit.
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
-    TArray<UParticleSystem *> OnOverlapEndRandomParticles;
+	TArray<UParticleSystem *> OnOverlapEndRandomParticles;
+    //TArray<UNiagaraSystem *> OnOverlapEndRandomParticles;
 
     // If particles aren't provided, the default game assets will be used at runtime.
     // However, if you disable it here, then no particles will be used.
@@ -45,7 +50,8 @@ struct ASCMAPKIT_API FAscMapKitEnvironmentAreaPropertiesOtherEffects
 	// Specify a particle to attach to the actor when an overlap occurs on this environment area. Leave empty for game runtime default.
 	// * For example: bubbles as a water trail for a projectile.
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
-    UParticleSystem *OnOverlapAttachParticleToActor;
+	UParticleSystem *OnOverlapAttachParticleToActor;
+    //UNiagaraSystem *OnOverlapAttachParticleToActor;
 
     // A percentage (0 to 100) chance for the "On Overlap Attach Particle to Actor" particle to execute when an overlap end occurs on this environment area.
     // * This could be useful for tweaking performance. If you do not want a lot of particles to spawn, lower the percentage value here.
