@@ -17,5 +17,9 @@ struct ASCMAPKIT_API FAscMapKitEnemyPropertiesWeaponStruct
 
     // todo
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    int32 WeaponStrengthLevel;
+
+    // todo
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     int32 ChanceToFire;
 };

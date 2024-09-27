@@ -29,14 +29,14 @@ public:
     // * Only the "Shape -> Box Extent" property is used at runtime.
     // * All other properties are ignored.
     // * These are configured as components in the map kit so you can visualize the collision in the editor.
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Ascentroid|Components|Collision")
+    UPROPERTY()
     UBoxComponent *Box;
 
     // If you selected a map kit collision type of "Static Mesh", specify the static mesh in the "Static Mesh" property.
     // * Only the "Static Mesh" property is used at runtime.
     // * All other properties are ignored.
     // * These are configured as components in the map kit so you can visualize the collision in the editor.
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Ascentroid|Components|Collision")
+    UPROPERTY()
     UStaticMeshComponent *StaticMesh;
 
     UPROPERTY()
@@ -52,7 +52,18 @@ public:
 
 #if WITH_EDITOR
     virtual void PostInitializeComponents() override;
-    
-    virtual void PostEditChangeProperty(struct FPropertyChangedEvent &PropertyChangedEvent) override;
+
+    virtual bool ShouldTickIfViewportsOnly() const override { return true; }
+
+    virtual void Tick(float DeltaTime) override;
+
+    virtual void PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent) override;
 #endif
+
+private:
+    UPROPERTY()
+    bool bIsBoxBoundsInitialized;
+
+    UPROPERTY()
+    bool bNeedsScaleReset;
 };

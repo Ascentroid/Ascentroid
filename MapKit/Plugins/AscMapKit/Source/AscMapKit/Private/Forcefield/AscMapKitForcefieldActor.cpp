@@ -78,16 +78,21 @@ void AAscMapKitForcefieldActor::OnConstruction(const FTransform &Transform)
         StaticMeshComponent->SetMaterial(0, PrimaryColorMaterialInstance);
     }
 
-    if (PrimaryColorMaterialInstance != nullptr)
-    {
-        PrimaryColorMaterialInstance->SetVectorParameterValue(FName("Color"), MapKit.StaticMesh.Color);
-        PrimaryColorMaterialInstance->SetScalarParameterValue(FName("Color Emit Multiply By"), MapKit.StaticMesh.EmitColorMultiplyBy);
-    }
+    UpdateColor();
 }
 
 void AAscMapKitForcefieldActor::BeginPlay()
 {
     Super::BeginPlay();
+}
+
+void AAscMapKitForcefieldActor::UpdateColor()
+{
+    if (PrimaryColorMaterialInstance != nullptr)
+    {
+        PrimaryColorMaterialInstance->SetVectorParameterValue(FName("Color"), MapKit.StaticMesh.Color);
+        PrimaryColorMaterialInstance->SetScalarParameterValue(FName("Color Emit Multiply By"), MapKit.StaticMesh.EmitColorMultiplyBy);
+    }
 }
 
 #if WITH_EDITOR

@@ -61,5 +61,7 @@ public:
     virtual void PostEditChangeProperty(struct FPropertyChangedEvent &PropertyChangedEvent) override;
 
     void EditorUpdateEnemyType(EAscMapKitEnemyTypeEnum EnemyType);
+
+    void EditorUpdateWeaponSockets();
 #endif
 };

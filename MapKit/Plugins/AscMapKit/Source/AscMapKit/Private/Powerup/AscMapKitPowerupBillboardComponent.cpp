@@ -145,114 +145,122 @@ UAscMapKitPowerupBillboardComponent::UAscMapKitPowerupBillboardComponent()
 }
 
 #if WITH_EDITOR
-void UAscMapKitPowerupBillboardComponent::EditorUpdatePowerupType(const EAscMapKitPowerupTypeEnum PowerupType)
+void UAscMapKitPowerupBillboardComponent::EditorUpdatePowerupType(const FAscMapKitPowerupPropertiesStruct &MapKit)
 {
     SetSprite(nullptr);
 
-    // todo: @reminder: update this as new enemies are created
-    switch (PowerupType)
+    if (MapKit.UseCustomEditorSprite)
     {
-        case EAscMapKitPowerupTypeEnum::AuxAmmo:
+        if (MapKit.CustomEditorSprite)
+            SetSprite(MapKit.CustomEditorSprite);
+
+        return;
+    }
+
+    // todo: @reminder: update this as new powerups are created
+    switch (MapKit.PowerupType)
+    {
+        case EAscMapKitPowerupTypeEnum::Aux_06:
             SetSprite(AuxAmmoTexture);
             break;
-        case EAscMapKitPowerupTypeEnum::AuxAmmoCache:
+        case EAscMapKitPowerupTypeEnum::Aux_07:
             SetSprite(AuxAmmoCacheTexture);
             break;
-        case EAscMapKitPowerupTypeEnum::AuxBoost:
+        case EAscMapKitPowerupTypeEnum::Aux_08:
             SetSprite(AuxBoostTexture);
             break;
-        case EAscMapKitPowerupTypeEnum::AuxConceal:
+        case EAscMapKitPowerupTypeEnum::Aux_03:
             SetSprite(AuxConcealTexture);
             break;
-        case EAscMapKitPowerupTypeEnum::AuxInvincible:
+        case EAscMapKitPowerupTypeEnum::Aux_04:
             SetSprite(AuxInvincibleTexture);
             break;
-        case EAscMapKitPowerupTypeEnum::AuxLaserCoupler:
+        case EAscMapKitPowerupTypeEnum::Aux_05:
             SetSprite(AuxLaserCouplerTexture);
             break;
-        case EAscMapKitPowerupTypeEnum::AuxNavmapReveal:
+        case EAscMapKitPowerupTypeEnum::Aux_10:
             SetSprite(AuxNavmapRevealTexture);
             break;
-        case EAscMapKitPowerupTypeEnum::AuxPower:
+        case EAscMapKitPowerupTypeEnum::Aux_01:
             SetSprite(AuxPowerTexture);
             break;
-        case EAscMapKitPowerupTypeEnum::AuxPowerTransfer:
+        case EAscMapKitPowerupTypeEnum::Aux_09:
             SetSprite(AuxPowerTransferTexture);
             break;
-        case EAscMapKitPowerupTypeEnum::AuxShield:
+        case EAscMapKitPowerupTypeEnum::Aux_02:
             SetSprite(AuxShieldTexture);
             break;
-        case EAscMapKitPowerupTypeEnum::PriLaser:
+        case EAscMapKitPowerupTypeEnum::Weapon_Pri_01:
             SetSprite(PriLaserTexture);
             break;
-        case EAscMapKitPowerupTypeEnum::PriShred:
+        case EAscMapKitPowerupTypeEnum::Weapon_Pri_02:
             SetSprite(PriShredTexture);
             break;
-        case EAscMapKitPowerupTypeEnum::PriMech:
+        case EAscMapKitPowerupTypeEnum::Weapon_Pri_03:
             SetSprite(PriMechTexture);
             break;
-        case EAscMapKitPowerupTypeEnum::PriTox:
+        case EAscMapKitPowerupTypeEnum::Weapon_Pri_04:
             SetSprite(PriToxTexture);
             break;
-        case EAscMapKitPowerupTypeEnum::PriCoil:
+        case EAscMapKitPowerupTypeEnum::Weapon_Pri_05:
             SetSprite(PriCoilTexture);
             break;
-        case EAscMapKitPowerupTypeEnum::PriPhase:
+        case EAscMapKitPowerupTypeEnum::Weapon_Pri_06:
             SetSprite(PriPhaseTexture);
             break;
-        case EAscMapKitPowerupTypeEnum::PriHydra:
+        case EAscMapKitPowerupTypeEnum::Weapon_Pri_07:
             SetSprite(PriHydraTexture);
             break;
-        case EAscMapKitPowerupTypeEnum::PriNeutron:
+        case EAscMapKitPowerupTypeEnum::Weapon_Pri_08:
             SetSprite(PriNeutronTexture);
             break;
         // todo: @future, @hammer
-        case EAscMapKitPowerupTypeEnum::SecAssault:
+        case EAscMapKitPowerupTypeEnum::Weapon_Sec_01:
             SetSprite(SecAssaultTexture);
             break;
-        case EAscMapKitPowerupTypeEnum::SecAssaultPack:
+        case EAscMapKitPowerupTypeEnum::Weapon_Sec_02:
             SetSprite(SecAssaultPackTexture);
             break;
-        case EAscMapKitPowerupTypeEnum::SecProwler:
+        case EAscMapKitPowerupTypeEnum::Weapon_Sec_03:
             SetSprite(SecProwlerTexture);
             break;
-        case EAscMapKitPowerupTypeEnum::SecProwlerPack:
+        case EAscMapKitPowerupTypeEnum::Weapon_Sec_04:
             SetSprite(SecProwlerPackTexture);
             break;
-        case EAscMapKitPowerupTypeEnum::SecRNA:
+        case EAscMapKitPowerupTypeEnum::Weapon_Sec_05:
             SetSprite(SecRNATexture);
             break;
-        case EAscMapKitPowerupTypeEnum::SecDeadeye:
+        case EAscMapKitPowerupTypeEnum::Weapon_Sec_06:
             SetSprite(SecDeadeyeTexture);
             break;
-        case EAscMapKitPowerupTypeEnum::SecDeadeyePack:
+        case EAscMapKitPowerupTypeEnum::Weapon_Sec_07:
             SetSprite(SecDeadeyePackTexture);
             break;
-        case EAscMapKitPowerupTypeEnum::SecVex:
+        case EAscMapKitPowerupTypeEnum::Weapon_Sec_08:
             SetSprite(SecVexTexture);
             break;
-        case EAscMapKitPowerupTypeEnum::SecAftershock:
+        case EAscMapKitPowerupTypeEnum::Weapon_Sec_09:
             SetSprite(SecAftershockTexture);
             break;
-        case EAscMapKitPowerupTypeEnum::TetChaff:
+        case EAscMapKitPowerupTypeEnum::Weapon_Tet_07:
             SetSprite(TetChaffTexture);
             break;
-        case EAscMapKitPowerupTypeEnum::TetBio:
+        case EAscMapKitPowerupTypeEnum::Weapon_Tet_03:
             SetSprite(TetBioTexture);
             break;
-        case EAscMapKitPowerupTypeEnum::TetBioPack:
+        case EAscMapKitPowerupTypeEnum::Weapon_Tet_04:
             SetSprite(TetBioPackTexture);
             break;
-        case EAscMapKitPowerupTypeEnum::TetHowler:
+        case EAscMapKitPowerupTypeEnum::Weapon_Tet_05:
             SetSprite(TetHowlerTexture);
             break;
-        case EAscMapKitPowerupTypeEnum::TetHowlerPack:
+        case EAscMapKitPowerupTypeEnum::Weapon_Tet_06:
             SetSprite(TetHowlerPackTexture);
             break;
-        case EAscMapKitPowerupTypeEnum::TetRadial:
+        case EAscMapKitPowerupTypeEnum::Weapon_Tet_01:
             SetSprite(TetRadialTexture);
             break;
-        case EAscMapKitPowerupTypeEnum::TetRadialPack:
+        case EAscMapKitPowerupTypeEnum::Weapon_Tet_02:
             SetSprite(TetRadialPackTexture);
             break;
     }

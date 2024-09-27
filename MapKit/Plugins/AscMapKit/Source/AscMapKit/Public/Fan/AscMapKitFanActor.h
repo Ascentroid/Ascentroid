@@ -28,7 +28,7 @@ public:
     UPROPERTY()
     UArrowComponent *ArrowComponent;
 
-    UPROPERTY()
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     UStaticMeshComponent *StaticMeshComponent;
 
     UFUNCTION()
@@ -40,7 +40,7 @@ public:
 #if WITH_EDITOR
     virtual void PostEditChangeProperty(struct FPropertyChangedEvent &PropertyChangedEvent) override;
 
-    void EditorUpdateFanType(EAscMapKitFanTypeEnum FanType);
+    void EditorUpdateFan(const FString &PropertyName, const EAscMapKitFanTypeEnum &FanType);
 #endif
 
 private:

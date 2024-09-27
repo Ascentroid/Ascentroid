@@ -12,6 +12,13 @@ struct ASCMAPKIT_API FAscMapKitDestructiblePropertiesStruct
 {
     GENERATED_BODY()
 
+    FAscMapKitDestructiblePropertiesStruct()
+    {
+        ScaleOverTime = true;
+        ScaleOverTimeUpOrDownFactor = -0.005f;
+        ScaleOverTimeRateSeconds = 0.03f; // FAscConstantStruct::TickRate30fps()
+    }
+
     // If checked, the destructible system will be turned off and not execute.
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     bool Disable;
@@ -51,6 +58,18 @@ struct ASCMAPKIT_API FAscMapKitDestructiblePropertiesStruct
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     float MinimalImpulseStrength;
 
+    // If enabled, when the actor is is spawned, it will scale up or down over time (using the additional scale settings).
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    bool ScaleOverTime;
+
+    // If the value is negative, the actor will scale down over time. If the value is positive, the actor will scale up over time.
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    float ScaleOverTimeUpOrDownFactor;
+
+    // The time/rate in seconds at which the scale factor execution is applied.
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    float ScaleOverTimeRateSeconds;
+    
     // Player Damage
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     FAscMapKitDestructibleDamagePropertiesStruct PlayerDamage;

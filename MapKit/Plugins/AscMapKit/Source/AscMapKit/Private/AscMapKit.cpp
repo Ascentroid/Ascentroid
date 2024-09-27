@@ -1,4 +1,4 @@
-#include "AscMapKit.h"
+#include "AscMapKit/Public/AscMapKit.h"
 
 #define LOCTEXT_NAMESPACE "FAscMapKitModule"
 

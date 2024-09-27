@@ -31,9 +31,22 @@
 				"Win64",
 				"Win32"
 			]
+		},
+		{
+			"Name": "AscMapKitEditor",
+			"Type": "Editor",
+			"LoadingPhase": "PostEngineInit",
+			"WhitelistPlatforms": [
+				"Win64",
+				"Win32"
+			]
 		}
 	],
 	"Plugins": [
+		{
+			"Name": "ProceduralMeshComponent",
+			"Enabled": true
+		},
 		{
 			"Name": "Niagara",
 			"Enabled": true

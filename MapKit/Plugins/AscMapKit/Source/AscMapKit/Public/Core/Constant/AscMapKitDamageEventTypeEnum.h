@@ -16,7 +16,7 @@ enum class EAscMapKitDamageEventTypeEnum : uint8
     Fire,
 	Forcefield,
 	Lava,
-	NeutronOvercharging,
+	Overcharging,
 	Plasma,
 	PlayerDeathExplosion,
 	Sludge,

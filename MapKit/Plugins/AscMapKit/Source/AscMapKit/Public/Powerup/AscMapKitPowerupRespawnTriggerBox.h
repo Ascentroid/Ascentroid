@@ -4,12 +4,13 @@
 #include "Runtime/Engine/Classes/Engine/TriggerBox.h"
 
 // Ascentroid
+#include "AscMapKit/Public/Powerup/AscMapKitPowerupRespawnTriggerBoxCollisionBoxBoundsVector.h"
 #include "AscMapKit/Public/Powerup/AscMapKitPowerupTypeEnum.h"
 
 // Generated
 #include "AscMapKitPowerupRespawnTriggerBox.generated.h"
 
-UCLASS(HideCategories=("Activation", "Asset User Data", "Collision", "Cooking", "HLOD", "Input", "LOD", "Lighting", "Mobile", "Physics", "Rendering", "Replication", "Sprite", "Tags", "Virtual Texture"))
+UCLASS(HideCategories=("Shape", "Navigation", "Tags", "Actor", "Activation", "Asset User Data", "Collision", "Cooking", "HLOD", "Input", "LOD", "Lighting", "Mobile", "Physics", "Rendering", "Replication", "Sprite", "Tags", "Virtual Texture"))
 class ASCMAPKIT_API AAscMapKitPowerupRespawnTriggerBox : public ATriggerBox
 {
 	GENERATED_BODY()
@@ -18,118 +19,136 @@ public:
 	AAscMapKitPowerupRespawnTriggerBox();
 
 	UFUNCTION()
-	void OnConstruction(const FTransform &Transform) override;
+	virtual void OnConstruction(const FTransform &Transform) override;
 
 	// todo: @reminder: update as powerups change
 
-	UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Weapon Primary Laser", AllowPrivateAccess = "true"))
-	bool WeaponPriLaser;
+	UPROPERTY(EditAnywhere, Category="Ascentroid - Powerups", meta=(DisplayName = "Pri 01 (Laser)", AllowPrivateAccess = "true"))
+	bool Weapon_Pri_01;
 
-	UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Weapon Primary Shred", AllowPrivateAccess = "true"))
-	bool WeaponPriShred;
+	UPROPERTY(EditAnywhere, Category="Ascentroid - Powerups", meta=(DisplayName = "Pri 02 (Shred)", AllowPrivateAccess = "true"))
+	bool Weapon_Pri_02;
 
-	UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Weapon Primary Mech", AllowPrivateAccess = "true"))
-	bool WeaponPriMech;
+	UPROPERTY(EditAnywhere, Category="Ascentroid - Powerups", meta=(DisplayName = "Pri 03 (Mech)", AllowPrivateAccess = "true"))
+	bool Weapon_Pri_03;
 
-	UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Weapon Primary Tox", AllowPrivateAccess = "true"))
-	bool WeaponPriTox;
+	UPROPERTY(EditAnywhere, Category="Ascentroid - Powerups", meta=(DisplayName = "Pri 04 (Tox)", AllowPrivateAccess = "true"))
+	bool Weapon_Pri_04;
 
-	UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Weapon Primary Coil", AllowPrivateAccess = "true"))
-	bool WeaponPriCoil;
+	UPROPERTY(EditAnywhere, Category="Ascentroid - Powerups", meta=(DisplayName = "Pri 05 (Coil)", AllowPrivateAccess = "true"))
+	bool Weapon_Pri_05;
 
-	UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Weapon Primary Phase", AllowPrivateAccess = "true"))
-	bool WeaponPriPhase;
+	UPROPERTY(EditAnywhere, Category="Ascentroid - Powerups", meta=(DisplayName = "Pri 06 (Phase)", AllowPrivateAccess = "true"))
+	bool Weapon_Pri_06;
 
-	UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Weapon Primary Hydra", AllowPrivateAccess = "true"))
-	bool WeaponPriHydra;
+	UPROPERTY(EditAnywhere, Category="Ascentroid - Powerups", meta=(DisplayName = "Pri 07 (Hydra)", AllowPrivateAccess = "true"))
+	bool Weapon_Pri_07;
 
-	UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Weapon Primary Neutron", AllowPrivateAccess = "true"))
-	bool WeaponPriNeutron;
+	UPROPERTY(EditAnywhere, Category="Ascentroid - Powerups", meta=(DisplayName = "Pri 08 (Neutron)", AllowPrivateAccess = "true"))
+	bool Weapon_Pri_08;
 
-	UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Weapon Primary Hammer", AllowPrivateAccess = "true"))
-	bool WeaponPriHammer;
+	UPROPERTY(EditAnywhere, Category="Ascentroid - Powerups", meta=(DisplayName = "Pri 09 (Hammer)", AllowPrivateAccess = "true"))
+	bool Weapon_Pri_09;
 
-	UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Weapon Secondary Assault", AllowPrivateAccess = "true"))
-	bool WeaponSecAssault;
+	UPROPERTY(EditAnywhere, Category="Ascentroid - Powerups", meta=(DisplayName = "Sec 01 (Assault)", AllowPrivateAccess = "true"))
+	bool Weapon_Sec_01;
 
-	UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Weapon Secondary Assault Pack", AllowPrivateAccess = "true"))
-	bool WeaponSecAssaultPack;
+	UPROPERTY(EditAnywhere, Category="Ascentroid - Powerups", meta=(DisplayName = "Sec 02 (Assault Pack)", AllowPrivateAccess = "true"))
+	bool Weapon_Sec_02;
 
-	UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Weapon Secondary Prowler", AllowPrivateAccess = "true"))
-	bool WeaponSecProwler;
+	UPROPERTY(EditAnywhere, Category="Ascentroid - Powerups", meta=(DisplayName = "Sec 03 (Prowler)", AllowPrivateAccess = "true"))
+	bool Weapon_Sec_03;
 
-	UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Weapon Secondary Prowler Pack", AllowPrivateAccess = "true"))
-	bool WeaponSecProwlerPack;
+	UPROPERTY(EditAnywhere, Category="Ascentroid - Powerups", meta=(DisplayName = "Sec 04 (Prowler Pack)", AllowPrivateAccess = "true"))
+	bool Weapon_Sec_04;
 
-	UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Weapon Secondary RNA", AllowPrivateAccess = "true"))
-	bool WeaponSecRNA;
+	UPROPERTY(EditAnywhere, Category="Ascentroid - Powerups", meta=(DisplayName = "Sec 05 (RNA)", AllowPrivateAccess = "true"))
+	bool Weapon_Sec_05;
 
-	UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Weapon Secondary Deadeye", AllowPrivateAccess = "true"))
-	bool WeaponSecDeadeye;
+	UPROPERTY(EditAnywhere, Category="Ascentroid - Powerups", meta=(DisplayName = "Sec 06 (Deadeye)", AllowPrivateAccess = "true"))
+	bool Weapon_Sec_06;
 
-	UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Weapon Secondary Deadeye Pack", AllowPrivateAccess = "true"))
-	bool WeaponSecDeadeyePack;
+	UPROPERTY(EditAnywhere, Category="Ascentroid - Powerups", meta=(DisplayName = "Sec 07 (Deadeye Pack)", AllowPrivateAccess = "true"))
+	bool Weapon_Sec_07;
 
-	UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Weapon Secondary Vex", AllowPrivateAccess = "true"))
-	bool WeaponSecVex;
+	UPROPERTY(EditAnywhere, Category="Ascentroid - Powerups", meta=(DisplayName = "Sec 08 (Vex)", AllowPrivateAccess = "true"))
+	bool Weapon_Sec_08;
 
-	UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Weapon Secondary Aftershock", AllowPrivateAccess = "true"))
-	bool WeaponSecAftershock;
+	UPROPERTY(EditAnywhere, Category="Ascentroid - Powerups", meta=(DisplayName = "Sec 09 (Aftershock)", AllowPrivateAccess = "true"))
+	bool Weapon_Sec_09;
 
-    UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Weapon Tertiary Radial", AllowPrivateAccess = "true"))
-    bool WeaponTetRadial;
+    UPROPERTY(EditAnywhere, Category="Ascentroid - Powerups", meta=(DisplayName = "Tet 01 (Radial)", AllowPrivateAccess = "true"))
+    bool Weapon_Tet_01;
 
-    UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Weapon Tertiary Radial", AllowPrivateAccess = "true"))
-    bool WeaponTetRadialPack;
+    UPROPERTY(EditAnywhere, Category="Ascentroid - Powerups", meta=(DisplayName = "Tet 02 (Radial Pack)", AllowPrivateAccess = "true"))
+    bool Weapon_Tet_02;
 
-    UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Weapon Tertiary Bio", AllowPrivateAccess = "true"))
-    bool WeaponTetBio;
+    UPROPERTY(EditAnywhere, Category="Ascentroid - Powerups", meta=(DisplayName = "Tet 03 (Bio)", AllowPrivateAccess = "true"))
+    bool Weapon_Tet_03;
 
-    UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Weapon Tertiary Bio", AllowPrivateAccess = "true"))
-    bool WeaponTetBioPack;
+    UPROPERTY(EditAnywhere, Category="Ascentroid - Powerups", meta=(DisplayName = "Tet 04 (Bio Pack)", AllowPrivateAccess = "true"))
+    bool Weapon_Tet_04;
 
-	UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Weapon Tertiary Howler", AllowPrivateAccess = "true"))
-	bool WeaponTetHowler;
+	UPROPERTY(EditAnywhere, Category="Ascentroid - Powerups", meta=(DisplayName = "Tet 05 (Howler)", AllowPrivateAccess = "true"))
+	bool Weapon_Tet_05;
 
-	UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Weapon Tertiary Howler", AllowPrivateAccess = "true"))
-	bool WeaponTetHowlerPack;
+	UPROPERTY(EditAnywhere, Category="Ascentroid - Powerups", meta=(DisplayName = "Tet 06 (Howler Pack)", AllowPrivateAccess = "true"))
+	bool Weapon_Tet_06;
 
-	UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Weapon Tertiary Chaff", AllowPrivateAccess = "true"))
-	bool WeaponTetChaff;
+	UPROPERTY(EditAnywhere, Category="Ascentroid - Powerups", meta=(DisplayName = "Tet 07 (Chaff)", AllowPrivateAccess = "true"))
+	bool Weapon_Tet_07;
 
-	UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Auxiliary Power", AllowPrivateAccess = "true"))
-	bool AuxPower;
+	UPROPERTY(EditAnywhere, Category="Ascentroid - Powerups", meta=(DisplayName = "Aux 01 (Power)", AllowPrivateAccess = "true"))
+	bool Aux_01;
 
-	UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Auxiliary Shield", AllowPrivateAccess = "true"))
-	bool AuxShield;
+	UPROPERTY(EditAnywhere, Category="Ascentroid - Powerups", meta=(DisplayName = "Aux 02 (Shield)", AllowPrivateAccess = "true"))
+	bool Aux_02;
 
-	UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Auxiliary Conceal", AllowPrivateAccess = "true"))
-	bool AuxConceal;
+	UPROPERTY(EditAnywhere, Category="Ascentroid - Powerups", meta=(DisplayName = "Aux 03 (Conceal)", AllowPrivateAccess = "true"))
+	bool Aux_03;
 
-	UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Auxiliary Invincible", AllowPrivateAccess = "true"))
-	bool AuxInvincible;
+	UPROPERTY(EditAnywhere, Category="Ascentroid - Powerups", meta=(DisplayName = "Aux 04 (Invincible)", AllowPrivateAccess = "true"))
+	bool Aux_04;
 
-	UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Auxiliary Laser Coupler", AllowPrivateAccess = "true"))
-	bool AuxLaserCoupler;
+	UPROPERTY(EditAnywhere, Category="Ascentroid - Powerups", meta=(DisplayName = "Aux 05 (LaserCoupler)", AllowPrivateAccess = "true"))
+	bool Aux_05;
 
-	UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Auxiliary Navmap Reveal", AllowPrivateAccess = "true"))
-	bool AuxNavmapReveal;
+	UPROPERTY(EditAnywhere, Category="Ascentroid - Powerups", meta=(DisplayName = "Aux 06 (Ammo)", AllowPrivateAccess = "true"))
+	bool Aux_06;
 
-	UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Auxiliary Ammo", AllowPrivateAccess = "true"))
-	bool AuxAmmo;
+	UPROPERTY(EditAnywhere, Category="Ascentroid - Powerups", meta=(DisplayName = "Aux 07 (AmmoCache)", AllowPrivateAccess = "true"))
+	bool Aux_07;
 
-	UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Auxiliary Ammo Cache", AllowPrivateAccess = "true"))
-	bool AuxAmmoCache;
+	UPROPERTY(EditAnywhere, Category="Ascentroid - Powerups", meta=(DisplayName = "Aux 08 (Boost)", AllowPrivateAccess = "true"))
+	bool Aux_08;
 
-	UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Auxiliary Boost", AllowPrivateAccess = "true"))
-	bool AuxBoost;
+	UPROPERTY(EditAnywhere, Category="Ascentroid - Powerups", meta=(DisplayName = "Aux 09 (PowerTransfer)", AllowPrivateAccess = "true"))
+	bool Aux_09;
 
-	UPROPERTY(EditAnywhere, Category=Powerups, meta=(DisplayName = "Auxiliary Power Transfer", AllowPrivateAccess = "true"))
-	bool AuxPowerTransfer;
+	UPROPERTY(EditAnywhere, Category="Ascentroid - Powerups", meta=(DisplayName = "Aux 10 (NavmapReveal)", AllowPrivateAccess = "true"))
+	bool Aux_10;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category="Ascentroid - Collision", DisplayName="Collision Box Bounds")
+	FAscMapKitPowerupRespawnTriggerBoxCollisionBoxBoundsVector BoxBounds;
 
 	UFUNCTION()
 	FVector GetRandomLocationWithinBounds();
 
 	UFUNCTION()
 	bool Supports(EAscMapKitPowerupTypeEnum PowerupType);
+
+#if WITH_EDITOR
+	virtual bool ShouldTickIfViewportsOnly() const override { return true; }
+
+	virtual void Tick(float DeltaTime) override;
+
+	virtual void PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent) override;
+#endif
+
+private:
+	UPROPERTY()
+	bool bIsBoxBoundsInitialized;
+
+	UPROPERTY()
+	bool bNeedsScaleReset;
 };

@@ -4,7 +4,7 @@
 #include "Runtime/Engine/Classes/Components/BillboardComponent.h"
 
 // Ascentroid
-#include "AscMapKit/Public/Powerup/AscMapKitPowerupTypeEnum.h"
+#include "AscMapKitPowerupPropertiesStruct.h"
 
 // Generated
 #include "AscMapKitPowerupBillboardComponent.generated.h"
@@ -22,7 +22,7 @@ public:
 
 #if WITH_EDITOR
     UFUNCTION()
-    void EditorUpdatePowerupType(EAscMapKitPowerupTypeEnum PowerupType);
+    void EditorUpdatePowerupType(const FAscMapKitPowerupPropertiesStruct &MapKit);
 #endif
 
 private:
@@ -126,5 +126,5 @@ private:
     UTexture2D *TetRadialTexture;
 
     UPROPERTY()
-    UTexture2D *TetRadialPackTexture;    
+    UTexture2D *TetRadialPackTexture;
 };

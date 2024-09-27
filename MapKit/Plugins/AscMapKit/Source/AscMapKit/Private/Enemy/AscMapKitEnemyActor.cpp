@@ -97,7 +97,8 @@ AAscMapKitEnemyActor::AAscMapKitEnemyActor()
     MapKit.Weapons.AttackMultipleTimesMaximumDelaySeconds = 0.9f;
     
     auto DefaultWeaponSocket = FAscMapKitEnemyPropertiesWeaponStruct();
-    DefaultWeaponSocket.WeaponType = EAscMapKitProjWeapTypeEnum::Pri_L1_Fluorine;
+    DefaultWeaponSocket.WeaponType = EAscMapKitProjWeapTypeEnum::Pri_01;
+    DefaultWeaponSocket.WeaponStrengthLevel = 1;
     DefaultWeaponSocket.ChanceToFire = 50;
 
     MapKit.Weapons.Sockets.Add(DefaultWeaponSocket);
@@ -200,6 +201,13 @@ void AAscMapKitEnemyActor::OnConstruction(const FTransform &Transform)
     }
 
 #if WITH_EDITOR
+    if (MapKit.DefaultGameRuntimeBoundingBox == nullptr)
+    {
+        MapKit.DefaultGameRuntimeBoundingBox = NewObject<UAscMapKitEnemyDefaultGameRuntimeBoundingBox>(this, UAscMapKitEnemyDefaultGameRuntimeBoundingBox::StaticClass(), TEXT("DefaultGameRuntimeBoundingBox"));
+        MapKit.DefaultGameRuntimeBoundingBox->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+        MapKit.DefaultGameRuntimeBoundingBox->SetBoxExtent(FVector::ZeroVector);
+    }
+
     if (BillboardComponent != nullptr)
         BillboardComponent->EditorUpdateEnemyType(MapKit.EnemyType);
 
@@ -212,30 +220,33 @@ void AAscMapKitEnemyActor::OnConstruction(const FTransform &Transform)
 #if !(UE_BUILD_SHIPPING)
     ArrowComponent->SetRelativeRotation(FRotator(0.f, 180.f, 0.f));
 
-    const auto BoundingBoxExtent = MapKit.DefaultGameRuntimeBoundingBox->Bounds.BoxExtent;
-
-    if (PrimaryColorStaticMeshComponent != nullptr)
+    if (MapKit.DefaultGameRuntimeBoundingBox != nullptr)
     {
-        const auto PrimaryColorStaticMeshOffset = 100.f;
+        const auto BoundingBoxExtent = MapKit.DefaultGameRuntimeBoundingBox->Bounds.BoxExtent;
 
-        auto NewLocation = FVector(-BoundingBoxExtent.X, BoundingBoxExtent.Y, BoundingBoxExtent.Z);
-        NewLocation.X += PrimaryColorStaticMeshOffset;
-        NewLocation.Y -= PrimaryColorStaticMeshOffset;
-        NewLocation.Z -= PrimaryColorStaticMeshOffset;
+        if (PrimaryColorStaticMeshComponent != nullptr)
+        {
+            const auto PrimaryColorStaticMeshOffset = 100.f;
 
-        PrimaryColorStaticMeshComponent->SetRelativeLocation(NewLocation);
-    }
+            auto NewLocation = FVector(-BoundingBoxExtent.X, BoundingBoxExtent.Y, BoundingBoxExtent.Z);
+            NewLocation.X += PrimaryColorStaticMeshOffset;
+            NewLocation.Y -= PrimaryColorStaticMeshOffset;
+            NewLocation.Z -= PrimaryColorStaticMeshOffset;
 
-    if (EmitColorStaticMeshComponent != nullptr)
-    {
-        const auto EmitColorStaticMeshOffset = 50.f;
+            PrimaryColorStaticMeshComponent->SetRelativeLocation(NewLocation);
+        }
 
-        auto NewLocation = FVector(-BoundingBoxExtent.X, -BoundingBoxExtent.Y, BoundingBoxExtent.Z);
-        NewLocation.X += EmitColorStaticMeshOffset;
-        NewLocation.Y += EmitColorStaticMeshOffset;
-        NewLocation.Z -= EmitColorStaticMeshOffset;
+        if (EmitColorStaticMeshComponent != nullptr)
+        {
+            const auto EmitColorStaticMeshOffset = 50.f;
 
-        EmitColorStaticMeshComponent->SetRelativeLocation(NewLocation);
+            auto NewLocation = FVector(-BoundingBoxExtent.X, -BoundingBoxExtent.Y, BoundingBoxExtent.Z);
+            NewLocation.X += EmitColorStaticMeshOffset;
+            NewLocation.Y += EmitColorStaticMeshOffset;
+            NewLocation.Z -= EmitColorStaticMeshOffset;
+
+            EmitColorStaticMeshComponent->SetRelativeLocation(NewLocation);
+        }
     }
 #endif
 }
@@ -260,6 +271,7 @@ void AAscMapKitEnemyActor::PostEditChangeProperty(struct FPropertyChangedEvent &
         BillboardComponent->EditorUpdateEnemyType(MapKit.EnemyType);
         MapKit.DefaultGameRuntimeBoundingBox->EditorUpdateEnemyType(MapKit.EnemyType);
         EditorUpdateEnemyType(MapKit.EnemyType);
+        EditorUpdateWeaponSockets();
     }
 }
 
@@ -295,5 +307,40 @@ void AAscMapKitEnemyActor::EditorUpdateEnemyType(const EAscMapKitEnemyTypeEnum E
             MapKit.Weapons.NumberOfSockets = 6;
             break;
     }
+
+    Modify();
+    PostEditChange();
+
+    MarkPackageDirty();
+}
+
+void AAscMapKitEnemyActor::EditorUpdateWeaponSockets()
+{
+    if (MapKit.Weapons.Sockets.Num() != MapKit.Weapons.NumberOfSockets)
+        MapKit.Weapons.Sockets.SetNum(MapKit.Weapons.NumberOfSockets);
+
+    for (auto i = 0; i < MapKit.Weapons.NumberOfSockets; i++)
+    {
+        if (MapKit.Weapons.Sockets.IsValidIndex(i))
+        {
+            MapKit.Weapons.Sockets[i].WeaponType = EAscMapKitProjWeapTypeEnum::Pri_01;
+            MapKit.Weapons.Sockets[i].WeaponStrengthLevel = 1;
+            MapKit.Weapons.Sockets[i].ChanceToFire = 50;
+        }
+        else
+        {
+            FAscMapKitEnemyPropertiesWeaponStruct Weapon;
+            Weapon.WeaponType = EAscMapKitProjWeapTypeEnum::Pri_01;
+            Weapon.WeaponStrengthLevel = 1;
+            Weapon.ChanceToFire = 50;
+
+            MapKit.Weapons.Sockets.Add(Weapon);
+        }
+    }
+
+    Modify();
+    PostEditChange();
+
+    MarkPackageDirty();
 }
 #endif

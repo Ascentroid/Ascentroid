@@ -40,6 +40,9 @@ public:
     UFUNCTION()
     void BeginPlay() override;
 
+    UFUNCTION()
+    void UpdateColor();
+
 #if WITH_EDITOR
     virtual void PostEditChangeProperty(struct FPropertyChangedEvent &PropertyChangedEvent) override;
 #endif

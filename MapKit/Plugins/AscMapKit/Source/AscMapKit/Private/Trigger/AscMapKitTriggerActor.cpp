@@ -161,5 +161,16 @@ void AAscMapKitTriggerActor::EditorUpdateTriggerType(const EAscMapKitTriggerType
         StaticMeshComponent->SetStaticMesh(nullptr);
         StaticMeshComponent->SetMaterial(0, UseMaterial);
     }
+
+    if (StaticMeshComponent)
+    {
+        StaticMeshComponent->Modify();
+        StaticMeshComponent->PostEditChange();
+    }
+
+    Modify();
+    PostEditChange();
+
+    MarkPackageDirty();
 }
 #endif

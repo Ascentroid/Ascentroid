@@ -29,7 +29,7 @@ void AAscMapKitPowerupActor::OnConstruction(const FTransform &Transform)
 
 #if WITH_EDITOR
     if (BillboardComponent != nullptr)
-        BillboardComponent->EditorUpdatePowerupType(MapKit.PowerupType);
+        BillboardComponent->EditorUpdatePowerupType(MapKit);
 #endif
 }
 
@@ -48,9 +48,14 @@ void AAscMapKitPowerupActor::PostEditChangeProperty(struct FPropertyChangedEvent
 {
     Super::PostEditChangeProperty(PropertyChangedEvent);
 
-    if (PropertyChangedEvent.GetPropertyName() == TEXT("PowerupType") && BillboardComponent != nullptr)
+    if (BillboardComponent != nullptr)
     {
-        BillboardComponent->EditorUpdatePowerupType(MapKit.PowerupType);
+        if (PropertyChangedEvent.GetPropertyName() == TEXT("PowerupType") ||
+            PropertyChangedEvent.GetPropertyName() == TEXT("UseCustomEditorSprite") ||
+            PropertyChangedEvent.GetPropertyName() == TEXT("CustomEditorSprite"))
+        {
+            BillboardComponent->EditorUpdatePowerupType(MapKit);
+        }
     }
 }
 #endif

@@ -6,13 +6,13 @@
 UENUM()
 enum class EAscMapKitEnemyTypeEnum : uint8
 {
-    PleaseSelect = 0,
-    AlienCylon,
-    AlienGrawn,
-    MachineAssaultCache,
-    MachineAssaultTank,
-    MachineGeminiTurret,
-    MachineSarkTurret,
-    MachineSecureGage,
-    MachineServasTurret
+    None = 0 UMETA(DisplayName = "Please Select"),
+    AlienCylon UMETA(DisplayName = "Alien Cylon"),
+    AlienGrawn UMETA(DisplayName = "Alien Grawn"),
+    MachineAssaultCache UMETA(DisplayName = "Machine Assault Cache"),
+    MachineAssaultTank UMETA(DisplayName = "Machine Assault Tank"),
+    MachineGeminiTurret UMETA(DisplayName = "Machine Gemini Turret"),
+    MachineSarkTurret UMETA(DisplayName = "Machine Sark Turret"),
+    MachineSecureGage UMETA(DisplayName = "Machine Secure Gage"),
+    MachineServasTurret UMETA(DisplayName = "Machine Servas Turret")
 };

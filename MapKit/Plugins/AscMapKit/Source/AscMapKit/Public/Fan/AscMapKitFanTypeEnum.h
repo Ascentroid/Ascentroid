@@ -6,7 +6,7 @@
 UENUM()
 enum class EAscMapKitFanTypeEnum : uint8
 {
-    PleaseSelect = 0,
-    Animated20x20mBasic001,
-    Custom
+    None = 0 UMETA(DisplayName = "Please Select"),
+    Animated20x20mBasic001 UMETA(DisplayName = "Animated 20x20m Basic 001"),
+    Custom UMETA(DisplayName = "Custom")
 };

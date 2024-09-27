@@ -5,7 +5,7 @@ public class AscMapKit : ModuleRules
 	public AscMapKit(ReadOnlyTargetRules Target) : base(Target)
 	{
         PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
-		
+
         //PublicIncludePaths.AddRange(new [] {});
         //PrivateIncludePaths.AddRange(new [] {});
 

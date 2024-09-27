@@ -44,7 +44,7 @@ void AAscMapKitFanActor::OnConstruction(const FTransform &Transform)
 #endif
 
 #if WITH_EDITOR
-    EditorUpdateFanType(MapKit.FanType);
+    EditorUpdateFan(TEXT("FanType"), MapKit.FanType);
 #endif
 }
 
@@ -58,11 +58,16 @@ void AAscMapKitFanActor::PostEditChangeProperty(struct FPropertyChangedEvent &Pr
 {
     Super::PostEditChangeProperty(PropertyChangedEvent);
 
-    if (PropertyChangedEvent.GetPropertyName() == TEXT("FanType"))
-        EditorUpdateFanType(MapKit.FanType);
+    // UE_LOG(LogTemp, Log, TEXT("Fan.PostEditChangeProperty(): %s"), *PropertyChangedEvent.GetPropertyName().ToString());
+
+    if (PropertyChangedEvent.GetPropertyName() == TEXT("FanType") ||
+        PropertyChangedEvent.GetPropertyName() == TEXT("Material") ||
+        PropertyChangedEvent.GetPropertyName() == TEXT("StaticMeshComponent"))
+        EditorUpdateFan(PropertyChangedEvent.GetPropertyName().ToString(), MapKit.FanType);
 }
 
-void AAscMapKitFanActor::EditorUpdateFanType(const EAscMapKitFanTypeEnum FanType)
+// todo: change PropertyName type to an enum?
+void AAscMapKitFanActor::EditorUpdateFan(const FString &PropertyName, const EAscMapKitFanTypeEnum &FanType)
 {
     UStaticMesh *UseStaticMesh = nullptr;
 
@@ -85,6 +90,37 @@ void AAscMapKitFanActor::EditorUpdateFanType(const EAscMapKitFanTypeEnum FanType
     {
         StaticMeshComponent->SetStaticMesh(UseStaticMesh);
         StaticMeshComponent->SetMaterial(0, nullptr);
+    }
+
+    // todo: should this go after the custom property stuff?
+    // todo: apply this pattern to other map kit actor types (decor, doors, etc)
+    if (PropertyName == TEXT("Material"))
+    {
+        if (MapKit.Custom.OverrideMaterials.Num() > 0 && StaticMeshComponent->GetStaticMesh())
+        {
+            for (const auto &OverrideMaterial : MapKit.Custom.OverrideMaterials)
+            {
+                if (OverrideMaterial.OverrideMaterial && OverrideMaterial.Material)
+                    StaticMeshComponent->SetMaterial(OverrideMaterial.MaterialIndex, OverrideMaterial.Material);
+            }
+        }
+    }
+    else if (PropertyName == "StaticMeshComponent")
+    {
+        if (StaticMeshComponent->GetNumMaterials() > 0 && MapKit.Custom.OverrideMaterials.Num() > 0)
+        {
+            for (int32 MaterialIndex = 0; MaterialIndex < StaticMeshComponent->GetNumMaterials(); ++MaterialIndex)
+            {
+                for (auto &OverrideMaterial : MapKit.Custom.OverrideMaterials)
+                {
+                    if (OverrideMaterial.OverrideMaterial && OverrideMaterial.MaterialIndex == MaterialIndex)
+                    {
+                        OverrideMaterial.Material = StaticMeshComponent->GetMaterial(MaterialIndex);
+                        break;
+                    }
+                }
+            }
+        }
     }
 }
 #endif
