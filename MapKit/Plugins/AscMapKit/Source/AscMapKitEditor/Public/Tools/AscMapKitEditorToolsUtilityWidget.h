@@ -26,6 +26,7 @@
 #include "AscMapKit/Public/Fan/AscMapKitFanTypeEnum.h"
 #include "AscMapKit/Public/Powerup/AscMapKitPowerupTypeEnum.h"
 #include "AscMapKit/Public/Trigger/AscMapKitTriggerTypeEnum.h"
+#include "AscMapKitEditor/Public/Tools/Widgets/AscMapKitEditorToolsSelfRefButtonWidget.h"
 
 // Generated
 #include "AscMapKitEditorToolsUtilityWidget.generated.h"
@@ -737,6 +738,148 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void BtnLinksAmbientCgLinkOnClick();
 
+	// Easy Buttons
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateAreaAcid;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateAreaElectric;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateAreaLava;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateAreaLavaFalls;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateAreaLiquid;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateAreaPowerStation;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateAreaSludge;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDecorGrate10x20mBasic001;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDecorGrate20x5mBasic001;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDecorGrate20x5mBasic002;
+	
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDecorGrate20x20mBasic001;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDecorLadderSet001;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDecorLetter;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDecorPiece001;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDecorSign001;
+	
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDecorSign002;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDecorSign003;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDecorSign004;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDecorSign005;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDecorSign006;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDoorAnimated20x20mBasic001;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDoorAnimated20x20mBasic002;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDoorAnimated20x20mBasic003;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDoorAnimated20x20mBasic004;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDoorAnimated20x20mBasic005;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDoorAnimated20x20mSciFiDoorsDoor1;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDoorAnimated20x20mSciFiDoorsDoor2;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDoorAnimated20x20mSciFiDoorsDoor4;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDoorAnimated20x20mSciFiPropsDoor1;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDoorAnimated40x20mBasic001;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDoorAnimated40x20mSciFiDoorsDoor3;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDoorDestructible20x20mBasic001;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDoorCustom;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateEnemyAlienCylon;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateEnemyAlienGrawn;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateEnemyMachineAssaultCache;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateEnemyMachineAssaultTank;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateEnemyMachineGeminiTurret;
+	
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateEnemyMachineSarkTurret;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateEnemyMachineSecureGage;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateEnemyMachineServasTurret;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateFanAnimated20x20mBasic001;
+	
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateFanCustom;
+	
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateTriggerInvisible;
+	
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateTriggerBasic001;
+	
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateTriggerCustom;
+
+	UFUNCTION(BlueprintCallable)
+	void BtnEasyOnClick(UAscMapKitEditorToolsSelfRefButtonWidget *Button);
+
 private:
 	UPROPERTY()
 	UStaticMesh *CubeStaticMesh;
@@ -754,7 +897,7 @@ private:
 	UMaterialInstanceConstant *LavaMaterial;
 
 	UPROPERTY()
-	UMaterialInstanceConstant *LavaFallMaterial;
+	UMaterialInstanceConstant *LavaFallsMaterial;
 
 	UPROPERTY()
 	UMaterialInstanceConstant *LiquidMaterial;

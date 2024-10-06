@@ -155,7 +155,13 @@ AActor *UAscMapKitEditorToolsHelper::SpawnInEditor(
 			OutActorDefaultName
 		);
 
-		return UGameplayStatics::FinishSpawningActor(ActorDeferred, Transform);
+		SaveToTransactionBuffer(ActorDeferred, true);
+
+		const auto Actor = UGameplayStatics::FinishSpawningActor(ActorDeferred, Transform);
+
+		SaveToTransactionBuffer(Actor, true);
+
+		return Actor;
 	}
 
 	return nullptr;

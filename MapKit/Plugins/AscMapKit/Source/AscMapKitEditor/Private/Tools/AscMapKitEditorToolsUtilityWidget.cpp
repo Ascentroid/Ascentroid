@@ -81,7 +81,7 @@ UAscMapKitEditorToolsUtilityWidget::UAscMapKitEditorToolsUtilityWidget()
 
 	static ConstructorHelpers::FObjectFinder<UMaterialInstanceConstant> AcidMaterialRef(TEXT("MaterialInstanceConstant'/AscMapKit/Conversion/Materials/High/MI_Acid_001.MI_Acid_001'"));
 	static ConstructorHelpers::FObjectFinder<UMaterialInstanceConstant> LavaMaterialRef(TEXT("MaterialInstanceConstant'/AscMapKit/Conversion/Materials/High/MI_Lava_004.MI_Lava_004'"));
-	static ConstructorHelpers::FObjectFinder<UMaterialInstanceConstant> LavaFallMaterialRef(TEXT("MaterialInstanceConstant'/AscMapKit/Conversion/Materials/High/MI_Lava_Falls_001.MI_Lava_Falls_001'"));
+	static ConstructorHelpers::FObjectFinder<UMaterialInstanceConstant> LavaFallsMaterialRef(TEXT("MaterialInstanceConstant'/AscMapKit/Conversion/Materials/High/MI_Lava_Falls_001.MI_Lava_Falls_001'"));
 	static ConstructorHelpers::FObjectFinder<UMaterialInstanceConstant> LiquidMaterialRef(TEXT("MaterialInstanceConstant'/AscMapKit/Shared/Materials/MI_Water_Simple.MI_Water_Simple'"));
 	static ConstructorHelpers::FObjectFinder<UMaterialInstanceConstant> SludgeMaterialRef(TEXT("MaterialInstanceConstant'/AscMapKit/Conversion/Materials/High/MI_Sludge_001.MI_Sludge_001'"));
 
@@ -198,8 +198,8 @@ UAscMapKitEditorToolsUtilityWidget::UAscMapKitEditorToolsUtilityWidget()
 	if (LavaMaterialRef.Succeeded())
 		LavaMaterial = LavaMaterialRef.Object;
 
-	if (LavaFallMaterialRef.Succeeded())
-		LavaFallMaterial = LavaFallMaterialRef.Object;
+	if (LavaFallsMaterialRef.Succeeded())
+		LavaFallsMaterial = LavaFallsMaterialRef.Object;
 
 	if (LiquidMaterialRef.Succeeded())
 		LiquidMaterial = LiquidMaterialRef.Object;
@@ -500,7 +500,7 @@ void UAscMapKitEditorToolsUtilityWidget::NativeConstruct()
 	ComboBoxAddArea->AddOption(TEXT("Acid"));
 	ComboBoxAddArea->AddOption(TEXT("Electric"));
 	ComboBoxAddArea->AddOption(TEXT("Lava"));
-	ComboBoxAddArea->AddOption(TEXT("Lava Fall"));
+	ComboBoxAddArea->AddOption(TEXT("Lava Falls"));
 	ComboBoxAddArea->AddOption(TEXT("Liquid"));
 	ComboBoxAddArea->AddOption(TEXT("Power Station"));
 	ComboBoxAddArea->AddOption(TEXT("Sludge"));
@@ -906,6 +906,145 @@ void UAscMapKitEditorToolsUtilityWidget::NativeConstruct()
 
 	BtnLinksAmbientCgLink->OnClicked.Clear();
 	BtnLinksAmbientCgLink->OnClicked.AddDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnLinksAmbientCgLinkOnClick);
+
+	// Easy Buttons
+	BtnCreateAreaAcid->SelfRefButtonOnClicked.Clear();
+	BtnCreateAreaAcid->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
+
+	BtnCreateAreaElectric->SelfRefButtonOnClicked.Clear();
+	BtnCreateAreaElectric->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
+
+	BtnCreateAreaLava->SelfRefButtonOnClicked.Clear();
+	BtnCreateAreaLava->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
+
+	BtnCreateAreaLavaFalls->SelfRefButtonOnClicked.Clear();
+	BtnCreateAreaLavaFalls->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
+
+	BtnCreateAreaLiquid->SelfRefButtonOnClicked.Clear();
+	BtnCreateAreaLiquid->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
+
+	BtnCreateAreaPowerStation->SelfRefButtonOnClicked.Clear();
+	BtnCreateAreaPowerStation->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
+
+	BtnCreateAreaSludge->SelfRefButtonOnClicked.Clear();
+	BtnCreateAreaSludge->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
+
+	BtnCreateDecorGrate10x20mBasic001->SelfRefButtonOnClicked.Clear();
+	BtnCreateDecorGrate10x20mBasic001->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
+	
+	BtnCreateDecorGrate20x5mBasic001->SelfRefButtonOnClicked.Clear();
+	BtnCreateDecorGrate20x5mBasic001->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
+	
+	BtnCreateDecorGrate20x5mBasic002->SelfRefButtonOnClicked.Clear();
+	BtnCreateDecorGrate20x5mBasic002->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
+
+	BtnCreateDecorGrate20x20mBasic001->SelfRefButtonOnClicked.Clear();
+	BtnCreateDecorGrate20x20mBasic001->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
+
+	BtnCreateDecorLadderSet001->SelfRefButtonOnClicked.Clear();
+	BtnCreateDecorLadderSet001->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
+	
+	BtnCreateDecorLetter->SelfRefButtonOnClicked.Clear();
+	BtnCreateDecorLetter->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
+
+	BtnCreateDecorPiece001->SelfRefButtonOnClicked.Clear();
+	BtnCreateDecorPiece001->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
+
+	BtnCreateDecorSign001->SelfRefButtonOnClicked.Clear();
+	BtnCreateDecorSign001->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
+
+	BtnCreateDecorSign002->SelfRefButtonOnClicked.Clear();
+	BtnCreateDecorSign002->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
+
+	BtnCreateDecorSign003->SelfRefButtonOnClicked.Clear();
+	BtnCreateDecorSign003->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
+
+	BtnCreateDecorSign004->SelfRefButtonOnClicked.Clear();
+	BtnCreateDecorSign004->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
+
+	BtnCreateDecorSign005->SelfRefButtonOnClicked.Clear();
+	BtnCreateDecorSign005->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
+
+	BtnCreateDecorSign006->SelfRefButtonOnClicked.Clear();
+	BtnCreateDecorSign006->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
+
+	BtnCreateDoorAnimated20x20mBasic001->SelfRefButtonOnClicked.Clear();
+	BtnCreateDoorAnimated20x20mBasic001->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
+
+	BtnCreateDoorAnimated20x20mBasic002->SelfRefButtonOnClicked.Clear();
+	BtnCreateDoorAnimated20x20mBasic002->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
+
+	BtnCreateDoorAnimated20x20mBasic003->SelfRefButtonOnClicked.Clear();
+	BtnCreateDoorAnimated20x20mBasic003->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
+
+	BtnCreateDoorAnimated20x20mBasic004->SelfRefButtonOnClicked.Clear();
+	BtnCreateDoorAnimated20x20mBasic004->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
+
+	BtnCreateDoorAnimated20x20mBasic005->SelfRefButtonOnClicked.Clear();
+	BtnCreateDoorAnimated20x20mBasic005->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
+
+	BtnCreateDoorAnimated20x20mSciFiDoorsDoor1->SelfRefButtonOnClicked.Clear();
+	BtnCreateDoorAnimated20x20mSciFiDoorsDoor1->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
+
+	BtnCreateDoorAnimated20x20mSciFiDoorsDoor2->SelfRefButtonOnClicked.Clear();
+	BtnCreateDoorAnimated20x20mSciFiDoorsDoor2->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
+
+	BtnCreateDoorAnimated20x20mSciFiDoorsDoor4->SelfRefButtonOnClicked.Clear();
+	BtnCreateDoorAnimated20x20mSciFiDoorsDoor4->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
+
+	BtnCreateDoorAnimated20x20mSciFiPropsDoor1->SelfRefButtonOnClicked.Clear();
+	BtnCreateDoorAnimated20x20mSciFiPropsDoor1->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
+
+	BtnCreateDoorAnimated40x20mBasic001->SelfRefButtonOnClicked.Clear();
+	BtnCreateDoorAnimated40x20mBasic001->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
+
+	BtnCreateDoorAnimated40x20mSciFiDoorsDoor3->SelfRefButtonOnClicked.Clear();
+	BtnCreateDoorAnimated40x20mSciFiDoorsDoor3->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
+
+	BtnCreateDoorDestructible20x20mBasic001->SelfRefButtonOnClicked.Clear();
+	BtnCreateDoorDestructible20x20mBasic001->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
+
+	BtnCreateDoorCustom->SelfRefButtonOnClicked.Clear();
+	BtnCreateDoorCustom->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
+
+	BtnCreateEnemyAlienCylon->SelfRefButtonOnClicked.Clear();
+	BtnCreateEnemyAlienCylon->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
+	
+	BtnCreateEnemyAlienGrawn->SelfRefButtonOnClicked.Clear();
+	BtnCreateEnemyAlienGrawn->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
+	
+	BtnCreateEnemyMachineAssaultCache->SelfRefButtonOnClicked.Clear();
+	BtnCreateEnemyMachineAssaultCache->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
+	
+	BtnCreateEnemyMachineAssaultTank->SelfRefButtonOnClicked.Clear();
+	BtnCreateEnemyMachineAssaultTank->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
+	
+	BtnCreateEnemyMachineGeminiTurret->SelfRefButtonOnClicked.Clear();
+	BtnCreateEnemyMachineGeminiTurret->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
+	
+	BtnCreateEnemyMachineSarkTurret->SelfRefButtonOnClicked.Clear();
+	BtnCreateEnemyMachineSarkTurret->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
+	
+	BtnCreateEnemyMachineSecureGage->SelfRefButtonOnClicked.Clear();
+	BtnCreateEnemyMachineSecureGage->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
+	
+	BtnCreateEnemyMachineServasTurret->SelfRefButtonOnClicked.Clear();
+	BtnCreateEnemyMachineServasTurret->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
+
+	BtnCreateFanAnimated20x20mBasic001->SelfRefButtonOnClicked.Clear();
+	BtnCreateFanAnimated20x20mBasic001->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
+	
+	BtnCreateFanCustom->SelfRefButtonOnClicked.Clear();
+	BtnCreateFanCustom->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
+
+	BtnCreateTriggerInvisible->SelfRefButtonOnClicked.Clear();
+	BtnCreateTriggerInvisible->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
+
+	BtnCreateTriggerBasic001->SelfRefButtonOnClicked.Clear();
+	BtnCreateTriggerBasic001->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
+
+	BtnCreateTriggerCustom->SelfRefButtonOnClicked.Clear();
+	BtnCreateTriggerCustom->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
 }
 
 void UAscMapKitEditorToolsUtilityWidget::BtnCreateOnClick()
@@ -987,6 +1126,10 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddAreaOnClick()
 		return;
 	}
 
+	const auto TransactionContext = FString::Printf(TEXT("%s::%hc"), *GetClass()->GetName(), *__FUNCTION__);
+
+	UKismetSystemLibrary::BeginTransaction(TransactionContext, FText::FromString(TEXT("Add Environment Area(s)")), nullptr);
+
 	const auto Area = ComboBoxAddArea->GetSelectedOption();
 	const auto Count = FCString::Atoi(*ComboBoxAddAreaCount->GetSelectedOption());
 	const auto Where = ComboBoxAddAreaWhere->GetSelectedOption();
@@ -1005,13 +1148,13 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddAreaOnClick()
 	
 	auto AreaType = EAscMapKitEnvironmentAreaTypeEnum::Unknown;
 
-	const auto bIsLavaFall = Area == TEXT("Lava Fall");
+	const auto bIsLavaFalls = Area == TEXT("Lava Falls");
 
 	if (Area == TEXT("Acid"))
 		AreaType = EAscMapKitEnvironmentAreaTypeEnum::Acid;
 	else if (Area == TEXT("Electric"))
 		AreaType = EAscMapKitEnvironmentAreaTypeEnum::Electric;
-	else if (Area == TEXT("Lava") || bIsLavaFall)
+	else if (Area == TEXT("Lava") || bIsLavaFalls)
 		AreaType = EAscMapKitEnvironmentAreaTypeEnum::Lava;
 	else if (Area == TEXT("Liquid"))
 		AreaType = EAscMapKitEnvironmentAreaTypeEnum::Liquid;
@@ -1055,7 +1198,7 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddAreaOnClick()
 			break;
 	}
 
-	if (bIsLavaFall)
+	if (bIsLavaFalls)
 	{
 		SpawnLocation.Z = 0.f;
 		bHasSurface = true;
@@ -1065,10 +1208,6 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddAreaOnClick()
 
 	const auto AreaNamePrefix = FString::Printf(TEXT("%sArea"), *Area.Replace(TEXT(" "), TEXT("")));
 	const auto AreaNameSequence = UAscMapKitEditorToolsHelper::GetEditorNextActorSequence(AreaActorClass, AreaNamePrefix);
-
-	const auto TransactionContext = FString::Printf(TEXT("%s::%hc"), *GetClass()->GetName(), *__FUNCTION__);
-
-	UKismetSystemLibrary::BeginTransaction(TransactionContext, FText::FromString(TEXT("Add Environment Area(s)")), nullptr);
 
 	GEditor->SelectNone(true, true, false);
 
@@ -1101,11 +1240,10 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddAreaOnClick()
 				AscMapKitEnvironmentAreaActor->MapKit.EnvironmentAreaName = Area;
 				AscMapKitEnvironmentAreaActor->MapKit.EnvironmentAreaType = AreaType;
 				AscMapKitEnvironmentAreaActor->BillboardComponent->EditorUpdateEnvironmentAreaType(AscMapKitEnvironmentAreaActor->MapKit.EnvironmentAreaType);
-				AscMapKitEnvironmentAreaActor->SetFolderPath(FName("Areas"));
 
 				AscMapKitEnvironmentAreaActor->Box->SetBoxExtent(FVector(1000.f, 1000.f, 1000.f));
 
-				if (bIsLavaFall)
+				if (bIsLavaFalls)
 					AscMapKitEnvironmentAreaActor->Box->SetBoxExtent(FVector(40.f, 1000.f, 1000.f));
 
 				if (bHasSurface && PlaneStaticMesh)
@@ -1123,10 +1261,10 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddAreaOnClick()
 							SurfaceStaticMeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 							SurfaceStaticMeshComponent->SetCollisionProfileName(UCollisionProfile::NoCollision_ProfileName);
 
-							if (!bIsLavaFall)
+							if (!bIsLavaFalls)
 								SurfaceStaticMeshComponent->SetRelativeLocation(FVector(0.f, 0.f, 1000.f));
 
-							if (bIsLavaFall)
+							if (bIsLavaFalls)
 								SurfaceStaticMeshComponent->SetRelativeRotation(FRotator(-90.f, 0.f, 0.f));
 
 							auto UseMaterial = LiquidMaterial;
@@ -1147,8 +1285,8 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddAreaOnClick()
 									break;
 							}
 
-							if (bIsLavaFall)
-								UseMaterial = LavaFallMaterial;
+							if (bIsLavaFalls)
+								UseMaterial = LavaFallsMaterial;
 
 							if (UseMaterial)
 								SurfaceStaticMeshComponent->SetMaterial(0, UseMaterial);
@@ -1158,16 +1296,18 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddAreaOnClick()
 
 						auto SurfaceActorName = FString::Printf(TEXT("Surface_%s"), *AscMapKitEnvironmentAreaActor->GetHumanReadableName());
 
-						if (bIsLavaFall)
-							SurfaceActorName = FString::Printf(TEXT("Lava_Fall_%s"), *AscMapKitEnvironmentAreaActor->GetHumanReadableName());
+						if (bIsLavaFalls)
+							SurfaceActorName = FString::Printf(TEXT("Lava_Falls_%s"), *AscMapKitEnvironmentAreaActor->GetHumanReadableName());
 
 						SurfaceActor->Rename(*(SurfaceActorName + FGuid::NewGuid().ToString()));
 						SurfaceActor->SetActorLabel(*SurfaceActorName);
 						SurfaceActor->AttachToActor(AscMapKitEnvironmentAreaActor, FAttachmentTransformRules::KeepRelativeTransform);
+
+						UKismetSystemLibrary::TransactObject(SurfaceActor);
 					}
 				}
 
-				if (bHasFog && !bIsLavaFall)
+				if (bHasFog && !bIsLavaFalls)
 				{
 					AStaticMeshActor *FogAreaActor = UAscMapKitEditorToolsHelper::GetEditorWorld()->SpawnActor<AStaticMeshActor>(SpawnLocation, FRotator::ZeroRotator);
 					
@@ -1209,10 +1349,12 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddAreaOnClick()
 						FogAreaActor->Rename(*(FogAreaActorName + FGuid::NewGuid().ToString()));
 						FogAreaActor->SetActorLabel(*FogAreaActorName);
 						FogAreaActor->AttachToActor(AscMapKitEnvironmentAreaActor, FAttachmentTransformRules::KeepRelativeTransform);
+
+						UKismetSystemLibrary::TransactObject(FogAreaActor);
 					}
 				}
 
-				if (bHasParticle && !bIsLavaFall)
+				if (bHasParticle && !bIsLavaFalls)
 				{
 					AEmitter *ParticleEmitter = UAscMapKitEditorToolsHelper::GetEditorWorld()->SpawnActor<AEmitter>(SpawnLocation, FRotator::ZeroRotator);
 
@@ -1257,6 +1399,8 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddAreaOnClick()
 							ParticleEmitter->Rename(*(ParticleActorName + FGuid::NewGuid().ToString()));
 							ParticleEmitter->SetActorLabel(*ParticleActorName);
 							ParticleEmitter->AttachToActor(AscMapKitEnvironmentAreaActor, FAttachmentTransformRules::KeepRelativeTransform);
+
+							UKismetSystemLibrary::TransactObject(ParticleEmitter);
 						}
 					}
 				}
@@ -1431,6 +1575,8 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddAreaOnClick()
 							SpotLightActor->AttachToActor(AscMapKitEnvironmentAreaActor, FAttachmentTransformRules::KeepRelativeTransform);
 
 							SpotLightActor->SpotLightComponent->SetRelativeLocation(FVector(0.f, 0.f, 999.f));
+
+							UKismetSystemLibrary::TransactObject(SpotLightActor);
 						}
 					}
 				}
@@ -1471,15 +1617,20 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddAreaOnClick()
 
 							PointLightActor->PointLightComponent->RegisterComponent();
 							PointLightActor->AttachToActor(AscMapKitEnvironmentAreaActor, FAttachmentTransformRules::KeepRelativeTransform);
+
+							UKismetSystemLibrary::TransactObject(PointLightActor);
 						}
 					}
 				}
 
-				GEditor->SelectActor(AscMapKitEnvironmentAreaActor, true, true);
-
-				UKismetSystemLibrary::TransactObject(AscMapKitEnvironmentAreaActor);
-
 				UAscMapKitEditorToolsHelper::ShowInfoMessage(FString::Printf(TEXT("Created environment area: %s"), *AscMapKitEnvironmentAreaActor->GetHumanReadableName()));
+			}
+
+			if (AscMapKitEnvironmentAreaActor)
+			{
+				AscMapKitEnvironmentAreaActor->SetFolderPath(FName("Areas"));
+				GEditor->SelectActor(AscMapKitEnvironmentAreaActor, true, true);
+				UKismetSystemLibrary::TransactObject(AscMapKitEnvironmentAreaActor);
 			}
 		}
 	}
@@ -4176,6 +4327,263 @@ void UAscMapKitEditorToolsUtilityWidget::BtnLinksUeTurboSquidLinkOnClick()
 void UAscMapKitEditorToolsUtilityWidget::BtnLinksAmbientCgLinkOnClick()
 {
 	FPlatformProcess::LaunchURL(TEXT("https://ambientcg.com"), nullptr, nullptr);
+}
+
+void UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick(UAscMapKitEditorToolsSelfRefButtonWidget *Button)
+{
+	if (Button)
+	{
+		const auto ButtonName = Button->GetName();
+
+		if (ButtonName == TEXT("BtnCreateAreaAcid"))
+			ComboBoxAddArea->SetSelectedOption(TEXT("Acid"));
+		else if (ButtonName == TEXT("BtnCreateAreaElectric"))
+			ComboBoxAddArea->SetSelectedOption(TEXT("Electric"));
+		else if (ButtonName == TEXT("BtnCreateAreaLava"))
+			ComboBoxAddArea->SetSelectedOption(TEXT("Lava"));
+		else if (ButtonName == TEXT("BtnCreateAreaLavaFalls"))
+			ComboBoxAddArea->SetSelectedOption(TEXT("Lava Falls"));
+		else if (ButtonName == TEXT("BtnCreateAreaLiquid"))
+			ComboBoxAddArea->SetSelectedOption(TEXT("Liquid"));
+		else if (ButtonName == TEXT("BtnCreateAreaPowerStation"))
+			ComboBoxAddArea->SetSelectedOption(TEXT("Power Station"));
+		else if (ButtonName == TEXT("BtnCreateAreaSludge"))
+			ComboBoxAddArea->SetSelectedOption(TEXT("Sludge"));
+		else if (ButtonName == TEXT("BtnCreateDecorGrate10x20mBasic001"))
+			ComboBoxAddDecorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDecorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDecorTypeEnum::Grate_10x20m_Basic_001)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDecorGrate20x5mBasic001"))
+			ComboBoxAddDecorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDecorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDecorTypeEnum::Grate_20x5m_Basic_001)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDecorGrate20x5mBasic002"))
+			ComboBoxAddDecorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDecorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDecorTypeEnum::Grate_20x5m_Basic_002)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDecorGrate20x20mBasic001"))
+			ComboBoxAddDecorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDecorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDecorTypeEnum::Grate_20x20m_Basic_001)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDecorLadderSet001"))
+			ComboBoxAddDecorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDecorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDecorTypeEnum::Ladder_Set_001)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDecorLetter"))
+			ComboBoxAddDecorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDecorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDecorTypeEnum::Letter)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDecorPiece001"))
+			ComboBoxAddDecorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDecorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDecorTypeEnum::Piece_001)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDecorSign001"))
+			ComboBoxAddDecorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDecorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDecorTypeEnum::Sign_001)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDecorSign002"))
+			ComboBoxAddDecorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDecorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDecorTypeEnum::Sign_002)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDecorSign003"))
+			ComboBoxAddDecorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDecorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDecorTypeEnum::Sign_003)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDecorSign004"))
+			ComboBoxAddDecorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDecorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDecorTypeEnum::Sign_004)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDecorSign005"))
+			ComboBoxAddDecorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDecorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDecorTypeEnum::Sign_005)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDecorSign006"))
+			ComboBoxAddDecorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDecorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDecorTypeEnum::Sign_006)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDoorAnimated20x20mBasic001"))
+			ComboBoxAddDoorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorTypeEnum::Animated20x20mBasic001)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDoorAnimated20x20mBasic002"))
+			ComboBoxAddDoorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorTypeEnum::Animated20x20mBasic002)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDoorAnimated20x20mBasic003"))
+			ComboBoxAddDoorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorTypeEnum::Animated20x20mBasic003)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDoorAnimated20x20mBasic004"))
+			ComboBoxAddDoorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorTypeEnum::Animated20x20mBasic004)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDoorAnimated20x20mBasic005"))
+			ComboBoxAddDoorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorTypeEnum::Animated20x20mBasic005)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDoorAnimated20x20mSciFiDoorsDoor1"))
+			ComboBoxAddDoorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorTypeEnum::Animated20x20mSciFiDoorsDoor1)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDoorAnimated20x20mSciFiDoorsDoor2"))
+			ComboBoxAddDoorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorTypeEnum::Animated20x20mSciFiDoorsDoor2)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDoorAnimated20x20mSciFiDoorsDoor4"))
+			ComboBoxAddDoorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorTypeEnum::Animated20x20mSciFiDoorsDoor4)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDoorAnimated20x20mSciFiPropsDoor1"))
+			ComboBoxAddDoorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorTypeEnum::Animated20x20mSciFiPropsDoor1)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDoorAnimated40x20mBasic001"))
+			ComboBoxAddDoorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorTypeEnum::Animated40x20mBasic001)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDoorAnimated40x20mSciFiDoorsDoor3"))
+			ComboBoxAddDoorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorTypeEnum::Animated40x20mSciFiDoorsDoor3)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDoorDestructible20x20mBasic001"))
+			ComboBoxAddDoorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorTypeEnum::Destructible20x20mBasic001)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDoorCustom"))
+			ComboBoxAddDoorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorTypeEnum::Custom)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateEnemyAlienCylon"))
+			ComboBoxAddEnemyType->SetSelectedOption(
+				StaticEnum<EAscMapKitEnemyTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitEnemyTypeEnum::AlienCylon)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateEnemyAlienGrawn"))
+			ComboBoxAddEnemyType->SetSelectedOption(
+				StaticEnum<EAscMapKitEnemyTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitEnemyTypeEnum::AlienGrawn)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateEnemyMachineAssaultCache"))
+			ComboBoxAddEnemyType->SetSelectedOption(
+				StaticEnum<EAscMapKitEnemyTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitEnemyTypeEnum::MachineAssaultCache)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateEnemyMachineAssaultTank"))
+			ComboBoxAddEnemyType->SetSelectedOption(
+				StaticEnum<EAscMapKitEnemyTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitEnemyTypeEnum::MachineAssaultTank)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateEnemyMachineGeminiTurret"))
+			ComboBoxAddEnemyType->SetSelectedOption(
+				StaticEnum<EAscMapKitEnemyTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitEnemyTypeEnum::MachineGeminiTurret)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateEnemyMachineSarkTurret"))
+			ComboBoxAddEnemyType->SetSelectedOption(
+				StaticEnum<EAscMapKitEnemyTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitEnemyTypeEnum::MachineSarkTurret)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateEnemyMachineSecureGage"))
+			ComboBoxAddEnemyType->SetSelectedOption(
+				StaticEnum<EAscMapKitEnemyTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitEnemyTypeEnum::MachineSecureGage)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateEnemyMachineServasTurret"))
+			ComboBoxAddEnemyType->SetSelectedOption(
+				StaticEnum<EAscMapKitEnemyTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitEnemyTypeEnum::MachineServasTurret)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateFanAnimated20x20mBasic001"))
+			ComboBoxAddFanType->SetSelectedOption(
+				StaticEnum<EAscMapKitFanTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitFanTypeEnum::Animated20x20mBasic001)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateFanCustom"))
+			ComboBoxAddFanType->SetSelectedOption(
+				StaticEnum<EAscMapKitFanTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitFanTypeEnum::Custom)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateTriggerInvisible"))
+			ComboBoxAddTriggerType->SetSelectedOption(
+				StaticEnum<EAscMapKitTriggerTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitTriggerTypeEnum::Invisible)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateTriggerBasic001"))
+			ComboBoxAddTriggerType->SetSelectedOption(
+				StaticEnum<EAscMapKitTriggerTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitTriggerTypeEnum::Basic001)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateTriggerCustom"))
+			ComboBoxAddTriggerType->SetSelectedOption(
+				StaticEnum<EAscMapKitTriggerTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitTriggerTypeEnum::Custom)
+				).ToString()
+			);
+	}
 }
 
 void UAscMapKitEditorToolsUtilityWidget::ToggleSection(const FString &TitleText, UTextBlock *TxtSubTitleWidget, UWidget *SectionPanelWidget)
