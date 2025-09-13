@@ -8,7 +8,7 @@ struct ASCMAPKIT_API FAscMapKitTriggerPropertiesOnExecuteStruct
 {
     GENERATED_BODY()
 
-    // The number of times this trigger must be executed before it will activated and subsequently become inactive.
+    // The number of times this trigger must be executed before it will be activated and subsequently become inactive.
     // * Less than or equal to zero = infinite execution. Execution will run every time the trigger is activated.
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     int32 ExecuteMaxCount;

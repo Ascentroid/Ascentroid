@@ -7,12 +7,13 @@
 // UE
 #include "CoreMinimal.h"
 #include "Editor/Blutility/Classes/EditorUtilityWidget.h"
-#include "Materials/MaterialInstanceConstant.h"
+#include "Runtime/Engine/Classes/Materials/MaterialInstanceConstant.h"
 #include "Runtime/UMG/Public/Components/Button.h"
 #include "Runtime/UMG/Public/Components/CheckBox.h"
 #include "Runtime/UMG/Public/Components/ComboBoxString.h"
 #include "Runtime/UMG/Public/Components/MultiLineEditableTextBox.h"
 #include "Runtime/UMG/Public/Components/GridPanel.h"
+#include "Runtime/UMG/Public/Components/GridSlot.h"
 #include "Runtime/UMG/Public/Components/ScrollBox.h"
 #include "Runtime/UMG/Public/Components/TextBlock.h"
 #include "Runtime/UMG/Public/Components/VerticalBox.h"
@@ -20,8 +21,16 @@
 
 // Ascentroid
 #include "AscMapKit/Public/Core/Constant/AscMapKitMaterialEmitColorTypeEnum.h"
+#include "AscMapKit/Public/Data/AscEnvironmentAreaDataAsset.h"
+#include "AscMapKit/Public/Data/AscDecorDataAsset.h"
+#include "AscMapKit/Public/Data/AscDoorDataAsset.h"
+#include "AscMapKit/Public/Data/AscDoorFrameDataAsset.h"
+#include "AscMapKit/Public/Data/AscEnemyDataAsset.h"
+#include "AscMapKit/Public/Data/AscFanDataAsset.h"
+#include "AscMapKit/Public/Data/AscTriggerDataAsset.h"
 #include "AscMapKit/Public/Decor/AscMapKitDecorTypeEnum.h"
 #include "AscMapKit/Public/Door/AscMapKitDoorTypeEnum.h"
+#include "AscMapKit/Public/Door/AscMapKitDoorFrameTypeEnum.h"
 #include "AscMapKit/Public/Enemy/AscMapKitEnemyTypeEnum.h"
 #include "AscMapKit/Public/Fan/AscMapKitFanTypeEnum.h"
 #include "AscMapKit/Public/Powerup/AscMapKitPowerupTypeEnum.h"
@@ -31,7 +40,7 @@
 // Generated
 #include "AscMapKitEditorToolsUtilityWidget.generated.h"
 
-UCLASS(BlueprintType)
+UCLASS(Blueprintable, BlueprintType)
 class ASCMAPKITEDITOR_API UAscMapKitEditorToolsUtilityWidget : public UEditorUtilityWidget
 {
 	GENERATED_BODY()
@@ -78,6 +87,14 @@ public:
 	UFUNCTION()
 	void ResetAllTabColors();
 
+	UFUNCTION()
+	void SetupGridPanelButtons(
+		const TArray<FAscEditorToolDataAssetStruct> &AssetItems,
+		const FString &AssetCategoryName,
+		UGridPanel *GridPanel,
+		TMap<FString, UAscMapKitEditorToolsSelfRefButtonWidget *> &ButtonMap
+	);
+	
 	// Create Area
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
 	UTextBlock *TxtSubTitleCreateArea;
@@ -92,17 +109,23 @@ public:
 	void BtnSubTitleCreateAreaOnClick();
 
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UGridPanel *GridPanelArea;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
 	UComboBoxString *ComboBoxAddArea;
-	
+
+	UFUNCTION(BlueprintCallable)
+	void ComboBoxAddAreaOnSelectionChanged(const FString SelectedItem, const ESelectInfo::Type SelectionType);
+
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
 	UComboBoxString *ComboBoxAddAreaCount;
-	
+
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
 	UComboBoxString *ComboBoxAddAreaWhere;
 
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
 	UButton *BtnAddArea;
-
+	
 	UFUNCTION(BlueprintCallable)
 	void BtnAddAreaOnClick();
 
@@ -120,7 +143,13 @@ public:
 	void BtnSubTitleCreateDecorOnClick();
 
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UGridPanel *GridPanelDecor;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
 	UComboBoxString *ComboBoxAddDecorType;
+
+	UFUNCTION(BlueprintCallable)
+	void ComboBoxAddDecorTypeOnSelectionChanged(const FString SelectedItem, const ESelectInfo::Type SelectionType);
 	
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
 	UComboBoxString *ComboBoxAddDecorColor;
@@ -135,8 +164,11 @@ public:
 	UCheckBox *ChkBoxAddDecorLight;
 
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UButton *BtnAddDecor;
+	UCheckBox *ChkBoxAddDecorDestructible;
 
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UButton *BtnAddDecor;
+	
 	UFUNCTION(BlueprintCallable)
 	void BtnAddDecorOnClick();
 
@@ -167,10 +199,16 @@ public:
 	void BtnSubTitleCreateDoorOnClick();
 
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UComboBoxString *ComboBoxAddDoorType;
+	UGridPanel *GridPanelDoor;
 	
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UComboBoxString *ComboBoxAddDoorColor;
+	UComboBoxString *ComboBoxAddDoorType;
+
+	UFUNCTION(BlueprintCallable)
+	void ComboBoxAddDoorTypeOnSelectionChanged(const FString SelectedItem, const ESelectInfo::Type SelectionType);
+	
+	//UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	//UComboBoxString *ComboBoxAddDoorColor;
 	
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
 	UComboBoxString *ComboBoxAddDoorCount;
@@ -183,6 +221,34 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void BtnAddDoorOnClick();
+
+	// Create Door Frame
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UGridPanel *GridPanelDoorFrame;
+	
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UComboBoxString *ComboBoxAddDoorFrameType;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UComboBoxString *ComboBoxAddDoorFrameColor;
+
+	UFUNCTION(BlueprintCallable)
+	void ComboBoxAddDoorFrameTypeOnSelectionChanged(const FString SelectedItem, const ESelectInfo::Type SelectionType);
+	
+	//UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	//UComboBoxString *ComboBoxAddDoorFrameColor;
+	
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UComboBoxString *ComboBoxAddDoorFrameCount;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UComboBoxString *ComboBoxAddDoorFrameWhere;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UButton *BtnAddDoorFrame;
+
+	UFUNCTION(BlueprintCallable)
+	void BtnAddDoorFrameOnClick();
 
 	// Create Enemy
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
@@ -198,7 +264,13 @@ public:
 	void BtnSubTitleCreateEnemyOnClick();
 
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UGridPanel *GridPanelEnemy;
+	
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
 	UComboBoxString *ComboBoxAddEnemyType;
+
+	UFUNCTION(BlueprintCallable)
+	void ComboBoxAddEnemyTypeOnSelectionChanged(const FString SelectedItem, const ESelectInfo::Type SelectionType);
 	
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
 	UComboBoxString *ComboBoxAddEnemyColor;
@@ -229,7 +301,13 @@ public:
 	void BtnSubTitleCreateFanOnClick();
 
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UGridPanel *GridPanelFan;
+	
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
 	UComboBoxString *ComboBoxAddFanType;
+
+	UFUNCTION(BlueprintCallable)
+	void ComboBoxAddFanTypeOnSelectionChanged(const FString SelectedItem, const ESelectInfo::Type SelectionType);
 	
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
 	UComboBoxString *ComboBoxAddFanColor;
@@ -239,6 +317,12 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
 	UComboBoxString *ComboBoxAddFanWhere;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UCheckBox *ChkBoxAddFanDisableCollision;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UCheckBox *ChkBoxAddFanDestructible;
 
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
 	UButton *BtnAddFan;
@@ -300,16 +384,16 @@ public:
 	UComboBoxString *ComboBoxAddLightWhere;
 
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UButton *BtnAddLight;
-
-	UFUNCTION(BlueprintCallable)
-	void BtnAddLightOnClick();
-
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
 	UCheckBox *ChkBoxLightCastShadows;
 
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
 	UCheckBox *ChkBoxLightFog;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UButton *BtnAddLight;
+
+	UFUNCTION(BlueprintCallable)
+	void BtnAddLightOnClick();
 
 	// Create Player
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
@@ -374,10 +458,28 @@ public:
 	UCheckBox *ChkBoxAddDefaultPowerupIncludeDefaultNames;
 
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UCheckBox *ChkBoxAddDefaultPowerupDeleteExisting;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UCheckBox *ChkBoxAddDefaultPowerupClusterLasers;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
 	UButton *BtnAddPowerupsDefaults;
 
 	UFUNCTION(BlueprintCallable)
 	void BtnAddPowerupsDefaultsOnClick();
+	
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UComboBoxString *ComboBoxAddPowerupRespawnTriggerCount;
+	
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UComboBoxString *ComboBoxAddPowerupRespawnTriggerWhere;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UButton *BtnAddPowerupRespawnTrigger;
+
+	UFUNCTION(BlueprintCallable)
+	void BtnAddPowerupRespawnTriggerOnClick();
 
 	// Create Trigger
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
@@ -393,7 +495,13 @@ public:
 	void BtnSubTitleCreateTriggerOnClick();
 
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UGridPanel *GridPanelTrigger;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
 	UComboBoxString *ComboBoxAddTriggerType;
+
+	UFUNCTION(BlueprintCallable)
+	void ComboBoxAddTriggerTypeOnSelectionChanged(const FString SelectedItem, const ESelectInfo::Type SelectionType);
 	
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
 	UComboBoxString *ComboBoxAddTriggerColor;
@@ -739,148 +847,55 @@ public:
 	void BtnLinksAmbientCgLinkOnClick();
 
 	// Easy Buttons
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateAreaAcid;
-
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateAreaElectric;
-
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateAreaLava;
-
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateAreaLavaFalls;
-
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateAreaLiquid;
-
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateAreaPowerStation;
-
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateAreaSludge;
-
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDecorGrate10x20mBasic001;
-
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDecorGrate20x5mBasic001;
-
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDecorGrate20x5mBasic002;
-	
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDecorGrate20x20mBasic001;
-
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDecorLadderSet001;
-
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDecorLetter;
-
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDecorPiece001;
-
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDecorSign001;
-	
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDecorSign002;
-
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDecorSign003;
-
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDecorSign004;
-
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDecorSign005;
-
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDecorSign006;
-
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDoorAnimated20x20mBasic001;
-
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDoorAnimated20x20mBasic002;
-
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDoorAnimated20x20mBasic003;
-
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDoorAnimated20x20mBasic004;
-
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDoorAnimated20x20mBasic005;
-
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDoorAnimated20x20mSciFiDoorsDoor1;
-
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDoorAnimated20x20mSciFiDoorsDoor2;
-
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDoorAnimated20x20mSciFiDoorsDoor4;
-
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDoorAnimated20x20mSciFiPropsDoor1;
-
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDoorAnimated40x20mBasic001;
-
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDoorAnimated40x20mSciFiDoorsDoor3;
-
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDoorDestructible20x20mBasic001;
-
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateDoorCustom;
-
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateEnemyAlienCylon;
-
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateEnemyAlienGrawn;
-
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateEnemyMachineAssaultCache;
-
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateEnemyMachineAssaultTank;
-
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateEnemyMachineGeminiTurret;
-	
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateEnemyMachineSarkTurret;
-
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateEnemyMachineSecureGage;
-
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateEnemyMachineServasTurret;
-
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateFanAnimated20x20mBasic001;
-	
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateFanCustom;
-	
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateTriggerInvisible;
-	
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateTriggerBasic001;
-	
-	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
-	UAscMapKitEditorToolsSelfRefButtonWidget *BtnCreateTriggerCustom;
-
 	UFUNCTION(BlueprintCallable)
 	void BtnEasyOnClick(UAscMapKitEditorToolsSelfRefButtonWidget *Button);
 
+	UFUNCTION(BlueprintCallable)
+	void HandleButtonSelectionHighlighting(UGridPanel *GridPanel, const bool &bReset, UAscMapKitEditorToolsSelfRefButtonWidget *Button = nullptr);
+
 private:
+	UPROPERTY()
+	UAscEnvironmentAreaDataAsset *EnvironmentAreaDataAsset;
+
+	UPROPERTY()
+	UAscDecorDataAsset *DecorDataAsset;
+
+	UPROPERTY()
+	UAscDoorDataAsset *DoorDataAsset;
+
+	UPROPERTY()
+	UAscDoorFrameDataAsset *DoorFrameDataAsset;
+
+	UPROPERTY()
+	UAscEnemyDataAsset *EnemyDataAsset;
+	
+	UPROPERTY()
+	UAscFanDataAsset *FanDataAsset;
+
+	UPROPERTY()
+	UAscTriggerDataAsset *TriggerDataAsset;
+
+	UPROPERTY()
+	TMap<FString, UAscMapKitEditorToolsSelfRefButtonWidget *> AreaButtonMap;
+
+	UPROPERTY()
+	TMap<FString, UAscMapKitEditorToolsSelfRefButtonWidget *> DecorButtonMap;
+
+	UPROPERTY()
+	TMap<FString, UAscMapKitEditorToolsSelfRefButtonWidget *> DoorButtonMap;
+
+	UPROPERTY()
+	TMap<FString, UAscMapKitEditorToolsSelfRefButtonWidget *> DoorFrameButtonMap;
+
+	UPROPERTY()
+	TMap<FString, UAscMapKitEditorToolsSelfRefButtonWidget *> EnemyButtonMap;
+
+	UPROPERTY()
+	TMap<FString, UAscMapKitEditorToolsSelfRefButtonWidget *> FanButtonMap;
+
+	UPROPERTY()
+	TMap<FString, UAscMapKitEditorToolsSelfRefButtonWidget *> TriggerButtonMap;
+
 	UPROPERTY()
 	UStaticMesh *CubeStaticMesh;
 
@@ -919,10 +934,14 @@ private:
 
 	UPROPERTY()
 	UMaterial *CausticMaterial;
-
+	
 	UPROPERTY()
 	UParticleSystem *ElectricalZapsParticleTemplate;
 	//UNiagaraSystem *ElectricalZapsParticleTemplate;
+
+	UPROPERTY()
+	UParticleSystem *EnemyGeneratorParticleTemplate;
+	//UNiagaraSystem *EnemyGeneratorParticleTemplate;
 
 	UPROPERTY()
 	UParticleSystem *LiquidBubblesParticleTemplate;
@@ -933,40 +952,8 @@ private:
 	//UNiagaraSystem *PowerStationParticleTemplate;
 
 	UPROPERTY()
-	UStaticMesh *DecorGrate10x20mBasic001StaticMesh;
-
-	UPROPERTY()
-	UStaticMesh *DecorGrate20x5mBasic001StaticMesh;
-
-	UPROPERTY()
-	UStaticMesh *DecorGrate20x5mBasic002StaticMesh;
-
-	UPROPERTY()
-	UStaticMesh *DecorGrate20x20mBasic001StaticMesh;
-
-	UPROPERTY()
-	UStaticMesh *DecorLetterStaticMesh;
-
-	UPROPERTY()
-	UStaticMesh *DecorPiece001StaticMesh;
-
-	UPROPERTY()
-	UStaticMesh *DecorSign001StaticMesh;
-
-	UPROPERTY()
-	UStaticMesh *DecorSign002StaticMesh;
-
-	UPROPERTY()
-	UStaticMesh *DecorSign003StaticMesh;
-
-	UPROPERTY()
-	UStaticMesh *DecorSign004StaticMesh;
-
-	UPROPERTY()
-	UStaticMesh *DecorSign005StaticMesh;
-
-	UPROPERTY()
-	UStaticMesh *DecorSign006StaticMesh;
+	UParticleSystem *ShieldStationParticleTemplate;
+	//UNiagaraSystem *ShieldStationParticleTemplate;
 
 	UPROPERTY()
 	UMaterialInstanceConstant *MaterialEmitColorBlue;
@@ -991,6 +978,9 @@ private:
 
 	UPROPERTY()
 	UMaterialInstanceConstant *MaterialEmitColorOrangeDark;
+
+	UPROPERTY()
+	UMaterialInstanceConstant *MaterialEmitColorOrangeDarkBright;
 
 	UPROPERTY()
 	UMaterialInstanceConstant *MaterialEmitColorPurple;
@@ -1027,15 +1017,6 @@ private:
 	
 	UPROPERTY()
 	TMap<EAscMapKitDecorTypeEnum, FString> DecorTypeMap;
-	
-	UPROPERTY()
-	TMap<EAscMapKitDecorTypeEnum, UStaticMesh *> DecorTypeStaticMeshMap;
-
-	UPROPERTY()
-	TMap<EAscMapKitDecorTypeEnum, int32> DecorTypeStaticMeshMaterialEmitColorOverrideMap;
-
-	UPROPERTY()
-	TArray<EAscMapKitDecorTypeEnum> DecorTypeLightSupport;
 
 	UPROPERTY()
 	TMap<EAscMapKitDoorTypeEnum, FString> DoorTypeMap;
@@ -1044,14 +1025,17 @@ private:
 	TMap<EAscMapKitDoorTypeEnum, int32> DoorTypeStaticMeshMaterialEmitColorOverrideMap;
 
 	UPROPERTY()
+	TMap<EAscMapKitDoorFrameTypeEnum, int32> DoorFrameTypeStaticMeshMaterialEmitColorOverrideMap;
+
+	UPROPERTY()
+	TMap<EAscMapKitDoorFrameTypeEnum, FString> DoorFrameTypeMap;
+
+	UPROPERTY()
 	TMap<EAscMapKitEnemyTypeEnum, FString> EnemyTypeMap;
 	
 	UPROPERTY()
 	TMap<EAscMapKitFanTypeEnum, FString> FanTypeMap;
 
-	UPROPERTY()
-	TMap<EAscMapKitFanTypeEnum, int32> FanTypeStaticMeshMaterialEmitColorOverrideMap;
-	
 	UPROPERTY()
 	TMap<EAscMapKitPowerupTypeEnum, FString> PowerupTypeMap;
 

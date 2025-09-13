@@ -6,7 +6,7 @@
 // Generated
 #include "AscMapKitEditorToolsPowerupHelper.generated.h"
 
-UCLASS(BlueprintType)
+UCLASS(Blueprintable, BlueprintType)
 class ASCMAPKITEDITOR_API UAscMapKitEditorToolsPowerupHelper : public UObject
 {
 	GENERATED_BODY()

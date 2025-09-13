@@ -25,6 +25,8 @@ enum class EAscMapKitMaterialEmitColorTypeEnum : uint8
 	Orange UMETA(DisplayName = "Orange"),
 
 	OrangeDark UMETA(DisplayName = "Orange (Dark)"),
+	
+	OrangeDarkBright UMETA(DisplayName = "Orange (Dark/Bright)"),
 
 	Purple UMETA(DisplayName = "Purple"),
 

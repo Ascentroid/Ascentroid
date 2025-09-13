@@ -24,6 +24,7 @@ void UAscMapKitEditorToolsLightHelper::SetPointLightDefaults(
 		LightActor->PointLightComponent->SpecularScale = 0.f;
 		LightActor->PointLightComponent->CastStaticShadows = bShadows;
 		LightActor->PointLightComponent->CastDynamicShadows = false;
+		LightActor->PointLightComponent->ShadowResolutionScale = 0.f;
 		LightActor->PointLightComponent->bAffectTranslucentLighting = false;
 		LightActor->PointLightComponent->bCastRaytracedShadow = false;
 		LightActor->PointLightComponent->bAffectReflection = false;

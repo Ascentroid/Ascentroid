@@ -9,18 +9,24 @@
 // Ascentroid
 #include "AscMapKit/Public/Area/AscMapKitEnvironmentAreaBillboardComponent.h"
 #include "AscMapKit/Public/Area/AscMapKitEnvironmentAreaPropertiesStruct.h"
+#include "AscMapKit/Public/Core/Global/AscMapKitBaseActor.h"
 
 // Generated
 #include "AscMapKitEnvironmentAreaActor.generated.h"
 
-UCLASS(HideCategories=("Activation", "Asset User Data", "Collision", "Cooking", "HLOD", "Input", "LOD", "Lighting", "Mobile", "Physics", "Rendering", "Replication", "Sprite", "Tags", "Virtual Texture"))
-class ASCMAPKIT_API AAscMapKitEnvironmentAreaActor : public AActor
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnEnemyGeneratorActivated);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnEnemyGeneratorDeactivated);
+
+UCLASS(Blueprintable, HideCategories=("Activation", "Asset User Data", "Collision", "Cooking", "HLOD", "Input", "LOD", "Lighting", "Mobile", "Physics", "Rendering", "Replication", "Sprite", "Tags", "Virtual Texture"))
+class ASCMAPKIT_API AAscMapKitEnvironmentAreaActor : public AAscMapKitBaseActor
 {
     GENERATED_BODY()
 
 public:
     AAscMapKitEnvironmentAreaActor();
 
+    static FAscMapKitEnvironmentAreaPropertiesStruct GetMapKitDefaults(UPostProcessComponent *InPostProcessComponent);
+    
     // Edit the majority of the map kit actor properties here.
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category="Ascentroid")
     FAscMapKitEnvironmentAreaPropertiesStruct MapKit;
@@ -57,10 +63,22 @@ public:
 
     virtual void Tick(float DeltaTime) override;
 
+    UFUNCTION()
+    void ConvertScaleToBoxExtent();
+
     virtual void PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent) override;
 #endif
 
+    UPROPERTY(BlueprintAssignable)
+    FOnEnemyGeneratorActivated OnEnemyGeneratorActivated;
+    
+    UPROPERTY(BlueprintAssignable)
+    FOnEnemyGeneratorDeactivated OnEnemyGeneratorDeactivated;
+
 private:
+    UPROPERTY()
+    UPostProcessComponent *PostProcessComponentInternal;
+    
     UPROPERTY()
     bool bIsBoxBoundsInitialized;
 

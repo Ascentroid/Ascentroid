@@ -1,7 +1,8 @@
 #include "AscMapKit/Public/Decor/AscMapKitDecorActor.h"
 
+// UE
+#include "Engine/CollisionProfile.h"
 #include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
-#include "Runtime/Engine/Classes/Materials/MaterialInstanceDynamic.h"
 
 AAscMapKitDecorActor::AAscMapKitDecorActor()
 {
@@ -17,33 +18,53 @@ AAscMapKitDecorActor::AAscMapKitDecorActor()
 	StaticMeshComponent->SetMobility(EComponentMobility::Static);
     StaticMeshComponent->SetRelativeScale3D(FVector(1.f, 1.f, 1.f));
 	StaticMeshComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-	StaticMeshComponent->SetCollisionProfileName(TEXT("BlockAll"));
+	StaticMeshComponent->SetCollisionProfileName(UCollisionProfile::BlockAll_ProfileName);
 	StaticMeshComponent->LightmapType = ELightmapType::ForceSurface; // note: necessary, otherwise lightmaps won't bake!!
 
+	StaticMeshDestroyedComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshDestroyedComponent"));
+	StaticMeshDestroyedComponent->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	StaticMeshDestroyedComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	StaticMeshDestroyedComponent->SetCollisionProfileName(UCollisionProfile::BlockAll_ProfileName);
+	StaticMeshDestroyedComponent->SetVisibility(false, true);
+	StaticMeshDestroyedComponent->LightmapType = ELightmapType::ForceSurface; // note: necessary, otherwise lightmaps won't bake!!
+	
     if (CubeStaticMeshRef.Succeeded())
         StaticMeshComponent->SetStaticMesh(CubeStaticMeshRef.Object);
+
+	MapKit = GetMapKitDefaults();
 }
 
-void AAscMapKitDecorActor::BeginPlay()
+FAscMapKitDecorPropertiesStruct AAscMapKitDecorActor::GetMapKitDefaults()
 {
-	Super::BeginPlay();
+	auto Result = FAscMapKitDecorPropertiesStruct();
 
-	if (StaticMeshComponent && MapKit.OverrideMaterials.Num() > 0)
-	{
-		for (const auto &Item : MapKit.OverrideMaterials)
-		{
-			if (!Item.OverrideMaterial)
-				continue;
+	Result.Destructible.ComponentType = EAscMapKitDestructibleComponentTypeEnum::StaticMesh;
 
-			if (Item.Material == nullptr)
-				continue;
+	Result.Destructible.StartShields.Easy = 50.f;
+	Result.Destructible.StartShields.Moderate = 75.f;
+	Result.Destructible.StartShields.Normal = 100.f;
+	Result.Destructible.StartShields.Hard = 150.f;
+	Result.Destructible.StartShields.Impossible = 200.f;
 
-			const auto MaterialInstance = UMaterialInstanceDynamic::Create(Item.Material, nullptr);
+	Result.Destructible.Disappear.Enable = true;
+	Result.Destructible.Disappear.ChanceDisappearOnStart = 50;
+	Result.Destructible.Disappear.IterationDelaySeconds = 0.3f;
+	Result.Destructible.Disappear.DelaySecondsRangeMin = 1.5f;
+	Result.Destructible.Disappear.DelaySecondsRangeMax = 2.5f;
+	Result.Destructible.Disappear.EffectsDelaySeconds = 0.5f;
+    
+	Result.SplashDamage.Enable = false;
+	Result.SplashDamage.UseLinearFalloffAmount = true;
+	Result.SplashDamage.LinearFalloffAmount.Easy = 30.f;
+	Result.SplashDamage.LinearFalloffAmount.Moderate = 40.f;
+	Result.SplashDamage.LinearFalloffAmount.Normal = 50.f;
+	Result.SplashDamage.LinearFalloffAmount.Hard = 60.f;
+	Result.SplashDamage.LinearFalloffAmount.Impossible = 70.f;
+	Result.SplashDamage.ImpulseRadius = 3000.f; // todo: may need tweaking
+	Result.SplashDamage.ImpulseStrength = 2000.f;
+	Result.SplashDamage.ImpulseModifier = 4.f;
+	Result.SplashDamage.ImpulseStrengthAgainstEnemy = 2000.f;
+	Result.SplashDamage.ImpulseInterpSpeedAgainstEnemy = 3.f;
 
-			if (Item.SlotName.TrimStartAndEnd().IsEmpty())
-				StaticMeshComponent->SetMaterial(Item.MaterialIndex, MaterialInstance);
-			else
-				StaticMeshComponent->SetMaterialByName(FName(Item.SlotName), MaterialInstance);
-		}
-	}
+	return Result;
 }

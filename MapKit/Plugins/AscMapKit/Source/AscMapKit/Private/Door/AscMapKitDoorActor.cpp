@@ -1,22 +1,26 @@
 #include "AscMapKit/Public/Door/AscMapKitDoorActor.h"
-#include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
+
+// UE
+#include "Runtime/Engine/Classes/Kismet/KismetSystemLibrary.h"
+
+// Ascentroid
+#include "AscMapKit/Public/Core/Global/AscMapKitPropertiesMaterialInfoStruct.h"
+#include "AscMapKit/Public/Core/Global/AscMapKitGlobals.h"
+#include "AscMapKit/Public/Core/Util/AscMapKitUtil.h"
 
 AAscMapKitDoorActor::AAscMapKitDoorActor()
 {
+#if WITH_EDITOR && !UE_BUILD_SHIPPING
+    PrimaryActorTick.bCanEverTick = true;
+    PrimaryActorTick.bStartWithTickEnabled = true;
+#else
+    PrimaryActorTick.bCanEverTick = false;
+    PrimaryActorTick.bStartWithTickEnabled = false;
+    PrimaryActorTick.bAllowTickOnDedicatedServer = false;
+#endif
+
     const ConstructorHelpers::FObjectFinder<UStaticMesh> CubeStaticMeshRef(TEXT("StaticMesh'/Engine/BasicShapes/Cube.Cube'"));
-    const ConstructorHelpers::FObjectFinder<UMaterialInterface> Animated20x20mBasic001MaterialRef(TEXT("Material'/AscMapKit/Editor/Materials/Doors/M_Editor_Door_Animated_20x20m_Basic_001.M_Editor_Door_Animated_20x20m_Basic_001'"));
-    const ConstructorHelpers::FObjectFinder<UMaterialInterface> Animated20x20mBasic002MaterialRef(TEXT("Material'/AscMapKit/Editor/Materials/Doors/M_Editor_Door_Animated_20x20m_Basic_002.M_Editor_Door_Animated_20x20m_Basic_002'"));
-    const ConstructorHelpers::FObjectFinder<UMaterialInterface> Animated20x20mBasic003MaterialRef(TEXT("Material'/AscMapKit/Editor/Materials/Doors/M_Editor_Door_Animated_20x20m_Basic_003.M_Editor_Door_Animated_20x20m_Basic_003'"));
-    const ConstructorHelpers::FObjectFinder<UMaterialInterface> Animated20x20mBasic004MaterialRef(TEXT("Material'/AscMapKit/Editor/Materials/Doors/M_Editor_Door_Animated_20x20m_Basic_004.M_Editor_Door_Animated_20x20m_Basic_004'"));
-    const ConstructorHelpers::FObjectFinder<UMaterialInterface> Animated20x20mBasic005MaterialRef(TEXT("Material'/AscMapKit/Editor/Materials/Doors/M_Editor_Door_Animated_20x20m_Basic_005.M_Editor_Door_Animated_20x20m_Basic_005'"));
-    const ConstructorHelpers::FObjectFinder<UMaterialInterface> Animated20x20mSciFiDoorsDoor1MaterialRef(TEXT("Material'/AscMapKit/Editor/Materials/Doors/M_Editor_Door_Animated_20x20m_SciFiDoors_Door_1.M_Editor_Door_Animated_20x20m_SciFiDoors_Door_1'"));
-    const ConstructorHelpers::FObjectFinder<UMaterialInterface> Animated20x20mSciFiDoorsDoor2MaterialRef(TEXT("Material'/AscMapKit/Editor/Materials/Doors/M_Editor_Door_Animated_20x20m_SciFiDoors_Door_2.M_Editor_Door_Animated_20x20m_SciFiDoors_Door_2'"));
-    const ConstructorHelpers::FObjectFinder<UMaterialInterface> Animated20x20mSciFiDoorsDoor4MaterialRef(TEXT("Material'/AscMapKit/Editor/Materials/Doors/M_Editor_Door_Animated_20x20m_SciFiDoors_Door_4.M_Editor_Door_Animated_20x20m_SciFiDoors_Door_4'"));
-    const ConstructorHelpers::FObjectFinder<UMaterialInterface> Animated20x20mSciFiPropsDoor1MaterialRef(TEXT("Material'/AscMapKit/Editor/Materials/Doors/M_Editor_Door_Animated_20x20m_SciFiProps_Door1.M_Editor_Door_Animated_20x20m_SciFiProps_Door1'"));
-    const ConstructorHelpers::FObjectFinder<UMaterialInterface> Animated40x20mBasic001MaterialRef(TEXT("Material'/AscMapKit/Editor/Materials/Doors/M_Editor_Door_Animated_40x20m_Basic_001.M_Editor_Door_Animated_40x20m_Basic_001'"));
-    const ConstructorHelpers::FObjectFinder<UMaterialInterface> Animated40x20mSciFiDoorsDoor3MaterialRef(TEXT("Material'/AscMapKit/Editor/Materials/Doors/M_Editor_Door_Animated_40x20m_SciFiDoors_Door3.M_Editor_Door_Animated_40x20m_SciFiDoors_Door3'"));
-    const ConstructorHelpers::FObjectFinder<UMaterialInterface> Destructible20x20mBasic001MaterialRef(TEXT("Material'/AscMapKit/Editor/Materials/Doors/M_Editor_Door_Destructible_20x20m_Basic_001.M_Editor_Door_Destructible_20x20m_Basic_001'"));
-    
+
     EmptyRootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("EmptyRootComponent"));
     EmptyRootComponent->SetMobility(EComponentMobility::Static);
 
@@ -24,8 +28,9 @@ AAscMapKitDoorActor::AAscMapKitDoorActor()
 
     StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
     StaticMeshComponent->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
-    StaticMeshComponent->SetRelativeScale3D(FVector(20.f, 2.f, 20.f));
+    StaticMeshComponent->SetRelativeScale3D(FVector(1.f, 1.f, 1.f));
     StaticMeshComponent->SetCollisionProfileName(TEXT("NoCollision"));
+    StaticMeshComponent->LightmapType = ELightmapType::ForceSurface; // note: necessary, otherwise lightmaps won't bake!!
 
     if (CubeStaticMeshRef.Succeeded())
     {
@@ -33,77 +38,78 @@ AAscMapKitDoorActor::AAscMapKitDoorActor()
         StaticMeshComponent->SetStaticMesh(CubeStaticMesh);
     }
 
-    if (Animated20x20mBasic001MaterialRef.Succeeded())
-        Animated20x20mBasic001Material = Animated20x20mBasic001MaterialRef.Object;
+    SkeletalMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalMeshComponent"));
+    SkeletalMeshComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+    SkeletalMeshComponent->SetCollisionProfileName(TEXT("BlockAll"));
+    SkeletalMeshComponent->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 
-    if (Animated20x20mBasic002MaterialRef.Succeeded())
-        Animated20x20mBasic002Material = Animated20x20mBasic002MaterialRef.Object;
+    PlayerInteractBoundingBox = CreateDefaultSubobject<UAscMapKitDoorPlayerInteractBoundingBox>(TEXT("PlayerInteractBoundingBox"));
+    PlayerInteractBoundingBox->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+    PlayerInteractBoundingBox->SetBoxExtent(FVector(1200.f, 1200.f, 1200.f));
+    PlayerInteractBoundingBox->SetVisibility(false, true);
+    PlayerInteractBoundingBox->SetHiddenInGame(true);
 
-    if (Animated20x20mBasic003MaterialRef.Succeeded())
-        Animated20x20mBasic003Material = Animated20x20mBasic003MaterialRef.Object;
-
-    if (Animated20x20mBasic004MaterialRef.Succeeded())
-        Animated20x20mBasic004Material = Animated20x20mBasic004MaterialRef.Object;
-
-    if (Animated20x20mBasic005MaterialRef.Succeeded())
-        Animated20x20mBasic005Material = Animated20x20mBasic005MaterialRef.Object;
-
-    if (Animated20x20mSciFiDoorsDoor1MaterialRef.Succeeded())
-        Animated20x20mSciFiDoorsDoor1Material = Animated20x20mSciFiDoorsDoor1MaterialRef.Object;
-
-    if (Animated20x20mSciFiDoorsDoor2MaterialRef.Succeeded())
-        Animated20x20mSciFiDoorsDoor2Material = Animated20x20mSciFiDoorsDoor2MaterialRef.Object;
-
-    if (Animated20x20mSciFiDoorsDoor4MaterialRef.Succeeded())
-        Animated20x20mSciFiDoorsDoor4Material = Animated20x20mSciFiDoorsDoor4MaterialRef.Object;
-
-    if (Animated20x20mSciFiPropsDoor1MaterialRef.Succeeded())
-        Animated20x20mSciFiPropsDoor1Material = Animated20x20mSciFiPropsDoor1MaterialRef.Object;
-
-    if (Animated40x20mBasic001MaterialRef.Succeeded())
-        Animated40x20mBasic001Material = Animated40x20mBasic001MaterialRef.Object;
-    
-    if (Animated40x20mSciFiDoorsDoor3MaterialRef.Succeeded())
-        Animated40x20mSciFiDoorsDoor3Material = Animated40x20mSciFiDoorsDoor3MaterialRef.Object;
-
-    if (Destructible20x20mBasic001MaterialRef.Succeeded())
-        Destructible20x20mBasic001Material = Destructible20x20mBasic001MaterialRef.Object;
-    
-    MapKit.Custom.NonDestructible.PlayerInteractBoundingBox = CreateDefaultSubobject<UAscMapKitDoorPlayerInteractBoundingBox>(TEXT("PlayerInteractBoundingBox"));
-    MapKit.Custom.NonDestructible.PlayerInteractBoundingBox->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
-    MapKit.Custom.NonDestructible.PlayerInteractBoundingBox->SetBoxExtent(FVector(1200.f, 1200.f, 1200.f));
-    
     // todo: @reminder: keep defaults in sync with game actor
 
-    MapKit.DisplayName = TEXT("Door");
-    MapKit.Id = TEXT("001");
-	
-    MapKit.Status.CloseTimeoutSeconds = 4.f;
-    MapKit.Status.CheckIntervalSeconds = 1.f;
+    MapKit = GetMapKitDefaults();
 
-    MapKit.Lock.OpenLockedDoorDelaySeconds = 0.4f;
-
-    MapKit.Destructible.MaxShields = 300.f;
-    MapKit.Destructible.LifetimeSeconds = 20.f;
-
-    MapKit.Destructible.Shared.PlayerDamage.Enable = true;
-    MapKit.Destructible.Shared.PlayerDamage.Amount = 3.f;
-    MapKit.Destructible.Shared.PlayerDamage.DelaySeconds = 1.f;
-    
-    MapKit.Destructible.Shared.EnemyDamage.Enable = true;
-    MapKit.Destructible.Shared.EnemyDamage.Amount = 3.f;
-    MapKit.Destructible.Shared.EnemyDamage.DelaySeconds = 1.f;
-
-    MapKit.Custom.NonDestructible.DisableEntireCollisionOnOpen = true;
-    MapKit.Custom.NonDestructible.DisableEntireCollisionOnOpenDelaySeconds = 0.f;
-    MapKit.Custom.NonDestructible.DisableDefaultToggleCollisionBoneNamesDelaySeconds = 0.3f;
-
-    MapKit.Custom.NonDestructible.PlayerInteractBoundingBoxExtent = FVector(1200.f, 1200.f, 1200.f);
-
-#if !(UE_BUILD_SHIPPING)
+#if !UE_BUILD_SHIPPING
     StaticMeshComponent->SetHiddenInGame(false);
-    MapKit.Custom.NonDestructible.PlayerInteractBoundingBox->SetHiddenInGame(false);
+
+    if (PlayerInteractBoundingBox)
+        PlayerInteractBoundingBox->SetHiddenInGame(false);
 #endif
+}
+
+FAscMapKitDoorPropertiesStruct AAscMapKitDoorActor::GetMapKitDefaults()
+{
+    auto Result = FAscMapKitDoorPropertiesStruct();
+
+    Result.DisplayName = TEXT("Door");
+    Result.Id = TEXT("001");
+
+    Result.Status.CloseTimeoutSeconds = 4.f;
+    Result.Status.CheckIntervalSeconds = 1.f;
+
+    Result.Lock.OpenLockedDoorDelaySeconds = 0.4f;
+
+    Result.NonDestructible.DisableEntireCollisionOnOpen = true;
+    Result.NonDestructible.DisableEntireCollisionOnOpenDelaySeconds = 0.f;
+    Result.NonDestructible.DisableDefaultToggleCollisionBoneNamesDelaySeconds = 0.3f;
+
+    Result.NonDestructible.PlayerInteractBoundingBoxExtent = FVector(1200.f, 1200.f, 1200.f);
+    
+    Result.Destructible.MaxShields = 300.f;
+    Result.Destructible.LifetimeSeconds = 20.f;
+
+    Result.Destructible.Shared.OverrideOnHitRadius = 5000.f;
+    Result.Destructible.Shared.OverrideOnHitImpulseStrength = 80000.f;
+
+    Result.Destructible.Shared.PlayerDamage.Enable = true;
+    Result.Destructible.Shared.PlayerDamage.Amount = 3.f;
+    Result.Destructible.Shared.PlayerDamage.DelaySeconds = 1.f;
+    Result.Destructible.Shared.PlayerDamage.ScaleByVelocityMin = 1.f;
+    Result.Destructible.Shared.PlayerDamage.ScaleByVelocityMax = 4500.f;
+
+    Result.Destructible.Shared.EnemyDamage.Enable = true;
+    Result.Destructible.Shared.EnemyDamage.Amount = 3.f;
+    Result.Destructible.Shared.EnemyDamage.DelaySeconds = 1.f;
+    Result.Destructible.Shared.EnemyDamage.ScaleByVelocityMin = 1.f;
+    Result.Destructible.Shared.EnemyDamage.ScaleByVelocityMax = 4500.f;
+
+    Result.Destructible.Shared.AllowDestroyByProjectile = true;
+    Result.Destructible.Shared.DestroyByProjectileStartShieldAmount = 30.f;
+
+    Result.Destructible.Shared.ScaleOverTime = false;
+
+    Result.Destructible.Shared.Disappear.Enable = true;
+    Result.Destructible.Shared.Disappear.ChanceDisappearOnStart = 50;
+    Result.Destructible.Shared.Disappear.IterationDelaySeconds = 0.3f;
+    Result.Destructible.Shared.Disappear.DelaySecondsRangeMin = 0.3f;
+    Result.Destructible.Shared.Disappear.DelaySecondsRangeMax = 0.5f;
+    Result.Destructible.Shared.Disappear.EffectsDelaySeconds = 0.5f;
+    
+    return Result;
 }
 
 void AAscMapKitDoorActor::OnConstruction(const FTransform &Transform)
@@ -121,87 +127,367 @@ void AAscMapKitDoorActor::PostInitializeComponents()
 {
     Super::PostInitializeComponents();
 
+    if (!GIsEditor)
+        return;
+
+    //UAscMapKitUtil::Log(TEXT("PostInitializeComponents()")); // @debug
+
     EditorUpdateDoorType(MapKit.DoorType);
-    EditorUpdatePlayerInteractBoundingBoxExtent(MapKit.Custom.NonDestructible.PlayerInteractBoundingBoxExtent);
+    EditorUpdatePlayerInteractBoundingBoxExtent(MapKit.NonDestructible.PlayerInteractBoundingBoxExtent);
+    EditorUpdateMaterialInfo();
+
+    if (MapKit.NonDestructible.ShowPlayerInteractBoundingBoxExtent)
+    {
+        PlayerInteractBoundingBox->SetVisibility(true, true);
+        PlayerInteractBoundingBox->SetHiddenInGame(false);
+    }
+}
+
+void AAscMapKitDoorActor::Tick(const float DeltaTime)
+{
+    Super::Tick(DeltaTime);
+
+    if (GetActorScale().X != 1.f || GetActorScale().Y != 1.f || GetActorScale().Z != 1.f)
+        bNeedsScaleReset = true;
+
+    if (bNeedsScaleReset)
+    {
+        GEngine->AddOnScreenDebugMessage(-1, 20.f, FColor::Red, FString::Printf(TEXT("Error: Scale modification is NOT supported by door actors! Sorry, it corrupts the door collision physics. If you need special door scaling, please build a custom door tailored to your requirements. %s"), *GetHumanReadableName()));
+
+        // todo: @reminder: see function comments
+        //ConvertScaleToBoxExtent();
+
+        GetRootComponent()->UpdateComponentToWorld();
+        GetRootComponent()->MarkRenderStateDirty();
+
+        SetActorRelativeScale3D(FVector(1.f, 1.f, 1.f));
+        SetActorScale3D(FVector(1.f, 1.f, 1.f));
+
+        bNeedsScaleReset = false;
+    }
+}
+
+void AAscMapKitDoorActor::PostLoad()
+{
+    Super::PostLoad();
+
+    if (!GIsEditor)
+        return;
+    
+    EditorUpdateMaterialInfo();
+}
+
+void AAscMapKitDoorActor::PostRegisterAllComponents()
+{
+    Super::PostRegisterAllComponents();
+
+    if (!GIsEditor)
+        return;
+    
+    EditorUpdateMaterialInfo();
+}
+
+void AAscMapKitDoorActor::PostEditUndo()
+{
+    Super::PostEditUndo();
+
+    if (!GIsEditor)
+        return;
+    
+    EditorUpdateMaterialInfo();
 }
 
 void AAscMapKitDoorActor::PostEditChangeProperty(struct FPropertyChangedEvent &PropertyChangedEvent)
 {
     Super::PostEditChangeProperty(PropertyChangedEvent);
 
-    if (PropertyChangedEvent.GetPropertyName() == TEXT("DoorType"))
+    if (!GIsEditor)
+        return;
+
+    if (PropertyChangedEvent.Property == nullptr || PropertyChangedEvent.MemberProperty == nullptr)
+        return;
+
+    const auto TransactionContext = FString::Printf(TEXT("%s::%hc"), *GetClass()->GetName(), *__FUNCTION__);
+    const auto TransactionIndex = UKismetSystemLibrary::BeginTransaction(TransactionContext, FText::FromString(FString::Printf(TEXT("Modify %s"), *GetHumanReadableName())), nullptr);
+
+    const auto PropertyName = PropertyChangedEvent.GetPropertyName();
+    const auto MemberDisplayName = PropertyChangedEvent.MemberProperty->GetDisplayNameText().ToString();
+
+    //UAscMapKitUtil::Log(TEXT("PostEditChangeProperty()")); // @debug
+    //UAscMapKitUtil::Log(PropertyName.ToString()); // @debug
+
+    auto bModified = false;
+    
+    if (MemberDisplayName.Contains(TEXT("Scale")) && (PropertyName == TEXT("X") || PropertyName == TEXT("Y") || PropertyName == TEXT("Z")))
+    {
+        bNeedsScaleReset = true;
+        bModified = true;
+    }
+    else if (PropertyName == TEXT("ShowPlayerInteractBoundingBoxExtent"))
+    {
+        if (PlayerInteractBoundingBox)
+        {
+            PlayerInteractBoundingBox->SetVisibility(!PlayerInteractBoundingBox->GetVisibleFlag(), true);
+            PlayerInteractBoundingBox->SetHiddenInGame(!PlayerInteractBoundingBox->bHiddenInGame);
+            bModified = true;
+        }
+    }
+    else if (PropertyName == TEXT("DoorType"))
+    {
         EditorUpdateDoorType(MapKit.DoorType);
-    else if (PropertyChangedEvent.GetPropertyName() == TEXT("PlayerInteractBoundingBoxExtent"))
-        EditorUpdatePlayerInteractBoundingBoxExtent(MapKit.Custom.NonDestructible.PlayerInteractBoundingBoxExtent);
+        bModified = true;
+    }
+    else if (PropertyName == TEXT("SkeletalMesh") || PropertyName == TEXT("AnimationBlueprintClass"))
+    {
+        EditorUpdateDoorCustom();
+        bModified = true;
+    }
+
+    const auto &CurrentPlayerInteract = MapKit.NonDestructible.PlayerInteractBoundingBoxExtent;
+
+    if (CachedPlayerInteractExtent.IsZero() || CurrentPlayerInteract != CachedPlayerInteractExtent)
+    {
+        EditorUpdatePlayerInteractBoundingBoxExtent(CurrentPlayerInteract);
+        bModified = true;
+    }
+
+    EditorUpdateMaterialInfo();
+
+    if (bModified)
+    {
+        PostEditChange();
+        Modify();
+        MarkPackageDirty();
+
+        GetRootComponent()->UpdateComponentToWorld();
+        GetRootComponent()->MarkRenderStateDirty();
+
+        ReregisterAllComponents();
+
+        UKismetSystemLibrary::TransactObject(this);
+        UKismetSystemLibrary::EndTransaction();
+    }
+    else
+        UKismetSystemLibrary::CancelTransaction(TransactionIndex);
 }
 
 void AAscMapKitDoorActor::EditorUpdateDoorType(const EAscMapKitDoorTypeEnum DoorType)
 {
-    UMaterialInterface *UseMaterial = nullptr;
+    if (!GIsEditor)
+        return;
     
-    auto UseShape = FVector(20.f, 2.f, 20.f);
-    
-    // todo: @reminder: update this as new doors are created
-    switch (DoorType)
+    //UAscMapKitUtil::Log(TEXT("EditorUpdateDoorType()")); // @debug
+
+    const auto DoorDataAsset = UAscMapKitGlobals::GetDoorDataAsset();
+    const auto DoorData = DoorDataAsset->Get(DoorType);
+
+    if (DoorType != EAscMapKitDoorTypeEnum::None && DoorType != EAscMapKitDoorTypeEnum::Custom && DoorType != DoorData.DoorType)
     {
-        case EAscMapKitDoorTypeEnum::Animated20x20mBasic001:
-            UseMaterial = Animated20x20mBasic001Material;
-            break;
-        case EAscMapKitDoorTypeEnum::Animated20x20mBasic002:
-            UseMaterial = Animated20x20mBasic002Material;
-            break;
-        case EAscMapKitDoorTypeEnum::Animated20x20mBasic003:
-            UseMaterial = Animated20x20mBasic003Material;
-            break;
-        case EAscMapKitDoorTypeEnum::Animated20x20mBasic004:
-            UseMaterial = Animated20x20mBasic004Material;
-            break;
-        case EAscMapKitDoorTypeEnum::Animated20x20mBasic005:
-            UseMaterial = Animated20x20mBasic005Material;
-            break;
-        case EAscMapKitDoorTypeEnum::Animated20x20mSciFiDoorsDoor1:
-            UseMaterial = Animated20x20mSciFiDoorsDoor1Material;
-            break;
-        case EAscMapKitDoorTypeEnum::Animated20x20mSciFiDoorsDoor2:
-            UseMaterial = Animated20x20mSciFiDoorsDoor2Material;
-            break;
-        case EAscMapKitDoorTypeEnum::Animated20x20mSciFiDoorsDoor4:
-            UseMaterial = Animated20x20mSciFiDoorsDoor4Material;
-            break;
-        case EAscMapKitDoorTypeEnum::Animated20x20mSciFiPropsDoor1:
-            UseMaterial = Animated20x20mSciFiPropsDoor1Material;
-            break;
-        case EAscMapKitDoorTypeEnum::Animated40x20mBasic001:
-            UseMaterial = Animated40x20mBasic001Material;
-            UseShape = FVector(40.f, 2.f, 20.f);
-            break;
-        case EAscMapKitDoorTypeEnum::Animated40x20mSciFiDoorsDoor3:
-            UseMaterial = Animated40x20mSciFiDoorsDoor3Material;
-            UseShape = FVector(40.f, 2.f, 20.f);
-            break;
-        case EAscMapKitDoorTypeEnum::Destructible20x20mBasic001:
-            UseMaterial = Destructible20x20mBasic001Material;
-            break;
+        UAscMapKitUtil::Log(TEXT("Door type is not configured in door data asset!"));
+        return;
     }
 
-    if (DoorType == EAscMapKitDoorTypeEnum::Custom && MapKit.Custom.StaticMeshPreview != nullptr)
-    {
-        StaticMeshComponent->SetStaticMesh(MapKit.Custom.StaticMeshPreview);
+    // reset
+    MapKit.NonDestructible.PlayerInteractBoundingBoxExtent = FVector(1200.f, 1200.f, 1200.f);
 
-        if (MapKit.Custom.StaticMeshPreviewMaterial != nullptr)
-            StaticMeshComponent->SetMaterial(0, MapKit.Custom.StaticMeshPreviewMaterial);
+    // reset
+    MapKit.Destructible.Enable = false;
+    MapKit.Destructible.Shared.DestructibleClass = nullptr;
+
+    // reset
+    if (StaticMeshComponent)
+    {
+        StaticMeshComponent->SetStaticMesh(nullptr);
+        StaticMeshComponent->SetVisibility(false, true);
+    }
+
+    // reset
+    if (SkeletalMeshComponent)
+    {
+        SkeletalMeshComponent->SetAnimationMode(EAnimationMode::AnimationSingleNode);
+        SkeletalMeshComponent->SetAnimInstanceClass(nullptr);
+        SkeletalMeshComponent->SetSkeletalMesh(nullptr);
+        SkeletalMeshComponent->SetVisibility(false, true);
+    }
+
+    // reset
+    MapKit.NonDestructible.AnimationBlueprintClass = nullptr;
+    MapKit.NonDestructible.SkeletalMesh = nullptr;
+
+    // reset
+    MapKit.Destructible.StaticMesh = nullptr;
+    MapKit.Destructible.StaticMeshDestroyed = nullptr;
+
+    const auto bIsDestructible = DoorData.bIsDestructible;
+
+    if (!DoorData.PlayerInteractBoundingBoxExtent.IsZero())
+    {
+        MapKit.NonDestructible.PlayerInteractBoundingBoxExtent = DoorData.PlayerInteractBoundingBoxExtent;
+        EditorUpdatePlayerInteractBoundingBoxExtent(DoorData.PlayerInteractBoundingBoxExtent);
+    }
+    
+    if (DoorType != EAscMapKitDoorTypeEnum::None && DoorType != EAscMapKitDoorTypeEnum::Custom)
+    {
+        if (!bIsDestructible)
+        {
+            if (StaticMeshComponent && DoorData.bForceUseStaticMesh && DoorData.StaticMesh)
+            {
+                StaticMeshComponent->SetStaticMesh(DoorData.StaticMesh);
+                StaticMeshComponent->SetVisibility(true, true);
+
+                MapKit.Destructible.StaticMesh = DoorData.StaticMesh;
+            }
+            else if (SkeletalMeshComponent && DoorData.SkeletalMesh)
+            {
+                if (DoorData.AnimationBlueprint)
+                {
+                    SkeletalMeshComponent->SetAnimationMode(EAnimationMode::AnimationBlueprint);
+                    SkeletalMeshComponent->SetAnimInstanceClass(DoorData.AnimationBlueprint);
+                }
+
+                SkeletalMeshComponent->SetSkeletalMesh(DoorData.SkeletalMesh);
+                SkeletalMeshComponent->SetVisibility(true, true);
+
+                MapKit.NonDestructible.AnimationBlueprintClass = DoorData.AnimationBlueprint;
+                MapKit.NonDestructible.SkeletalMesh = DoorData.SkeletalMesh;
+            }
+        }
+        else
+        {
+            // todo: @reminder: @wtf: did I plan on allowing skeletal mesh doors to also be destructible (ComponentType)???
+            MapKit.Destructible.Enable = true;
+            MapKit.Destructible.Shared.ComponentType = EAscMapKitDestructibleComponentTypeEnum::StaticMesh;
+
+            if (DoorData.DestructibleAnimationBlueprint)
+                MapKit.Destructible.Shared.DestructibleClass = DoorData.DestructibleAnimationBlueprint;
+
+            if (StaticMeshComponent)
+            {
+                if (DoorData.StaticMesh)
+                    MapKit.Destructible.StaticMesh = DoorData.StaticMesh;
+
+                if (DoorData.StaticMeshDestroyed)
+                {
+                    StaticMeshComponent->SetStaticMesh(DoorData.StaticMeshDestroyed);
+                    StaticMeshComponent->SetVisibility(true, true);
+
+                    MapKit.Destructible.StaticMeshDestroyed = DoorData.StaticMeshDestroyed;
+                }
+
+                // note: if the component mesh was not set, it means there was no StaticMeshDestroyed, so set it to StaticMesh
+                if (!StaticMeshComponent->GetStaticMesh() && DoorData.StaticMesh)
+                {
+                    StaticMeshComponent->SetStaticMesh(DoorData.StaticMesh);
+                    StaticMeshComponent->SetVisibility(true, true);
+                }
+            }
+        }
+    }
+    else if (DoorType == EAscMapKitDoorTypeEnum::Custom)
+    {
+        // todo: if the map kit property values are set, update the corresponding components
+        if (!bIsDestructible)
+        {
+            // todo: non-destructible
+            // todo: what on MapKit to update?
+        }
+        else
+        {
+            // todo: destructible
+            // todo: what on MapKit to update?
+        }
+    }
+}
+
+void AAscMapKitDoorActor::EditorUpdateDoorCustom()
+{
+    if (!GIsEditor)
+        return;
+    
+    Modify();
+
+    MapKit.DoorType = EAscMapKitDoorTypeEnum::Custom;
+
+    const auto PropertyName = GET_MEMBER_NAME_CHECKED(AAscMapKitDoorActor, MapKit);
+    const auto MapKitProperty = FindFProperty<FProperty>(StaticClass(), PropertyName);
+
+    if (MapKitProperty)
+    {
+        FPropertyChangedEvent PropertyChangedEvent(MapKitProperty);
+        PostEditChangeProperty(PropertyChangedEvent);
     }
     else
-    {
-        StaticMeshComponent->SetStaticMesh(CubeStaticMesh);
-        StaticMeshComponent->SetMaterial(0, UseMaterial);
-        StaticMeshComponent->SetRelativeScale3D(UseShape);
-    }
+        UAscMapKitUtil::Log(FString::Printf(TEXT("Unable to find property! %s"), *PropertyName.ToString()));
 }
 
 void AAscMapKitDoorActor::EditorUpdatePlayerInteractBoundingBoxExtent(const FVector Arg)
 {
-    if (MapKit.Custom.NonDestructible.PlayerInteractBoundingBox)
-        MapKit.Custom.NonDestructible.PlayerInteractBoundingBox->SetBoxExtent(Arg);
+    if (!GIsEditor)
+        return;
+    
+    if (PlayerInteractBoundingBox)
+    {
+        PlayerInteractBoundingBox->SetBoxExtent(Arg);
+        CachedPlayerInteractExtent = Arg;
+    }
+}
+
+void AAscMapKitDoorActor::EditorUpdateMaterialInfo()
+{
+    MapKit.NonDestructible.MaterialInfo.Empty();
+    MapKit.Destructible.MaterialInfo.Empty();
+    MapKit.Destructible.MaterialInfoDestroyed.Empty();
+
+    if (SkeletalMeshComponent && SkeletalMeshComponent->SkeletalMesh)
+    {
+        const auto Mesh = SkeletalMeshComponent->SkeletalMesh;
+
+        for (int32 i = 0; i < Mesh->Materials.Num(); i++)
+        {
+            FAscMapKitPropertiesMaterialInfoStruct Info;
+            Info.MaterialIndex = i;
+            Info.SlotName = Mesh->Materials[i].MaterialSlotName.ToString();
+            Info.Material = SkeletalMeshComponent->GetMaterial(i);
+
+            MapKit.NonDestructible.MaterialInfo.Add(Info);
+        }
+    }
+
+    if (StaticMeshComponent && StaticMeshComponent->GetStaticMesh())
+    {
+        for (int32 i = 0; i < StaticMeshComponent->GetNumMaterials(); ++i)
+        {
+            FAscMapKitPropertiesMaterialInfoStruct Info;
+            Info.MaterialIndex = i;
+            Info.Material = StaticMeshComponent->GetMaterial(i);
+
+            if (const auto MeshAsset = StaticMeshComponent->GetStaticMesh())
+            {
+                if (MeshAsset->StaticMaterials.IsValidIndex(i))
+                {
+                    const auto StaticMaterial = MeshAsset->StaticMaterials[i];
+                    Info.Material = StaticMaterial.MaterialInterface;
+                    Info.SlotName = StaticMaterial.MaterialSlotName.ToString();
+                }
+            }
+            
+            MapKit.Destructible.MaterialInfo.Add(Info);
+        }
+    }
+
+    if (MapKit.Destructible.StaticMeshDestroyed)
+    {
+        for (int32 i = 0; i < MapKit.Destructible.StaticMeshDestroyed->StaticMaterials.Num(); ++i)
+        {
+            const auto StaticMaterial = MapKit.Destructible.StaticMeshDestroyed->StaticMaterials[i];
+            
+            FAscMapKitPropertiesMaterialInfoStruct Info;
+            Info.MaterialIndex = i;
+            Info.Material = StaticMaterial.MaterialInterface;
+            Info.SlotName = StaticMaterial.MaterialSlotName.ToString();
+            
+            MapKit.Destructible.MaterialInfo.Add(Info);
+        }
+    }
 }
 #endif

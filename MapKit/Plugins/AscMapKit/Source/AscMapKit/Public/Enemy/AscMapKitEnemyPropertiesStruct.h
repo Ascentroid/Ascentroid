@@ -3,10 +3,12 @@
 // Ascentroid
 #include "AscMapKit/Public/Destructible/AscMapKitDestructiblePropertiesStruct.h"
 #include "AscMapKit/Public/Enemy/AscMapKitEnemyDefaultGameRuntimeBoundingBox.h"
+#include "AscMapKit/Public/Enemy/AscMapKitEnemyPropertiesBehaviorStruct.h"
 #include "AscMapKit/Public/Enemy/AscMapKitEnemyPropertiesColorsStruct.h"
 #include "AscMapKit/Public/Enemy/AscMapKitEnemyPropertiesDodgeStruct.h"
 #include "AscMapKit/Public/Enemy/AscMapKitEnemyPropertiesHowlersStruct.h"
 #include "AscMapKit/Public/Enemy/AscMapKitEnemyPropertiesMeleeStruct.h"
+#include "AscMapKit/Public/Enemy/AscMapKitEnemyPropertiesMovementStruct.h"
 #include "AscMapKit/Public/Enemy/AscMapKitEnemyPropertiesOtherEffectsStruct.h"
 #include "AscMapKit/Public/Enemy/AscMapKitEnemyPropertiesPointsStruct.h"
 #include "AscMapKit/Public/Enemy/AscMapKitEnemyPropertiesPowerupStruct.h"
@@ -46,6 +48,12 @@ struct ASCMAPKIT_API FAscMapKitEnemyPropertiesStruct
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     FAscMapKitEnemyPropertiesColorsStruct Colors;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    FAscMapKitEnemyPropertiesBehaviorStruct Behavior;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    FAscMapKitEnemyPropertiesMovementStruct Movement;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     FAscMapKitDestructiblePropertiesStruct Destructible;

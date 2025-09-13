@@ -1,4 +1,6 @@
 #include "AscMapKit/Public/Trigger/AscMapKitTriggerActor.h"
+
+// UE
 #include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
 
 AAscMapKitTriggerActor::AAscMapKitTriggerActor()
@@ -51,47 +53,56 @@ AAscMapKitTriggerActor::AAscMapKitTriggerActor()
     InvisibleTriggerCollisionStaticMesh->CanCharacterStepUpOn = ECB_No;
     InvisibleTriggerCollisionStaticMesh->SetIsReplicated(false);
     
-    MapKit.DefaultGameRuntimeBoundingBox = CreateDefaultSubobject<UAscMapKitTriggerDefaultGameRuntimeBoundingBox>(TEXT("DefaultGameRuntimeBoundingBox"));
-    MapKit.DefaultGameRuntimeBoundingBox->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
-    MapKit.DefaultGameRuntimeBoundingBox->SetBoxExtent(FVector::ZeroVector);
+    DefaultGameRuntimeBoundingBoxInternal = CreateDefaultSubobject<UAscMapKitTriggerDefaultGameRuntimeBoundingBox>(TEXT("DefaultGameRuntimeBoundingBox"));
+    DefaultGameRuntimeBoundingBoxInternal->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+    DefaultGameRuntimeBoundingBoxInternal->SetBoxExtent(FVector::ZeroVector);
     
-    // todo: @reminder: keep defaults in sync with game actor
+    MapKit = GetMapKitDefaults(DefaultGameRuntimeBoundingBoxInternal);
 
-    MapKit.DisplayName = TEXT("Trigger");
-    MapKit.Id = TEXT("001");
-
-    MapKit.Invisible.CollisionType = EAscMapKitTriggerPropertiesInvisibleCollisionTypeEnum::Box;
-
-    MapKit.Reusable.ShowHudMessageWhenAllRulesComplete = true;
-    
-    MapKit.OnExecute.ExecuteMaxCount = 1;
-    MapKit.OnLockDoor.CloseDoorWhenLocked = true;
-
-    MapKit.OnExecute.ShowHudMessage = true;
-    MapKit.OnInactive.ShowHudMessage = true;
-    MapKit.OnForcefieldChange.ShowDisableHudMessage = true;
-    MapKit.OnForcefieldChange.ShowEnableHudMessage = true;
-    MapKit.OnForcefieldChange.ShowDisablePulseHudMessage = true;
-    MapKit.OnForcefieldChange.ShowEnablePulseHudMessage = true;
-    MapKit.OnUnlockDoor.ShowHudMessage = true;
-    MapKit.OnLockDoor.ShowHudMessage = true;
-    MapKit.OnOpenDoor.ShowHudMessage = true;
-    MapKit.OnCloseDoor.ShowHudMessage = true;
-    MapKit.OnDestroyDoor.ShowHudMessage = true;
-    MapKit.MakeDoorDestructible.ShowHudMessage = true;
-    MapKit.MakeDoorIndestructible.ShowHudMessage = true;
-    MapKit.ResetReusableTriggers.ShowHudMessage = true;
-
-#if !(UE_BUILD_SHIPPING)
+#if !UE_BUILD_SHIPPING
     ArrowComponent->SetHiddenInGame(false);
     BillboardComponent->SetHiddenInGame(false);
     StaticMeshComponent->SetHiddenInGame(false);
-    MapKit.DefaultGameRuntimeBoundingBox->SetHiddenInGame(false);
+    DefaultGameRuntimeBoundingBoxInternal->SetHiddenInGame(false);
 #endif
 
 #if WITH_EDITORONLY_DATA
     BillboardComponent->SetEditorScale(8.f);
 #endif
+}
+
+FAscMapKitTriggerPropertiesStruct AAscMapKitTriggerActor::GetMapKitDefaults(UAscMapKitTriggerDefaultGameRuntimeBoundingBox *InDefaultGameRuntimeBoundingBox)
+{
+    auto Result = FAscMapKitTriggerPropertiesStruct();
+
+    Result.DefaultGameRuntimeBoundingBox = InDefaultGameRuntimeBoundingBox;
+
+    Result.DisplayName = TEXT("Trigger");
+    Result.Id = TEXT("001");
+
+    Result.Invisible.CollisionType = EAscMapKitTriggerPropertiesInvisibleCollisionTypeEnum::Box;
+
+    Result.Reusable.ShowHudMessageWhenAllRulesComplete = true;
+    
+    Result.OnExecute.ExecuteMaxCount = 1;
+    Result.OnLockDoor.CloseDoorWhenLocked = true;
+
+    Result.OnExecute.ShowHudMessage = true;
+    Result.OnInactive.ShowHudMessage = true;
+    Result.OnForcefieldChange.ShowDisableHudMessage = true;
+    Result.OnForcefieldChange.ShowEnableHudMessage = true;
+    Result.OnForcefieldChange.ShowDisablePulseHudMessage = true;
+    Result.OnForcefieldChange.ShowEnablePulseHudMessage = true;
+    Result.OnUnlockDoor.ShowHudMessage = true;
+    Result.OnLockDoor.ShowHudMessage = true;
+    Result.OnOpenDoor.ShowHudMessage = true;
+    Result.OnCloseDoor.ShowHudMessage = true;
+    Result.OnDestroyDoor.ShowHudMessage = true;
+    Result.MakeDoorDestructible.ShowHudMessage = true;
+    Result.MakeDoorIndestructible.ShowHudMessage = true;
+    Result.ResetReusableTriggers.ShowHudMessage = true;
+    
+    return Result;
 }
 
 void AAscMapKitTriggerActor::OnConstruction(const FTransform &Transform)
@@ -108,7 +119,7 @@ void AAscMapKitTriggerActor::OnConstruction(const FTransform &Transform)
     EditorUpdateTriggerType(MapKit.TriggerType);
 #endif
 
-#if !(UE_BUILD_SHIPPING)
+#if !UE_BUILD_SHIPPING
     ArrowComponent->SetRelativeRotation(FRotator(0.f, 180.f, 0.f)); // todo: confirm direction
 #endif
 }
@@ -117,7 +128,7 @@ void AAscMapKitTriggerActor::BeginPlay()
 {
     Super::BeginPlay();
 
-#if !(UE_BUILD_SHIPPING)
+#if !UE_BUILD_SHIPPING
     if (BillboardComponent && BillboardComponent->CurrentTexture != nullptr)
         BillboardComponent->SetSprite(BillboardComponent->CurrentTexture);
 #endif

@@ -12,23 +12,23 @@ struct ASCMAPKIT_API FAscMapKitDifficultyFloatStruct
     GENERATED_BODY()
 
     // The value for game difficulty "Easy".
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, meta = (ClampMin = "0.0", ClampMax = "999999.9999"))
     float Easy;
 
     // The value for game difficulty "Moderate".
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, meta = (ClampMin = "0.0", ClampMax = "999999.9999"))
     float Moderate;
 
     // The value for game difficulty "Normal".
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, meta = (ClampMin = "0.0", ClampMax = "999999.9999"))
     float Normal;
 
     // The value for game difficulty "Hard".
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, meta = (ClampMin = "0.0", ClampMax = "999999.9999"))
     float Hard;
 
     // The value for game difficulty "Impossible".
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, meta = (ClampMin = "0.0", ClampMax = "999999.9999"))
     float Impossible;
 
     float Get(const EAscMapKitGameDifficultyEnum Difficulty)

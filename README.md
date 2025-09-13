@@ -40,95 +40,23 @@ Note: you may need to run all installations as a <b>Windows Administrator</b> us
 
 ### Setup Your Campaign Project
 
-Install Ascentroid (the game). The latest test builds are posted in the [Ascentroid Discord](https://discord.gg/pktfw78) in the <b>#downloads</b> channel.
+1) Install Ascentroid (the game). The latest test builds are posted in the [Ascentroid Discord](https://discord.gg/pktfw78) in the <b>#downloads</b> channel.
 
-Start UE and create a new, blank <b>C++</b> project for your campaign <b>without Starter Content</b>:
+2) Install the Ascentroid Map Kit Tool (as a **Windows Administrator**): [ascentroid-mapkit-tool_0.0.1_x64_en-US.msi](https://drive.google.com/file/d/1d6aqJWmnY3m9d7hqudIg-Gp79zMO0AAs/view?usp=sharing)
 
-![Imgur](https://i.imgur.com/5Msq0OW.png)
+3) Use the Ascentroid Map Kit Tool to create a campaign.
 
-![Imgur](https://i.imgur.com/IxDBZi9.png)
+4) All content must be placed in the UE project <b>Campaign Content</b> folder, or it will not get cooked into your <b>\*.pak</b> file!
 
-![Imgur](https://i.imgur.com/YGuy48Z.png)
+5) There should be an Ascentroid editor panel in the Unreal Engine editor to help you create Ascentroid content for your level(s). Look for the icon in the main toolbar.
 
-Open your UE campaign project if it doesn't automatically open after you create it.
+6) Consult the FAQ in the Ascentroid editor panel. Use it as a guide.
 
-Once open, click the <b>Show Sources</b> icon in the <b>Content Browser</b>:
+7) Remember to bake lights and do not use dynamic lighting (for performance)!
 
-![Imgur](https://i.imgur.com/a3xkG7J.png)
+8) Use the "Cook" button in the Ascentroid Map Kit Tool to create the <b>\*.json</b> and <b>\*.pak</b> files for your campaign.
 
-In the lower, right-hand corner of the <b>Content Browser</b>, click the <b>View Options</b> and make sure <b>Show C++ Classes</b> and <b>Show Plugin Content</b> options are selected/checked.
-
-![Imgur](https://i.imgur.com/j7PETD7.png)
-
-Now, close the UE campaign project.
-
-Download the [Ascentroid Map Kit Setup Utility](https://github.com/Ascentroid/Ascentroid/blob/latest-stable/MapKit/Setup/AscMapKitSetup.zip) (requires [.NET Framework 4.7.2 Runtime](https://dotnet.microsoft.com/download/dotnet-framework/thank-you/net472-web-installer)):
-
-https://github.com/Ascentroid/Ascentroid/blob/latest-stable/MapKit/Setup/AscMapKitSetup.zip
-
-Unzip anywhere and execute <b>AscMapKitSetup.exe</b>. Run as a <b>Windows Administrator</b> user:
-
-![Imgur](https://i.imgur.com/6iVNY0e.png)
-
-![Imgur](https://i.imgur.com/G9vad3v.png)
-
-Follow the steps and provide the folder/file locations as requested in the utility. When ready, click the <b>Initialize Now!</b> button.
-
-![Imgur](https://i.imgur.com/Nzo9LjJ.png)
-
-The utility will perform the following in the background:
-
-1) Downloads the UE map kit source files and extracts them to the appropriate campaign project folders.
-
-2) It will install a <b>AscMapKit</b> plugin into your UE campaign project. These files contain map kit content and C++ actors you can use in your levels (grates, fans, signs, doors, enemies, powerups, and more).
-
-3) It will install a <b>Campaign</b> plugin in your UE campaign project. This plugin is <b>required</b> in order to <b>cook</b> a <b>*.pak</b> file, which will contain all of your campaign content to be used by the Ascentroid game runtime.
-
-4) It will place an <b>Empty.umap</b> level file into your UE campaign project <b>Content</b> folder. This empty level, and file name, is <b>required</b> in order for the <b>cook</b> process to work. <i>I don't know why... it's some kind of wonky UE thing.</i>
-
-5) It will create a <b>_BatchScripts</b> folder at the root of your UE campaign project. It will contain a few batch files you will need to use later.
-
-6) It will create a <b>*.json</b> file at the root of your UE campaign project. This file contains important, and required, meta data used by the Ascentroid game runtime.
-
-When the map kit setup is complete, it should pop-up a series of steps to help guide you through the final setup:
-
-![Imgur](https://i.imgur.com/uOW4G5o.png)
-
-1) Execute (as a <b>Windows Administrator</b> user):
-```
-[campaign project root]\_BatchScripts\GenerateProject.bat
-```
-
-Note: if running this command displays <b>ERROR: Could not find NetFxSDK install dir; this will prevent SwarmInterface from installing. Install a version of .NET Framework SDK at 4.6.0 or higher</b>, you did not install the proper Visual Studio components as instructed in the external tutorial/documentation! However, you can fix it quickly by simply installing the [.NET Framework 4.7.2 Developer Pack](https://dotnet.microsoft.com/download/dotnet-framework/thank-you/net472-developer-pack-offline-installer). After that is installed, run the <b><i>GenerateProject.bat</i></b> script again. It should (hopefully) work now.
-
-2) Execute (as a <b>Windows Administrator</b> user):
-```
-[campaign project root]\_BatchScripts\Compile.bat
-```
-
-3) Open your UE campaign project.
-
-4) If UE prompts to update the project, click <b>Update</b>:
-
-![Imgur](https://i.imgur.com/c6JXMUB.png)
-
-5) If UE prompts about new plugins being available, click <b>Dismiss</b>:
-
-![Imgur](https://i.imgur.com/NFjatG5.png)
-
-6) Create at least one level in your UE project and save it to the <b>Campaign Content</b> folder.
-
-7) Edit campaign <b>*.json</b> (make sure your campaign and level name(s) match):
-```
-[campaign project root]\[campaign project name].json
-```
-
-8) All assets used in your campaign <b>must</b> be saved in the <b>Campaign Content</b> folder (or they won't cook!).
-
-9) To cook your campaign, execute (as a <b>Windows Administrator</b> user):
-```
-[campaign project root]\_BatchScripts\Cook.bat
-```
+9) Use the "Backup" button in the Ascentroid Map Kit Tool to make backup copies of your Unreal Engine project (as needed).
 
 10) The <b>\*.json</b> and <b>\*.pak</b> files for your campaign will be copied to the Ascentroid game folder:
 ```

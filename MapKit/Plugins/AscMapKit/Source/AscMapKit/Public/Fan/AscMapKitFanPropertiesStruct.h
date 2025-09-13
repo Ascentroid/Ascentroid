@@ -2,7 +2,8 @@
 
 // Ascentroid
 #include "AscMapKit/Public/Core/Constant/AscMapKitSoundClassEnum.h"
-#include "AscMapKit/Public/Fan/AscMapKitFanPropertiesCustomStruct.h"
+#include "AscMapKit/Public/Destructible/AscMapKitDestructiblePropertiesSplashDamageStruct.h"
+#include "AscMapKit/Public/Destructible/AscMapKitDestructiblePropertiesStruct.h"
 #include "AscMapKit/Public/Fan/AscMapKitFanTypeEnum.h"
 
 // Generated
@@ -38,13 +39,17 @@ struct ASCMAPKIT_API FAscMapKitFanPropertiesStruct
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     USoundBase *PlayAmbientSoundCue;
 
+    // Customize the ambient sound cue pitch.
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    float PlayAmbientSoundCuePitch;
+
     // Specify a custom game runtime sound class for the ambient sound. If set to "Default", it will use the game runtime default (sound class "SFX").
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     EAscMapKitSoundClassEnum PlayAmbientSoundCueSoundClass;
 
-    // todo: @pak: @consideration: expose an array of material structs TArray<SlotName, UMaterialInstance> with a list of hard-coded slot names
-    // todo: @pak: @consideration: so people can customize the materials on existing pre-built assets
-    
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
-    FAscMapKitFanPropertiesCustomStruct Custom;
+    FAscMapKitDestructiblePropertiesStruct Destructible;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    FAscMapKitDestructiblePropertiesSplashDamageStruct SplashDamage;
 };

@@ -12,7 +12,7 @@ AAscMapKitDestructibleActor::AAscMapKitDestructibleActor()
     MapKit.OverrideOnHitRadius = 5000.f;
     MapKit.OverrideOnHitImpulseStrength = 80000.f;
 
-	MapKit.ScaleOverTime = true;
+	MapKit.ScaleOverTime = false;
 	MapKit.ScaleOverTimeUpOrDownFactor = -0.005f;
 	MapKit.ScaleOverTimeRateSeconds = 0.03f; // FAscConstantStruct::TickRate30fps()
 

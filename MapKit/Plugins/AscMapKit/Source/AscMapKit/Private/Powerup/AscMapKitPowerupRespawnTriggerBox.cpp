@@ -7,7 +7,7 @@
 
 AAscMapKitPowerupRespawnTriggerBox::AAscMapKitPowerupRespawnTriggerBox()
 {
-#if WITH_EDITOR
+#if WITH_EDITOR && !UE_BUILD_SHIPPING
     PrimaryActorTick.bCanEverTick = true;
     PrimaryActorTick.bStartWithTickEnabled = true;
 #else
@@ -62,7 +62,7 @@ void AAscMapKitPowerupRespawnTriggerBox::OnConstruction(const FTransform &Transf
 {
     Super::OnConstruction(Transform);
 
-#if WITH_EDITOR
+#if WITH_EDITOR && !UE_BUILD_SHIPPING
     SetActorTickInterval(FMath::FRandRange(0.8f, 1.f));
 #endif
 
@@ -162,7 +162,7 @@ bool AAscMapKitPowerupRespawnTriggerBox::Supports(const EAscMapKitPowerupTypeEnu
     return false;
 }
 
-#if WITH_EDITOR
+#if WITH_EDITOR && !UE_BUILD_SHIPPING
 void AAscMapKitPowerupRespawnTriggerBox::Tick(const float DeltaTime)
 {
     Super::Tick(DeltaTime);
@@ -174,29 +174,72 @@ void AAscMapKitPowerupRespawnTriggerBox::Tick(const float DeltaTime)
         for (const auto &Component : GetComponents())
         {
             if (Component->IsA(UBoxComponent::StaticClass()))
-            {
                 BoxComponentCount++;
-            }
         }
 
         if (BoxComponentCount > 1)
             GEngine->AddOnScreenDebugMessage(-1, 20.f, FColor::Red, FString::Printf(TEXT("Please fix! An AscMapKitPowerupRespawnTriggerBox can only have one (1) collision component, but %d were detected: %s"), BoxComponentCount, *GetHumanReadableName()));
     }
 
+    if (GetActorScale().X != 1.f || GetActorScale().Y != 1.f || GetActorScale().Z != 1.f)
+        bNeedsScaleReset = true;
+    
     if (bNeedsScaleReset)
     {
-        SetActorRelativeScale3D(FVector(1.f, 1.f, 1.f));
-        SetActorScale3D(FVector(1.f, 1.f, 1.f));
-            
+        GEngine->AddOnScreenDebugMessage(-1, 20.f, FColor::Red, FString::Printf(TEXT("Error: Change the Collision Box Bounds, but NOT the actor scale! Actor scale modification is NOT supported by powerup respawn trigger box actors! %s"), *GetHumanReadableName()));
+
+        // todo: @reminder: see function comments
+        //ConvertScaleToBoxExtent();
+
         GetRootComponent()->UpdateComponentToWorld();
         GetRootComponent()->MarkRenderStateDirty();
+
+        SetActorRelativeScale3D(FVector(1.f, 1.f, 1.f));
+        SetActorScale3D(FVector(1.f, 1.f, 1.f));
 
         bNeedsScaleReset = false;
     }
 }
+
+// todo: @reminder: this is a temporary hack/fix to convert old maps with scale sizes to box extent sizes
+// todo: @reminder: intended to be compiled/run manually and commented out again when all finished
+void AAscMapKitPowerupRespawnTriggerBox::ConvertScaleToBoxExtent()
+{
+    UBoxComponent *BoxComponent = nullptr;
+
+    if (GetComponents().Num() > 0)
+    {
+        for (const auto &Component : GetComponents())
+        {
+            if (Component->IsA(UBoxComponent::StaticClass()))
+            {
+                BoxComponent = Cast<UBoxComponent>(Component);
+                break;
+            }
+        }
+    }
+    
+    if (!BoxComponent)
+        return;
+
+    // assume original default extent is 40 units in each axis
+    const FVector DefaultExtent(40.f, 40.f, 40.f);
+
+    const auto WorldScale = BoxComponent->GetComponentScale();
+
+    // todo: @reminder: adjust manually depending on the map needs
+    const auto Padding = 300.f;
+
+    const auto NewExtent = (DefaultExtent * WorldScale) - Padding;
+
+    BoxComponent->SetBoxExtent(NewExtent);
+    BoxComponent->SetWorldScale3D(FVector(1.f, 1.f, 1.f));
+
+    GEngine->AddOnScreenDebugMessage(-1, 20.f, FColor::Cyan, FString::Printf(TEXT("Converted scale to box extent for: %s"), *GetHumanReadableName()));
+}
 #endif
 
-#if WITH_EDITOR
+#if WITH_EDITOR && !UE_BUILD_SHIPPING
 void AAscMapKitPowerupRespawnTriggerBox::PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent)
 {
     Super::PostEditChangeProperty(PropertyChangedEvent);
@@ -225,26 +268,9 @@ void AAscMapKitPowerupRespawnTriggerBox::PostEditChangeProperty(FPropertyChanged
     {
         bNeedsScaleReset = true;
         bModified = true;
-
-        GEngine->AddOnScreenDebugMessage(-1, 20.f, FColor::Red, TEXT("Error: Change the Collision Box Bounds, but NOT the actor scale! Actor scale is NOT supported by powerup respawn trigger box actors!"));
     }
     else if (PropertyCategory == TEXT("Collision Box Bounds") && GetCollisionComponent() != nullptr)
-    {
-        if (GetCollisionComponent()->IsA(UBoxComponent::StaticClass()))
-        {
-            const auto BoxComponent = Cast<UBoxComponent>(GetCollisionComponent());
-
-            if (BoxComponent)
-            {
-                BoxComponent->SetBoxExtent(FVector(BoxBounds.X, BoxBounds.Y, BoxBounds.Z));
-                BoxComponent->MarkRenderStateDirty();
-
-                UKismetSystemLibrary::TransactObject(BoxComponent);
-
-                bModified = true;
-            }
-        }
-    }
+        bModified = SyncBoxes(true);
 
     if (bModified)
     {
@@ -262,5 +288,26 @@ void AAscMapKitPowerupRespawnTriggerBox::PostEditChangeProperty(FPropertyChanged
     }
     else
         UKismetSystemLibrary::CancelTransaction(TransactionIndex);
+}
+
+bool AAscMapKitPowerupRespawnTriggerBox::SyncBoxes(bool bTransactObject)
+{
+    if (GetCollisionComponent()->IsA(UBoxComponent::StaticClass()))
+    {
+        const auto BoxComponent = Cast<UBoxComponent>(GetCollisionComponent());
+
+        if (BoxComponent)
+        {
+            BoxComponent->SetBoxExtent(FVector(BoxBounds.X, BoxBounds.Y, BoxBounds.Z));
+            BoxComponent->MarkRenderStateDirty();
+
+            if (bTransactObject)
+                UKismetSystemLibrary::TransactObject(BoxComponent);
+
+            return true;
+        }
+    }
+
+    return false;
 }
 #endif

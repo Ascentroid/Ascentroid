@@ -21,7 +21,7 @@ struct ASCMAPKIT_API FAscMapKitEnemyPropertiesTurretStruct
     bool Enable;
 
     // How quickly the turret will track a player.
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, meta = (ClampMin = "0.0", ClampMax = "10.0"))
     float TrackSpeed;
 
     // If set, the explosion particle will be spawned at the "TurretRoot" location.

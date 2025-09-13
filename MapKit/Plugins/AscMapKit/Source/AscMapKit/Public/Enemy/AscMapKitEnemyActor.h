@@ -6,19 +6,24 @@
 #include "Runtime/Engine/Classes/Components/StaticMeshComponent.h"
 
 // Ascentroid
+#include "AscMapKit/Public/Core/Global/AscMapKitBaseActor.h"
 #include "AscMapKit/Public/Enemy/AscMapKitEnemyBillboardComponent.h"
 #include "AscMapKit/Public/Enemy/AscMapKitEnemyPropertiesStruct.h"
 
 // Generated
 #include "AscMapKitEnemyActor.generated.h"
 
-UCLASS(HideCategories=("Activation", "Asset User Data", "Collision", "Cooking", "HLOD", "Input", "LOD", "Lighting", "Mobile", "Physics", "Rendering", "Replication", "Sprite", "Tags", "Virtual Texture"))
-class ASCMAPKIT_API AAscMapKitEnemyActor : public AActor
+UCLASS(Blueprintable, HideCategories=("Activation", "Asset User Data", "Collision", "Cooking", "HLOD", "Input", "LOD", "Lighting", "Mobile", "Physics", "Rendering", "Replication", "Sprite", "Tags", "Virtual Texture"))
+class ASCMAPKIT_API AAscMapKitEnemyActor : public AAscMapKitBaseActor
 {
     GENERATED_BODY()
 
 public:
     AAscMapKitEnemyActor();
+
+    static FAscMapKitEnemyPropertiesStruct GetMapKitDefaults();
+
+    static int32 GetNumberOfSockets(const EAscMapKitEnemyTypeEnum EnemyType);
 
     // Edit the majority of the map kit actor properties here.
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category="Ascentroid")

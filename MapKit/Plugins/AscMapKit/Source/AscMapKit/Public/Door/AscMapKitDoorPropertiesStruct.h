@@ -2,9 +2,9 @@
 
 // Ascentroid
 #include "AscMapKit/Public/Door/AscMapKitDoorTypeEnum.h"
-#include "AscMapKit/Public/Door/AscMapKitDoorPropertiesCustomStruct.h"
 #include "AscMapKit/Public/Door/AscMapKitDoorPropertiesDestructibleStruct.h"
 #include "AscMapKit/Public/Door/AscMapKitDoorPropertiesLockStruct.h"
+#include "AscMapKit/Public/Door/AscMapKitDoorPropertiesNonDestructibleStruct.h"
 #include "AscMapKit/Public/Door/AscMapKitDoorPropertiesSecretStruct.h"
 #include "AscMapKit/Public/Door/AscMapKitDoorPropertiesStatusStruct.h"
 #include "AscMapKit/Public/Door/AscMapKitDoorPropertiesOtherEffectsStruct.h"
@@ -38,13 +38,13 @@ struct ASCMAPKIT_API FAscMapKitDoorPropertiesStruct
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     FAscMapKitDoorPropertiesSecretStruct Secret;
-
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    FAscMapKitDoorPropertiesNonDestructibleStruct NonDestructible;
+    
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     FAscMapKitDoorPropertiesDestructibleStruct Destructible;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     FAscMapKitDoorPropertiesOtherEffectsStruct OtherEffects;
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
-    FAscMapKitDoorPropertiesCustomStruct Custom;
 };

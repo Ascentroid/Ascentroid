@@ -1,4 +1,6 @@
 #include "AscMapKit/Public/Forcefield/AscMapKitForcefieldActor.h"
+
+// UE
 #include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
 
 AAscMapKitForcefieldActor::AAscMapKitForcefieldActor()
@@ -32,7 +34,7 @@ AAscMapKitForcefieldActor::AAscMapKitForcefieldActor()
     
     MapKit.StaticMesh.Scale = FVector(1.f, 1.f, 1.f);
     MapKit.StaticMesh.Color = FLinearColor(0.5f, 0.5f, 6.f, 0.f);
-    MapKit.StaticMesh.EmitColorMultiplyBy = 10.f;
+    MapKit.StaticMesh.EmitColorMultiplyBy = 1.f;
     
     MapKit.Animate.Enable = true;
     MapKit.Animate.Axis = EAscMapKitXYZEnum::Z;
@@ -63,7 +65,7 @@ AAscMapKitForcefieldActor::AAscMapKitForcefieldActor()
     MapKit.OtherEffects.OnDisappearParticleScale = FVector(1.f, 1.f, 1.f);
     MapKit.OtherEffects.OnDisabledParticleScale = FVector(1.f, 1.f, 1.f);
 
-#if !(UE_BUILD_SHIPPING)
+#if !UE_BUILD_SHIPPING
     StaticMeshComponent->SetHiddenInGame(false);
 #endif
 }

@@ -12,7 +12,7 @@
 // Generated
 #include "AscMapKitEditorToolsLightHelper.generated.h"
 
-UCLASS(BlueprintType)
+UCLASS(Blueprintable, BlueprintType)
 class ASCMAPKITEDITOR_API UAscMapKitEditorToolsLightHelper : public UObject
 {
 	GENERATED_BODY()

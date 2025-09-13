@@ -2,6 +2,7 @@
 
 // Ascentroid
 #include "AscMapKit/Public/Core/Constant/AscMapKitSoundClassEnum.h"
+#include "AscMapKit/Public/Trigger/AscMapKitTriggerPropertiesEnemyGeneratorStruct.h"
 #include "AscMapKit/Public/Trigger/AscMapKitTriggerReusableStateEnum.h"
 
 // Generated
@@ -30,6 +31,9 @@ struct ASCMAPKIT_API FAscMapKitTriggerPropertiesReusableRuleStruct
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     EAscMapKitTriggerReusableStateEnum ToState;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    FAscMapKitTriggerPropertiesEnemyGeneratorStruct EnemyGenerator;
+    
     // Check this if you want to show a HUD message when the rule is match.
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     bool ShowHudMessage;

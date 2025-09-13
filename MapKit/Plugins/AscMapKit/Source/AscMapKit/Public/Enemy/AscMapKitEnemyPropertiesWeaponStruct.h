@@ -11,15 +11,14 @@ struct ASCMAPKIT_API FAscMapKitEnemyPropertiesWeaponStruct
 {
     GENERATED_BODY()
 
-    // todo
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     EAscMapKitProjWeapTypeEnum WeaponType;
 
-    // todo
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    // Only applicable to weapons which have a strength level (lasers).
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, meta = (ClampMin = "0", ClampMax = "6"))
     int32 WeaponStrengthLevel;
 
-    // todo
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    // The percentage chance (0 to 100) for this weapon to fire.
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, meta = (ClampMin = "0", ClampMax = "100"))
     int32 ChanceToFire;
 };

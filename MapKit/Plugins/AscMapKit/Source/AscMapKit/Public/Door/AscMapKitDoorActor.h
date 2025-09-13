@@ -4,19 +4,22 @@
 #include "Runtime/Engine/Classes/Components/StaticMeshComponent.h"
 
 // Ascentroid
+#include "AscMapKit/Public/Core/Global/AscMapKitBaseActor.h"
 #include "AscMapKit/Public/Door/AscMapKitDoorPropertiesStruct.h"
 
 // Generated
 #include "AscMapKitDoorActor.generated.h"
 
-UCLASS(HideCategories=("Activation", "Asset User Data", "Collision", "Cooking", "HLOD", "Input", "LOD", "Lighting", "Mobile", "Physics", "Rendering", "Replication", "Sprite", "Tags", "Virtual Texture"))
-class ASCMAPKIT_API AAscMapKitDoorActor : public AActor
+UCLASS(Blueprintable, HideCategories=("Activation", "Asset User Data", "Collision", "Cooking", "HLOD", "Input", "LOD", "Lighting", "Mobile", "Physics", "Rendering", "Replication", "Sprite", "Tags", "Virtual Texture"))
+class ASCMAPKIT_API AAscMapKitDoorActor : public AAscMapKitBaseActor
 {
     GENERATED_BODY()
 
 public:
     AAscMapKitDoorActor();
 
+    static FAscMapKitDoorPropertiesStruct GetMapKitDefaults();
+    
     // Edit the majority of the map kit actor properties here.
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category="Ascentroid")
     FAscMapKitDoorPropertiesStruct MapKit;
@@ -26,9 +29,15 @@ public:
 
     UPROPERTY()
     UStaticMesh *CubeStaticMesh;
-    
-    UPROPERTY()
+
+    UPROPERTY(SaveGame)
     UStaticMeshComponent *StaticMeshComponent;
+
+    UPROPERTY(SaveGame)
+    USkeletalMeshComponent *SkeletalMeshComponent;
+
+    UPROPERTY(SaveGame)
+    UAscMapKitDoorPlayerInteractBoundingBox *PlayerInteractBoundingBox;
     
     UFUNCTION()
     void OnConstruction(const FTransform &Transform) override;
@@ -38,48 +47,34 @@ public:
 
 #if WITH_EDITOR
     virtual void PostInitializeComponents() override;
+   
+    virtual bool ShouldTickIfViewportsOnly() const override { return true; }
+
+    virtual void Tick(float DeltaTime) override;
+
+    // Called after the actor is deserialized when opening a map.
+    virtual void PostLoad() override;
+
+    // Called after components are registered, good if you need the skeletal mesh to exist.
+    virtual void PostRegisterAllComponents() override;
+
+    // Useful if map makers undo/redo changes -- keeps the list up to date:
+    virtual void PostEditUndo() override;
     
     virtual void PostEditChangeProperty(struct FPropertyChangedEvent &PropertyChangedEvent) override;
 
     void EditorUpdateDoorType(EAscMapKitDoorTypeEnum DoorType);
 
+    void EditorUpdateDoorCustom();
+
     void EditorUpdatePlayerInteractBoundingBoxExtent(FVector Arg);
+
+    void EditorUpdateMaterialInfo();
+
+    //UPROPERTY()
+    FVector CachedPlayerInteractExtent;
+
+    //UPROPERTY()
+    bool bNeedsScaleReset;
 #endif
-
-private:
-    UPROPERTY()
-    UMaterialInterface *Animated20x20mBasic001Material;
-
-    UPROPERTY()
-    UMaterialInterface *Animated20x20mBasic002Material;
-
-    UPROPERTY()
-    UMaterialInterface *Animated20x20mBasic003Material;
-
-    UPROPERTY()
-    UMaterialInterface *Animated20x20mBasic004Material;
-
-    UPROPERTY()
-    UMaterialInterface *Animated20x20mBasic005Material;
-
-    UPROPERTY()
-    UMaterialInterface *Animated20x20mSciFiDoorsDoor1Material;
-
-    UPROPERTY()
-    UMaterialInterface *Animated20x20mSciFiDoorsDoor2Material;
-
-    UPROPERTY()
-    UMaterialInterface *Animated20x20mSciFiDoorsDoor4Material;
-
-    UPROPERTY()
-    UMaterialInterface *Animated20x20mSciFiPropsDoor1Material;
-
-    UPROPERTY()
-    UMaterialInterface *Animated40x20mBasic001Material;
-
-    UPROPERTY()
-    UMaterialInterface *Animated40x20mSciFiDoorsDoor3Material;
-
-    UPROPERTY()
-    UMaterialInterface *Destructible20x20mBasic001Material;
 };

@@ -18,6 +18,10 @@ struct ASCMAPKIT_API FAscMapKitEnemyPropertiesStatusStruct
 	// The enemy will not attack, but will continue to perform all other functions.
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     bool DisableAttack;
+	
+	// The enemy will not attack, but will continue to perform all other functions.
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+	bool DisableMovement;
 
 	// The enemy will be permanently invincible. (todo: not implemented)
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
@@ -30,13 +34,4 @@ struct ASCMAPKIT_API FAscMapKitEnemyPropertiesStatusStruct
 	// The enemy will start with this amount of shields.
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     FAscMapKitDifficultyFloatStruct StartShields;
-
-	// The enemy will be forced to a maximum movement speed.
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
-    float MaxSpeed;
-
-	// How long, in second(s), to reset the enemy to idle if nothing is keeping the enemy aware/active.
-	// Idle enemies are good for performance, because it lowers the enemy tick rate in the game engine.
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
-	float ResetToIdleSeconds;
 };

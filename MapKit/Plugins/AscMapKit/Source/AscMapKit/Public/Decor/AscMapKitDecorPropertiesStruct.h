@@ -1,7 +1,8 @@
 #pragma once
 
 // Ascentroid
-#include "AscMapKit/Public/Decor/AscMapKitDecorPropertiesCustomMaterialStruct.h"
+#include "AscMapKit/Public/Destructible/AscMapKitDestructiblePropertiesSplashDamageStruct.h"
+#include "AscMapKit/Public/Destructible/AscMapKitDestructiblePropertiesStruct.h"
 
 // Generated
 #include "AscMapKitDecorPropertiesStruct.generated.h"
@@ -11,7 +12,13 @@ struct ASCMAPKIT_API FAscMapKitDecorPropertiesStruct
 {
     GENERATED_BODY()
 
-    // If you need to override static mesh materials, you can do it here.
+    // Used by the game runtime to disable all collision on the decor actor.
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
-    TArray<FAscMapKitDecorPropertiesCustomMaterialStruct> OverrideMaterials;
+    bool DisableCollision;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    FAscMapKitDestructiblePropertiesStruct Destructible;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    FAscMapKitDestructiblePropertiesSplashDamageStruct SplashDamage;
 };

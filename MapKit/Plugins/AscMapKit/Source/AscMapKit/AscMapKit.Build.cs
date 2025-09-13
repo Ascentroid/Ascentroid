@@ -13,6 +13,7 @@ public class AscMapKit : ModuleRules
 			new []
 			{
 				"Core",
+				"Engine",
 				"Niagara"
 			});
 
@@ -20,7 +21,6 @@ public class AscMapKit : ModuleRules
 			new []
 			{
 				"CoreUObject",
-				"Engine",
 				"Slate",
 				"SlateCore"
 			});

@@ -32,7 +32,7 @@ struct ASCMAPKIT_API FAscMapKitEnemyPropertiesColorsStruct
     bool OverrideEmitColorMultiplyBy;
 
     // Use this to increase the emit color amount.
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, meta = (ClampMin = "0.0", ClampMax = "1000.0"))
     float EmitColorMultiplyBy;
 
 	// Read-only. Used for the material assigned to the enemy.

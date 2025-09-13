@@ -7,13 +7,14 @@
 #include "Runtime/Engine/Classes/Components/StaticMeshComponent.h"
 
 // Ascentroid
+#include "AscMapKit/Public/Core/Global/AscMapKitBaseActor.h"
 #include "AscMapKit/Public/Navmap/AscMapKitNavmapCollisionBoxBoundsVector.h"
 
 // Generated
 #include "AscMapKitNavmapActor.generated.h"
 
-UCLASS(HideCategories=("Activation", "Asset User Data", "Collision", "Cooking", "HLOD", "Input", "LOD", "Lighting", "Mobile", "Physics", "Rendering", "Replication", "Sprite", "Tags", "Virtual Texture"))
-class ASCMAPKIT_API AAscMapKitNavmapActor : public AActor
+UCLASS(Blueprintable, HideCategories=("Activation", "Asset User Data", "Collision", "Cooking", "HLOD", "Input", "LOD", "Lighting", "Mobile", "Physics", "Rendering", "Replication", "Sprite", "Tags", "Virtual Texture"))
+class ASCMAPKIT_API AAscMapKitNavmapActor : public AAscMapKitBaseActor
 {
     GENERATED_BODY()
 

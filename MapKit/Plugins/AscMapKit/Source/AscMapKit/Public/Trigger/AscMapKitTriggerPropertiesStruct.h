@@ -3,6 +3,7 @@
 // Ascentroid
 #include "AscMapKit/Public/Trigger/AscMapKitTriggerDefaultGameRuntimeBoundingBox.h"
 #include "AscMapKit/Public/Trigger/AscMapKitTriggerPropertiesCustomStruct.h"
+#include "AscMapKit/Public/Trigger/AscMapKitTriggerPropertiesEnemyGeneratorStruct.h"
 #include "AscMapKit/Public/Trigger/AscMapKitTriggerPropertiesInvisibleStruct.h"
 #include "AscMapKit/Public/Trigger/AscMapKitTriggerPropertiesMakeDoorDestructibleStruct.h"
 #include "AscMapKit/Public/Trigger/AscMapKitTriggerPropertiesMakeDoorIndestructibleStruct.h"
@@ -60,7 +61,7 @@ struct ASCMAPKIT_API FAscMapKitTriggerPropertiesStruct
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     FAscMapKitTriggerPropertiesOnInactiveStruct OnInactive;
-
+    
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     FAscMapKitTriggerPropertiesOnForcefieldChangeStruct OnForcefieldChange;
     

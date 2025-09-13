@@ -14,6 +14,7 @@ public class AscMapKitEditor : ModuleRules
 			{
 				"AscMapKit",
 				"Core",
+				"Engine",
 				"Niagara"
 			});
 
@@ -24,7 +25,6 @@ public class AscMapKitEditor : ModuleRules
 				"Blutility",
 				"CoreUObject",
 				"EditorStyle",
-				"Engine",
 				"ProceduralMeshComponent",
 				"Projects",
 				"Slate",

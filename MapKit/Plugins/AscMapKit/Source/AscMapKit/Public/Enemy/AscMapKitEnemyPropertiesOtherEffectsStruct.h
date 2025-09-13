@@ -95,11 +95,11 @@ struct ASCMAPKIT_API FAscMapKitEnemyPropertiesOtherEffectsStruct
     EAscMapKitSoundClassEnum PlayTalkSoundCueSoundClass;
 
     // A minimum value for how long to wait, in seconds, before the enemy will repeat their "talk" sound. The wait value is selected randomly between the minimum and maximum range after each play.
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, meta = (ClampMin = "0", ClampMax = "1000"))
     int32 PlayTalkSoundCueRepeatWaitMinimumSeconds;
 
     // A maximum value for how long to wait, in seconds, before the enemy will repeat their "talk" sound. The wait value is selected randomly between the minimum and maximum range after each play.
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, meta = (ClampMin = "0", ClampMax = "1000"))
     int32 PlayTalkSoundCueRepeatWaitMaximumSeconds;
     
     // If a sound cue is not provided, the default game asset will be used at runtime.
@@ -133,6 +133,6 @@ struct ASCMAPKIT_API FAscMapKitEnemyPropertiesOtherEffectsStruct
 
     // A percent value used to randomly play the victory sound when a player dies.
     // 0 to 100 (percent)
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, meta = (ClampMin = "0", ClampMax = "100"))
     int32 ChanceToPlayVictorySoundCue;
 };

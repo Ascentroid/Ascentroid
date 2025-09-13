@@ -10,7 +10,7 @@
 // Generated
 #include "AscMapKitPowerupRespawnTriggerBox.generated.h"
 
-UCLASS(HideCategories=("Shape", "Navigation", "Tags", "Actor", "Activation", "Asset User Data", "Collision", "Cooking", "HLOD", "Input", "LOD", "Lighting", "Mobile", "Physics", "Rendering", "Replication", "Sprite", "Tags", "Virtual Texture"))
+UCLASS(Blueprintable, HideCategories=("Shape", "Navigation", "Tags", "Actor", "Activation", "Asset User Data", "Collision", "Cooking", "HLOD", "Input", "LOD", "Lighting", "Mobile", "Physics", "Rendering", "Replication", "Sprite", "Tags", "Virtual Texture"))
 class ASCMAPKIT_API AAscMapKitPowerupRespawnTriggerBox : public ATriggerBox
 {
 	GENERATED_BODY()
@@ -142,7 +142,12 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION()
+	void ConvertScaleToBoxExtent();
+
 	virtual void PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent) override;
+
+	bool SyncBoxes(bool bTransactObject);
 #endif
 
 private:

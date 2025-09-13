@@ -9,7 +9,7 @@
 // Generated
 #include "AscMapKitEnemyBillboardComponent.generated.h"
 
-UCLASS()
+UCLASS(Blueprintable)
 class ASCMAPKIT_API UAscMapKitEnemyBillboardComponent : public UBillboardComponent
 {
     GENERATED_BODY()

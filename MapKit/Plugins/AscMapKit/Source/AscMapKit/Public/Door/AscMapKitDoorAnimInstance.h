@@ -6,7 +6,7 @@
 // Generated
 #include "AscMapKitDoorAnimInstance.generated.h"
 
-UCLASS()
+UCLASS(Blueprintable)
 class ASCMAPKIT_API UAscMapKitDoorAnimInstance : public UAnimInstance
 {
 	GENERATED_UCLASS_BODY()

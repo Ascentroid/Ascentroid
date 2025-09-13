@@ -6,14 +6,15 @@
 #include "Runtime/Engine/Classes/Components/StaticMeshComponent.h"
 
 // Ascentroid
+#include "AscMapKit/Public/Core/Global/AscMapKitBaseActor.h"
 #include "AscMapKit/Public/Powerup/AscMapKitPowerupBillboardComponent.h"
 #include "AscMapKit/Public/Powerup/AscMapKitPowerupPropertiesStruct.h"
 
 // Generated
 #include "AscMapKitPowerupActor.generated.h"
 
-UCLASS(HideCategories=("Activation", "Asset User Data", "Collision", "Cooking", "HLOD", "Input", "LOD", "Lighting", "Mobile", "Physics", "Rendering", "Replication", "Sprite", "Tags", "Virtual Texture"))
-class ASCMAPKIT_API AAscMapKitPowerupActor : public AActor
+UCLASS(Blueprintable, HideCategories=("Activation", "Asset User Data", "Collision", "Cooking", "HLOD", "Input", "LOD", "Lighting", "Mobile", "Physics", "Rendering", "Replication", "Sprite", "Tags", "Virtual Texture"))
+class ASCMAPKIT_API AAscMapKitPowerupActor : public AAscMapKitBaseActor
 {
     GENERATED_BODY()
 

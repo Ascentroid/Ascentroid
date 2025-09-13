@@ -1,8 +1,11 @@
 #pragma once
 
 // Ascentroid
-#include "AscMapKit/Public/Destructible/AscMapKitDestructibleDamagePropertiesStruct.h"
-#include "AscMapKit/Public/Destructible/AscMapKitDestructibleDisappearPropertiesStruct.h"
+#include "AscMapKit/Public/Core/Constant/AscMapKitDifficultyFloatStruct.h"
+#include "AscMapKit/Public/Destructible/AscMapKitDestructibleComponentTypeEnum.h"
+#include "AscMapKit/Public/Destructible/AscMapKitDestructiblePropertiesDamageStruct.h"
+#include "AscMapKit/Public/Destructible/AscMapKitDestructiblePropertiesDisappearStruct.h"
+#include "AscMapKit/Public/Destructible/AscMapKitDestructiblePropertiesOtherEffectsStruct.h"
 
 // Generated
 #include "AscMapKitDestructiblePropertiesStruct.generated.h"
@@ -19,9 +22,13 @@ struct ASCMAPKIT_API FAscMapKitDestructiblePropertiesStruct
         ScaleOverTimeRateSeconds = 0.03f; // FAscConstantStruct::TickRate30fps()
     }
 
-    // If checked, the destructible system will be turned off and not execute.
+    // Which component type to use for the destructible actor non-destroyed state.
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
-    bool Disable;
+    EAscMapKitDestructibleComponentTypeEnum ComponentType;
+
+    // If checked, the destructible system will be enabled.
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    bool Enable;
 
     // Required class type which contains the static mesh components for the chunks/pieces of the destructible actor.
     // * This is typically a Blueprint class you create and must sub-class "AAscMapKitDestructibleActor".
@@ -34,6 +41,15 @@ struct ASCMAPKIT_API FAscMapKitDestructiblePropertiesStruct
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     bool Indestructible;
 
+    // If checked, the destructible will already be destroyed when it is spawned at game runtime.
+    // Also used to track status at game runtime (set to true when it gets destroyed).
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    bool IsDestroyed;
+
+    // The destructible will start with this amount of shields.
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    FAscMapKitDifficultyFloatStruct StartShields;
+    
     // If checked, the main actor will not use game entity impact values (like projectiles). It will use the override property values instead (if they are greater than zero).
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     bool OverrideOnHitImpact;
@@ -72,11 +88,11 @@ struct ASCMAPKIT_API FAscMapKitDestructiblePropertiesStruct
     
     // Player Damage
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
-    FAscMapKitDestructibleDamagePropertiesStruct PlayerDamage;
+    FAscMapKitDestructiblePropertiesDamageStruct PlayerDamage;
 
     // Enemy Damage
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
-    FAscMapKitDestructibleDamagePropertiesStruct EnemyDamage;
+    FAscMapKitDestructiblePropertiesDamageStruct EnemyDamage;
 
     // If checked, the chunks/pieces can be destroyed by projectiles.
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
@@ -87,5 +103,8 @@ struct ASCMAPKIT_API FAscMapKitDestructiblePropertiesStruct
     float DestroyByProjectileStartShieldAmount;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
-    FAscMapKitDestructibleDisappearPropertiesStruct Disappear;    
+    FAscMapKitDestructiblePropertiesDisappearStruct Disappear;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    FAscMapKitDestructiblePropertiesOtherEffectsStruct OtherEffects;
 };

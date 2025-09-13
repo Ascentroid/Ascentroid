@@ -10,7 +10,7 @@
 // Generated
 #include "AscMapKitEditorToolsHotfixPowerupTypesUtilityWidget.generated.h"
 
-UCLASS(BlueprintType)
+UCLASS(Blueprintable, BlueprintType)
 class ASCMAPKITEDITOR_API UAscMapKitEditorToolsHotfixPowerupTypesUtilityWidget : public UEditorUtilityWidget
 {
 	GENERATED_BODY()

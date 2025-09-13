@@ -32,15 +32,15 @@ struct ASCMAPKIT_API FAscMapKitEnemyPropertiesPointsStruct
     FVector2D TextCanvasSize;
 
     // Use to increase or decrease the size of the text.
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, meta = (ClampMin = "0.0", ClampMax = "1000.0"))
     float TextScale;
 
     // Use to set the density of the text.
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, meta = (ClampMin = "0.0", ClampMax = "1000.0"))
     float TextDensity;
 
     // How long, in seconds, to display the text before is disappears (is destroyed).
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, meta = (ClampMin = "0.0", ClampMax = "1000.0"))
     float TextAutoDestroySeconds;
 
     // todo: what was this for? did we want to support this?

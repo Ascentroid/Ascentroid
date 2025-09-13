@@ -6,7 +6,7 @@
 
 AAscMapKitNavmapActor::AAscMapKitNavmapActor()
 {
-#if WITH_EDITOR
+#if WITH_EDITOR && !UE_BUILD_SHIPPING
     PrimaryActorTick.bCanEverTick = true;
     PrimaryActorTick.bStartWithTickEnabled = true;
 #else
@@ -35,7 +35,7 @@ void AAscMapKitNavmapActor::OnConstruction(const FTransform &Transform)
 {
     Super::OnConstruction(Transform);
 
-#if WITH_EDITOR
+#if WITH_EDITOR && !UE_BUILD_SHIPPING
     SetActorTickInterval(FMath::FRandRange(0.8f, 1.f));
 #endif
 
@@ -49,13 +49,18 @@ void AAscMapKitNavmapActor::OnConstruction(const FTransform &Transform)
     }
 }
 
-#if WITH_EDITOR
+#if WITH_EDITOR && !UE_BUILD_SHIPPING
 void AAscMapKitNavmapActor::Tick(const float DeltaTime)
 {
     Super::Tick(DeltaTime);
 
+    if (GetActorScale().X != 1.f || GetActorScale().Y != 1.f || GetActorScale().Z != 1.f)
+        bNeedsScaleReset = true;
+    
     if (bNeedsScaleReset)
     {
+        GEngine->AddOnScreenDebugMessage(-1, 20.f, FColor::Red, FString::Printf(TEXT("Error: Change the box component bounds, but NOT the actor scale! Actor scale is NOT supported by navmap actors! %s"), *GetHumanReadableName()));
+        
         SetActorRelativeScale3D(FVector(1.f, 1.f, 1.f));
         SetActorScale3D(FVector(1.f, 1.f, 1.f));
 
@@ -67,7 +72,7 @@ void AAscMapKitNavmapActor::Tick(const float DeltaTime)
 }
 #endif
 
-#if WITH_EDITOR
+#if WITH_EDITOR && !UE_BUILD_SHIPPING
 void AAscMapKitNavmapActor::PostEditChangeProperty(FPropertyChangedEvent &PropertyChangedEvent)
 {
     Super::PostEditChangeProperty(PropertyChangedEvent);
@@ -96,8 +101,6 @@ void AAscMapKitNavmapActor::PostEditChangeProperty(FPropertyChangedEvent &Proper
     {
         bNeedsScaleReset = true;
         bModified = true;
-
-        GEngine->AddOnScreenDebugMessage(-1, 20.f, FColor::Red, TEXT("Error: Change the box component bounds, but NOT the actor scale! Actor scale is NOT supported by navmap actors!"));
     }
     else if (PropertyCategory == TEXT("Collision Box Bounds") && Box != nullptr)
     {

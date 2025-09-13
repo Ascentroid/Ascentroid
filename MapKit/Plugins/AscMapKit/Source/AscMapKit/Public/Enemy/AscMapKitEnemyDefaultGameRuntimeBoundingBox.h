@@ -9,7 +9,7 @@
 // Generated
 #include "AscMapKitEnemyDefaultGameRuntimeBoundingBox.generated.h"
 
-UCLASS()
+UCLASS(Blueprintable)
 class ASCMAPKIT_API UAscMapKitEnemyDefaultGameRuntimeBoundingBox : public UBoxComponent
 {
     GENERATED_BODY()

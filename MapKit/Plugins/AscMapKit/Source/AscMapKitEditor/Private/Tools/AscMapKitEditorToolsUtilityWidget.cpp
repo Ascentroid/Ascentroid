@@ -1,6 +1,7 @@
 #include "AscMapKitEditor/Public/Tools/AscMapKitEditorToolsUtilityWidget.h"
 
 // UE
+#include "Editor/UnrealEd/Public/ActorGroupingUtils.h"
 #include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
 #include "Runtime/Core/Public/Algo/MaxElement.h"
 #include "Runtime/Core/Public/Internationalization/Regex.h"
@@ -19,13 +20,19 @@
 #include "Runtime/Engine/Classes/Engine/SphereReflectionCapture.h"
 #include "Runtime/Engine/Classes/Engine/SpotLight.h"
 #include "Runtime/Engine/Classes/Engine/StaticMeshActor.h"
+#include "Runtime/Engine/Classes/GameFramework/WorldSettings.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "Runtime/Engine/Classes/Kismet/KismetSystemLibrary.h"
 #include "Runtime/Engine/Classes/Lightmass/LightmassImportanceVolume.h"
 #include "Runtime/Engine/Public/DrawDebugHelpers.h"
+#include "Runtime/Engine/Public/EngineUtils.h"
+#include "Runtime/UMG/Public/Components/Border.h"
+#include "Runtime/UMG/Public/Components/Image.h"
+#include "Runtime/UMG/Public/Components/SizeBox.h"
 
 // Ascentroid
 #include "AscMapKit/Public/Area/AscMapKitEnvironmentAreaActor.h"
+#include "AscMapKit/Public/Core/Global/AscMapKitGlobals.h"
 #include "AscMapKit/Public/Decor/AscMapKitDecorActor.h"
 #include "AscMapKit/Public/Door/AscMapKitDoorActor.h"
 #include "AscMapKit/Public/Enemy/AscMapKitEnemyActor.h"
@@ -38,30 +45,23 @@
 #include "AscMapKit/Public/Powerup/AscMapKitPowerupRespawnTriggerBox.h"
 #include "AscMapKit/Public/Trigger/AscMapKitTriggerActor.h"
 #include "AscMapKitEditor/Public/Tools/Helpers/AscMapKitEditorToolsHelper.h"
+#include "AscMapKitEditor/Public/Tools/Helpers/AscMapKitEditorToolsLevelGeometryHelper.h"
 #include "AscMapKitEditor/Public/Tools/Helpers/AscMapKitEditorToolsLightHelper.h"
 #include "AscMapKitEditor/Public/Tools/Helpers/AscMapKitEditorToolsPowerupHelper.h"
 #include "AscMapKitEditor/Public/Tools/Helpers/AscMapKitEditorToolsPowerupRespawnTriggerHelper.h"
 
 const auto NavmapBoundsPadding = 4000.f;
 
+// todo: @reminder: there may be more cleanup to do here
+// todo: @reminder: a lot of assets could be moved into data assets and loaded dynamically instead
+// todo: @reminder: I could have missed some areas where I should be looking at data assets and remove static code
+// todo: @reminder: I just want to move on to other things now and will revisit this again later
+
 UAscMapKitEditorToolsUtilityWidget::UAscMapKitEditorToolsUtilityWidget()
 {
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeStaticMeshRef(TEXT("/Engine/BasicShapes/Cube.Cube"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> CylinderStaticMeshRef(TEXT("/Engine/BasicShapes/Cylinder.Cylinder"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> PlaneStaticMeshRef(TEXT("/Engine/BasicShapes/Plane.Plane"));
-
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> DecorGrate10x20mBasic001StaticMeshRef(TEXT("StaticMesh'/AscMapKit/Shared/Decor/Grate/10x20m/Basic/001/SM_Decor_Grate_10x20m_Basic_001.SM_Decor_Grate_10x20m_Basic_001'"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> DecorGrate20x5mBasic001StaticMeshRef(TEXT("StaticMesh'/AscMapKit/Shared/Decor/Grate/20x5m/Basic/001/SM_Decor_Grate_20x5m_Basic_001.SM_Decor_Grate_20x5m_Basic_001'"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> DecorGrate20x5mBasic002StaticMeshRef(TEXT("StaticMesh'/AscMapKit/Shared/Decor/Grate/20x5m/Basic/002/SM_Decor_Grate_20x5m_Basic_002.SM_Decor_Grate_20x5m_Basic_002'"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> DecorGrate20x20mBasic001StaticMeshRef(TEXT("StaticMesh'/AscMapKit/Shared/Decor/Grate/20x20m/Basic/001/SM_Decor_Grate_20x20m_Basic_001.SM_Decor_Grate_20x20m_Basic_001'"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> DecorLetterStaticMeshRef(TEXT("StaticMesh'/AscMapKit/Shared/Decor/Letters/SM_Letter_X.SM_Letter_X'"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> DecorPiece001StaticMeshRef(TEXT("StaticMesh'/AscMapKit/Shared/Decor/Piece/001/SM_Decor_Piece_001.SM_Decor_Piece_001'"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> DecorSign001StaticMeshRef(TEXT("StaticMesh'/AscMapKit/Shared/Decor/Sign/001/SM_Decor_Sign_001.SM_Decor_Sign_001'"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> DecorSign002StaticMeshRef(TEXT("StaticMesh'/AscMapKit/Shared/Decor/Sign/002/SM_Decor_Sign_002.SM_Decor_Sign_002'"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> DecorSign003StaticMeshRef(TEXT("StaticMesh'/AscMapKit/Shared/Decor/Sign/003/SM_Decor_Sign_003.SM_Decor_Sign_003'"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> DecorSign004StaticMeshRef(TEXT("StaticMesh'/AscMapKit/Shared/Decor/Sign/004/SM_Decor_Sign_004.SM_Decor_Sign_004'"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> DecorSign005StaticMeshRef(TEXT("StaticMesh'/AscMapKit/Shared/Decor/Sign/005/SM_Decor_Sign_005.SM_Decor_Sign_005'"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> DecorSign006StaticMeshRef(TEXT("StaticMesh'/AscMapKit/Shared/Decor/Sign/006/SM_Decor_Sign_006.SM_Decor_Sign_006'"));
 
 	static ConstructorHelpers::FObjectFinder<UMaterialInstanceConstant> MaterialEmitColorBlueRef(TEXT("MaterialInstanceConstant'/AscMapKit/Shared/Materials/MI_Shared_Emit_Blue.MI_Shared_Emit_Blue'"));
 	static ConstructorHelpers::FObjectFinder<UMaterialInstanceConstant> MaterialEmitColorBlueDarkRef(TEXT("MaterialInstanceConstant'/AscMapKit/Shared/Materials/MI_Shared_Emit_Blue_Dark.MI_Shared_Emit_Blue_Dark'"));
@@ -71,6 +71,7 @@ UAscMapKitEditorToolsUtilityWidget::UAscMapKitEditorToolsUtilityWidget()
 	static ConstructorHelpers::FObjectFinder<UMaterialInstanceConstant> MaterialEmitColorGreenDarkRef(TEXT("MaterialInstanceConstant'/AscMapKit/Shared/Materials/MI_Shared_Emit_Green_Dark.MI_Shared_Emit_Green_Dark'"));
 	static ConstructorHelpers::FObjectFinder<UMaterialInstanceConstant> MaterialEmitColorOrangeRef(TEXT("MaterialInstanceConstant'/AscMapKit/Shared/Materials/MI_Shared_Emit_Orange.MI_Shared_Emit_Orange'"));
 	static ConstructorHelpers::FObjectFinder<UMaterialInstanceConstant> MaterialEmitColorOrangeDarkRef(TEXT("MaterialInstanceConstant'/AscMapKit/Shared/Materials/MI_Shared_Emit_Orange_Dark.MI_Shared_Emit_Orange_Dark'"));
+	static ConstructorHelpers::FObjectFinder<UMaterialInstanceConstant> MaterialEmitColorOrangeDarkBrightRef(TEXT("MaterialInstanceConstant'/AscMapKit/Shared/Materials/MI_Shared_Emit_Orange_Dark_Bright.MI_Shared_Emit_Orange_Dark_Bright'"));
 	static ConstructorHelpers::FObjectFinder<UMaterialInstanceConstant> MaterialEmitColorPurpleRef(TEXT("MaterialInstanceConstant'/AscMapKit/Shared/Materials/MI_Shared_Emit_Purple.MI_Shared_Emit_Purple'"));
 	static ConstructorHelpers::FObjectFinder<UMaterialInstanceConstant> MaterialEmitColorPurpleDarkRef(TEXT("MaterialInstanceConstant'/AscMapKit/Shared/Materials/MI_Shared_Emit_Purple_Dark.MI_Shared_Emit_Purple_Dark'"));
 	static ConstructorHelpers::FObjectFinder<UMaterialInstanceConstant> MaterialEmitColorRedRef(TEXT("MaterialInstanceConstant'/AscMapKit/Shared/Materials/MI_Shared_Emit_Red.MI_Shared_Emit_Red'"));
@@ -94,12 +95,16 @@ UAscMapKitEditorToolsUtilityWidget::UAscMapKitEditorToolsUtilityWidget()
 	
 #if USE_PARTICLES_CASCADE
 	const ConstructorHelpers::FObjectFinder<UParticleSystem> ElectricalZapsParticleTemplateRef(TEXT("ParticleSystem'/AscMapKit/Shared/Particles/P_Electrical_Zaps_Blue.P_Electrical_Zaps_Blue'"));
+	const ConstructorHelpers::FObjectFinder<UParticleSystem> EnemyGeneratorParticleTemplateRef(TEXT("ParticleSystem'/AscMapKit/Editor/Particles/Area/EnemyGenerator/P_Area_Enemy_Generator.P_Area_Enemy_Generator'"));
 	const ConstructorHelpers::FObjectFinder<UParticleSystem> LiquidBubblesParticleTemplateRef(TEXT("ParticleSystem'/AscMapKit/Editor/Particles/Area/Water/PS_Area_Bubbles.PS_Area_Bubbles'"));
 	const ConstructorHelpers::FObjectFinder<UParticleSystem> PowerStationParticleTemplateRef(TEXT("ParticleSystem'/AscMapKit/Editor/Particles/Area/PowerStation/PS_Power_Station_Sprites.PS_Power_Station_Sprites'"));
+	const ConstructorHelpers::FObjectFinder<UParticleSystem> ShieldStationParticleTemplateRef(TEXT("ParticleSystem'/AscMapKit/Editor/Particles/Area/ShieldStation/PS_Shield_Station_Sprites.PS_Shield_Station_Sprites'"));
 #else
 	const ConstructorHelpers::FObjectFinder<UNiagaraSystem> ElectricalZapsParticleTemplateRef(TEXT("NiagaraSystem'/AscMapKit/Shared/Particles/P_Electrical_Zaps_Blue_Niagara.P_Electrical_Zaps_Blue_Niagara'"));
+	const ConstructorHelpers::FObjectFinder<UNiagaraSystem> EnemyGeneratorParticleTemplateRef(TEXT("NiagaraSystem'/AscMapKit/Shared/Particles/P_Area_Enemy_Generator_Niagara.P_Area_Enemy_Generator_Niagara'"));
 	const ConstructorHelpers::FObjectFinder<UNiagaraSystem> LiquidBubblesParticleTemplateRef(TEXT("NiagaraSystem'/AscMapKit/Editor/Particles/Area/Water/P_Area_Bubbles_Niagara.P_Area_Bubbles_Niagara'"));
 	const ConstructorHelpers::FObjectFinder<UNiagaraSystem> PowerStationParticleTemplateRef(TEXT("NiagaraSystem'/AscMapKit/Editor/Particles/Area/PowerStation/P_Power_Station_Sprites_Niagara.P_Power_Station_Sprites_Niagara'"));
+	const ConstructorHelpers::FObjectFinder<UNiagaraSystem> ShieldStationParticleTemplateRef(TEXT("NiagaraSystem'/AscMapKit/Editor/Particles/Area/ShieldStation/P_Shield_Station_Sprites_Niagara.P_Shield_Station_Sprites_Niagara'"));
 #endif
 
 	if (CubeStaticMeshRef.Succeeded())
@@ -110,42 +115,6 @@ UAscMapKitEditorToolsUtilityWidget::UAscMapKitEditorToolsUtilityWidget()
 
 	if (PlaneStaticMeshRef.Succeeded())
 		PlaneStaticMesh = PlaneStaticMeshRef.Object;
-
-	if (DecorGrate10x20mBasic001StaticMeshRef.Succeeded())
-		DecorGrate10x20mBasic001StaticMesh = DecorGrate10x20mBasic001StaticMeshRef.Object;
-
-	if (DecorGrate20x5mBasic001StaticMeshRef.Succeeded())
-		DecorGrate20x5mBasic001StaticMesh = DecorGrate20x5mBasic001StaticMeshRef.Object;
-
-	if (DecorGrate20x5mBasic002StaticMeshRef.Succeeded())
-		DecorGrate20x5mBasic002StaticMesh = DecorGrate20x5mBasic002StaticMeshRef.Object;
-
-	if (DecorGrate20x20mBasic001StaticMeshRef.Succeeded())
-		DecorGrate20x20mBasic001StaticMesh = DecorGrate20x20mBasic001StaticMeshRef.Object;
-
-	if (DecorLetterStaticMeshRef.Succeeded())
-		DecorLetterStaticMesh = DecorLetterStaticMeshRef.Object;
-
-	if (DecorPiece001StaticMeshRef.Succeeded())
-		DecorPiece001StaticMesh = DecorPiece001StaticMeshRef.Object;
-
-	if (DecorSign001StaticMeshRef.Succeeded())
-		DecorSign001StaticMesh = DecorSign001StaticMeshRef.Object;
-
-	if (DecorSign002StaticMeshRef.Succeeded())
-		DecorSign002StaticMesh = DecorSign002StaticMeshRef.Object;
-
-	if (DecorSign003StaticMeshRef.Succeeded())
-		DecorSign003StaticMesh = DecorSign003StaticMeshRef.Object;
-
-	if (DecorSign004StaticMeshRef.Succeeded())
-		DecorSign004StaticMesh = DecorSign004StaticMeshRef.Object;
-
-	if (DecorSign005StaticMeshRef.Succeeded())
-		DecorSign005StaticMesh = DecorSign005StaticMeshRef.Object;
-		
-	if (DecorSign006StaticMeshRef.Succeeded())
-		DecorSign006StaticMesh = DecorSign006StaticMeshRef.Object;
 
 	if (MaterialEmitColorBlueRef.Succeeded())
 		MaterialEmitColorBlue = MaterialEmitColorBlueRef.Object;
@@ -170,6 +139,9 @@ UAscMapKitEditorToolsUtilityWidget::UAscMapKitEditorToolsUtilityWidget()
 
 	if (MaterialEmitColorOrangeDarkRef.Succeeded())
 		MaterialEmitColorOrangeDark = MaterialEmitColorOrangeDarkRef.Object;
+
+	if (MaterialEmitColorOrangeDarkBrightRef.Succeeded())
+		MaterialEmitColorOrangeDarkBright = MaterialEmitColorOrangeDarkBrightRef.Object;
 
 	if (MaterialEmitColorPurpleRef.Succeeded())
 		MaterialEmitColorPurple = MaterialEmitColorPurpleRef.Object;
@@ -225,11 +197,17 @@ UAscMapKitEditorToolsUtilityWidget::UAscMapKitEditorToolsUtilityWidget()
 	if (ElectricalZapsParticleTemplateRef.Succeeded())
 		ElectricalZapsParticleTemplate = ElectricalZapsParticleTemplateRef.Object;
 
+	if (EnemyGeneratorParticleTemplateRef.Succeeded())
+		EnemyGeneratorParticleTemplate = EnemyGeneratorParticleTemplateRef.Object;
+
 	if (LiquidBubblesParticleTemplateRef.Succeeded())
 		LiquidBubblesParticleTemplate = LiquidBubblesParticleTemplateRef.Object;
 
 	if (PowerStationParticleTemplateRef.Succeeded())
 		PowerStationParticleTemplate = PowerStationParticleTemplateRef.Object;
+
+	if (ShieldStationParticleTemplateRef.Succeeded())
+		ShieldStationParticleTemplate = ShieldStationParticleTemplateRef.Object;
 
 	PowerupDefaultCounts.Empty();
 	PowerupDefaultCounts.Add(EAscMapKitPowerupTypeEnum::Weapon_Pri_01, 20); // Laser
@@ -240,8 +218,8 @@ UAscMapKitEditorToolsUtilityWidget::UAscMapKitEditorToolsUtilityWidget()
 	PowerupDefaultCounts.Add(EAscMapKitPowerupTypeEnum::Weapon_Pri_06, 2); // Phase
 	PowerupDefaultCounts.Add(EAscMapKitPowerupTypeEnum::Weapon_Pri_07, 1); // Hydra
 	PowerupDefaultCounts.Add(EAscMapKitPowerupTypeEnum::Weapon_Pri_08, 2); // Neutron
-	PowerupDefaultCounts.Add(EAscMapKitPowerupTypeEnum::Weapon_Sec_02, 2); // Assault Pack
-	PowerupDefaultCounts.Add(EAscMapKitPowerupTypeEnum::Weapon_Sec_04, 4); // Prowler Pack
+	PowerupDefaultCounts.Add(EAscMapKitPowerupTypeEnum::Weapon_Sec_02, 0); // Assault Pack
+	PowerupDefaultCounts.Add(EAscMapKitPowerupTypeEnum::Weapon_Sec_04, 2); // Prowler Pack
 	PowerupDefaultCounts.Add(EAscMapKitPowerupTypeEnum::Weapon_Sec_05, 8); // RNA
 	PowerupDefaultCounts.Add(EAscMapKitPowerupTypeEnum::Weapon_Sec_07, 4); // Deadeye Pack
 	PowerupDefaultCounts.Add(EAscMapKitPowerupTypeEnum::Weapon_Sec_08, 1); // Vex
@@ -258,46 +236,19 @@ UAscMapKitEditorToolsUtilityWidget::UAscMapKitEditorToolsUtilityWidget()
 	PowerupDefaultCounts.Add(EAscMapKitPowerupTypeEnum::Aux_08, 4); // Boost
 	PowerupDefaultCounts.Add(EAscMapKitPowerupTypeEnum::Aux_09, 2); // Power Transfer
 	PowerupDefaultCounts.Add(EAscMapKitPowerupTypeEnum::Aux_10, 1); // Navmap Reveal
-	
-	DecorTypeStaticMeshMap.Empty();
-	DecorTypeStaticMeshMap.Add(EAscMapKitDecorTypeEnum::Grate_10x20m_Basic_001, DecorGrate10x20mBasic001StaticMesh);
-	DecorTypeStaticMeshMap.Add(EAscMapKitDecorTypeEnum::Grate_20x5m_Basic_001, DecorGrate20x5mBasic001StaticMesh);
-	DecorTypeStaticMeshMap.Add(EAscMapKitDecorTypeEnum::Grate_20x5m_Basic_002, DecorGrate20x5mBasic002StaticMesh);
-	DecorTypeStaticMeshMap.Add(EAscMapKitDecorTypeEnum::Grate_20x20m_Basic_001, DecorGrate20x20mBasic001StaticMesh);
-	DecorTypeStaticMeshMap.Add(EAscMapKitDecorTypeEnum::Ladder_Set_001, DecorPiece001StaticMesh);
-	DecorTypeStaticMeshMap.Add(EAscMapKitDecorTypeEnum::Letter, DecorLetterStaticMesh);
-	DecorTypeStaticMeshMap.Add(EAscMapKitDecorTypeEnum::Piece_001, DecorPiece001StaticMesh);
-	DecorTypeStaticMeshMap.Add(EAscMapKitDecorTypeEnum::Sign_001, DecorSign001StaticMesh);
-	DecorTypeStaticMeshMap.Add(EAscMapKitDecorTypeEnum::Sign_002, DecorSign002StaticMesh);
-	DecorTypeStaticMeshMap.Add(EAscMapKitDecorTypeEnum::Sign_003, DecorSign003StaticMesh);
-	DecorTypeStaticMeshMap.Add(EAscMapKitDecorTypeEnum::Sign_004, DecorSign004StaticMesh);
-	DecorTypeStaticMeshMap.Add(EAscMapKitDecorTypeEnum::Sign_005, DecorSign005StaticMesh);
-	DecorTypeStaticMeshMap.Add(EAscMapKitDecorTypeEnum::Sign_006, DecorSign006StaticMesh);
 
-	DecorTypeStaticMeshMaterialEmitColorOverrideMap.Empty();
-	DecorTypeStaticMeshMaterialEmitColorOverrideMap.Add(EAscMapKitDecorTypeEnum::Grate_20x20m_Basic_001, 1);
-	DecorTypeStaticMeshMaterialEmitColorOverrideMap.Add(EAscMapKitDecorTypeEnum::Letter, 0);
-	DecorTypeStaticMeshMaterialEmitColorOverrideMap.Add(EAscMapKitDecorTypeEnum::Sign_001, 2);
-	DecorTypeStaticMeshMaterialEmitColorOverrideMap.Add(EAscMapKitDecorTypeEnum::Sign_002, 2);
-	DecorTypeStaticMeshMaterialEmitColorOverrideMap.Add(EAscMapKitDecorTypeEnum::Sign_004, 2);
-	DecorTypeStaticMeshMaterialEmitColorOverrideMap.Add(EAscMapKitDecorTypeEnum::Sign_005, 2);
-	DecorTypeStaticMeshMaterialEmitColorOverrideMap.Add(EAscMapKitDecorTypeEnum::Sign_006, 0);
+	// todo: @reminder: change all material overrides from indexes to slot names
+	// todo: @reminder: slot names are easier to reference and will be more friendly for map makers
 
-	DecorTypeLightSupport.Empty();
-	DecorTypeLightSupport.Add(EAscMapKitDecorTypeEnum::Grate_20x20m_Basic_001);
-	DecorTypeLightSupport.Add(EAscMapKitDecorTypeEnum::Letter);
-	DecorTypeLightSupport.Add(EAscMapKitDecorTypeEnum::Sign_001);
-	DecorTypeLightSupport.Add(EAscMapKitDecorTypeEnum::Sign_002);
-	DecorTypeLightSupport.Add(EAscMapKitDecorTypeEnum::Sign_004);
-	DecorTypeLightSupport.Add(EAscMapKitDecorTypeEnum::Sign_005);
-	DecorTypeLightSupport.Add(EAscMapKitDecorTypeEnum::Sign_006);
-
+	// todo: @reminder: remove
 	DoorTypeStaticMeshMaterialEmitColorOverrideMap.Empty();
 	DoorTypeStaticMeshMaterialEmitColorOverrideMap.Add(EAscMapKitDoorTypeEnum::Animated20x20mBasic004, 4);
 	DoorTypeStaticMeshMaterialEmitColorOverrideMap.Add(EAscMapKitDoorTypeEnum::Animated20x20mBasic005, 2);
 
-	FanTypeStaticMeshMaterialEmitColorOverrideMap.Empty();
-	FanTypeStaticMeshMaterialEmitColorOverrideMap.Add(EAscMapKitFanTypeEnum::Animated20x20mBasic001, 3);
+	// todo: @reminder: remove? use material slot names instead? "Emit"?
+	DoorFrameTypeStaticMeshMaterialEmitColorOverrideMap.Empty();
+	DoorFrameTypeStaticMeshMaterialEmitColorOverrideMap.Add(EAscMapKitDoorFrameTypeEnum::Frame20x20mBasic001, 4);
+	DoorFrameTypeStaticMeshMaterialEmitColorOverrideMap.Add(EAscMapKitDoorFrameTypeEnum::Frame20x20mBasic002, 2);
 
 	// todo: triggers don't have emit materials yet
 	TriggerTypeStaticMeshMaterialEmitColorOverrideMap.Empty();
@@ -312,6 +263,7 @@ UAscMapKitEditorToolsUtilityWidget::UAscMapKitEditorToolsUtilityWidget()
 	MaterialEmitColorTypeMaterialMap.Add(EAscMapKitMaterialEmitColorTypeEnum::GreenDark, MaterialEmitColorGreenDark);
 	MaterialEmitColorTypeMaterialMap.Add(EAscMapKitMaterialEmitColorTypeEnum::Orange, MaterialEmitColorOrange);
 	MaterialEmitColorTypeMaterialMap.Add(EAscMapKitMaterialEmitColorTypeEnum::OrangeDark, MaterialEmitColorOrangeDark);
+	MaterialEmitColorTypeMaterialMap.Add(EAscMapKitMaterialEmitColorTypeEnum::OrangeDarkBright, MaterialEmitColorOrangeDarkBright);
 	MaterialEmitColorTypeMaterialMap.Add(EAscMapKitMaterialEmitColorTypeEnum::Purple, MaterialEmitColorPurple);
 	MaterialEmitColorTypeMaterialMap.Add(EAscMapKitMaterialEmitColorTypeEnum::PurpleDark, MaterialEmitColorPurpleDark);
 	MaterialEmitColorTypeMaterialMap.Add(EAscMapKitMaterialEmitColorTypeEnum::Red, MaterialEmitColorRed);
@@ -327,6 +279,14 @@ UAscMapKitEditorToolsUtilityWidget::UAscMapKitEditorToolsUtilityWidget()
 void UAscMapKitEditorToolsUtilityWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
+
+	EnvironmentAreaDataAsset = UAscMapKitGlobals::GetEnvironmentAreaDataAsset();
+	DecorDataAsset = UAscMapKitGlobals::GetDecorDataAsset();
+	DoorDataAsset = UAscMapKitGlobals::GetDoorDataAsset();
+	DoorFrameDataAsset = UAscMapKitGlobals::GetDoorFrameDataAsset();
+	EnemyDataAsset = UAscMapKitGlobals::GetEnemyDataAsset();
+	FanDataAsset = UAscMapKitGlobals::GetFanDataAsset();
+	TriggerDataAsset = UAscMapKitGlobals::GetTriggerDataAsset();
 
 	// Material Emit Color
 	MaterialEmitColorTypeMap.Empty();
@@ -348,69 +308,36 @@ void UAscMapKitEditorToolsUtilityWidget::NativeConstruct()
 	DecorTypeMap.Empty();
 	DecorTypeMap.Add(EAscMapKitDecorTypeEnum::None, TEXT("Please Select"));
 
-	const UEnum *DecorTypeEnum = StaticEnum<EAscMapKitDecorTypeEnum>();
+	for (const auto &Item : DecorDataAsset->AssetItems)
+		DecorTypeMap.Add(Item.DecorType, Item.Name);
 
-	for (auto i = 0; i < DecorTypeEnum->GetMaxEnumValue(); ++i)
-	{
-		if (DecorTypeEnum->IsValidEnumValue(i))
-		{
-			const auto EnumValue = static_cast<EAscMapKitDecorTypeEnum>(DecorTypeEnum->GetValueByIndex(i));
-			const auto DisplayName = DecorTypeEnum->GetDisplayNameTextByIndex(i).ToString();
-
-			DecorTypeMap.Add(EnumValue, DisplayName);
-		}
-	}
-	
 	// Door
 	DoorTypeMap.Empty();
 	DoorTypeMap.Add(EAscMapKitDoorTypeEnum::None, TEXT("Please Select"));
 
-	const UEnum *DoorTypeEnum = StaticEnum<EAscMapKitDoorTypeEnum>();
+	for (const auto &Item : DoorDataAsset->AssetItems)
+		DoorTypeMap.Add(Item.DoorType, Item.Name);
 
-	for (auto i = 0; i < DoorTypeEnum->GetMaxEnumValue(); ++i)
-	{
-		if (DoorTypeEnum->IsValidEnumValue(i))
-		{
-			const auto EnumValue = static_cast<EAscMapKitDoorTypeEnum>(DoorTypeEnum->GetValueByIndex(i));
-			const auto DisplayName = DoorTypeEnum->GetDisplayNameTextByIndex(i).ToString();
+	// Door Frame
+	DoorFrameTypeMap.Empty();
+	DoorFrameTypeMap.Add(EAscMapKitDoorFrameTypeEnum::None, TEXT("Please Select"));
 
-			DoorTypeMap.Add(EnumValue, DisplayName);
-		}
-	}
+	for (const auto &Item : DoorFrameDataAsset->AssetItems)
+		DoorFrameTypeMap.Add(Item.DoorFrameType, Item.Name);
 
 	// Enemy
 	EnemyTypeMap.Empty();
 	EnemyTypeMap.Add(EAscMapKitEnemyTypeEnum::None, TEXT("Please Select"));
 
-	const UEnum *EnemyTypeEnum = StaticEnum<EAscMapKitEnemyTypeEnum>();
-
-	for (auto i = 0; i < EnemyTypeEnum->GetMaxEnumValue(); ++i)
-	{
-		if (EnemyTypeEnum->IsValidEnumValue(i))
-		{
-			const auto EnumValue = static_cast<EAscMapKitEnemyTypeEnum>(EnemyTypeEnum->GetValueByIndex(i));
-			const auto DisplayName = EnemyTypeEnum->GetDisplayNameTextByIndex(i).ToString();
-
-			EnemyTypeMap.Add(EnumValue, DisplayName);
-		}
-	}
+	for (const auto &Item : EnemyDataAsset->AssetItems)
+		EnemyTypeMap.Add(Item.EnemyType, Item.Name);
 
 	// Fan
 	FanTypeMap.Empty();
 	FanTypeMap.Add(EAscMapKitFanTypeEnum::None, TEXT("Please Select"));
 
-	const UEnum *FanTypeEnum = StaticEnum<EAscMapKitFanTypeEnum>();
-
-	for (auto i = 0; i < FanTypeEnum->GetMaxEnumValue(); ++i)
-	{
-		if (FanTypeEnum->IsValidEnumValue(i))
-		{
-			const auto EnumValue = static_cast<EAscMapKitFanTypeEnum>(FanTypeEnum->GetValueByIndex(i));
-			const auto DisplayName = FanTypeEnum->GetDisplayNameTextByIndex(i).ToString();
-
-			FanTypeMap.Add(EnumValue, DisplayName);
-		}
-	}
+	for (const auto &Item : FanDataAsset->AssetItems)
+		FanTypeMap.Add(Item.FanType, Item.Name);
 	
 	// Powerup
 	PowerupTypeMap.Empty();
@@ -433,18 +360,8 @@ void UAscMapKitEditorToolsUtilityWidget::NativeConstruct()
 	TriggerTypeMap.Empty();
 	TriggerTypeMap.Add(EAscMapKitTriggerTypeEnum::None, TEXT("Please Select"));
 
-	const UEnum *TriggerTypeEnum = StaticEnum<EAscMapKitTriggerTypeEnum>();
-
-	for (auto i = 0; i < TriggerTypeEnum->GetMaxEnumValue(); ++i)
-	{
-		if (TriggerTypeEnum->IsValidEnumValue(i))
-		{
-			const auto EnumValue = static_cast<EAscMapKitTriggerTypeEnum>(TriggerTypeEnum->GetValueByIndex(i));
-			const auto DisplayName = TriggerTypeEnum->GetDisplayNameTextByIndex(i).ToString();
-
-			TriggerTypeMap.Add(EnumValue, DisplayName);
-		}
-	}
+	for (const auto &Item : TriggerDataAsset->AssetItems)
+		TriggerTypeMap.Add(Item.TriggerType, Item.Name);
 
 	BtnCreate->OnClicked.Clear();
 	BtnCreate->OnClicked.AddDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnCreateOnClick);
@@ -494,17 +411,25 @@ void UAscMapKitEditorToolsUtilityWidget::NativeConstruct()
 	BtnSubTitleCreateTrigger->OnClicked.Clear();
 	BtnSubTitleCreateTrigger->OnClicked.AddDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnSubTitleCreateTriggerOnClick);
 
+	SetupGridPanelButtons(EnvironmentAreaDataAsset->GetAssetItemsAsEditorToolData(), TEXT("Area"), GridPanelArea, AreaButtonMap);
+	SetupGridPanelButtons(DecorDataAsset->GetAssetItemsAsEditorToolData(), TEXT("Decor"), GridPanelDecor, DecorButtonMap);
+	SetupGridPanelButtons(DoorDataAsset->GetAssetItemsAsEditorToolData(), TEXT("Door"), GridPanelDoor, DoorButtonMap);
+	SetupGridPanelButtons(DoorFrameDataAsset->GetAssetItemsAsEditorToolData(), TEXT("DoorFrame"), GridPanelDoorFrame, DoorFrameButtonMap);
+	SetupGridPanelButtons(EnemyDataAsset->GetAssetItemsAsEditorToolData(), TEXT("Enemy"), GridPanelEnemy, EnemyButtonMap);
+	SetupGridPanelButtons(FanDataAsset->GetAssetItemsAsEditorToolData(), TEXT("Fan"), GridPanelFan, FanButtonMap);
+	SetupGridPanelButtons(TriggerDataAsset->GetAssetItemsAsEditorToolData(), TEXT("Trigger"), GridPanelTrigger, TriggerButtonMap);
+
 	// Create Area
 	ComboBoxAddArea->ClearOptions();
 	ComboBoxAddArea->AddOption(TEXT("Please Select"));
-	ComboBoxAddArea->AddOption(TEXT("Acid"));
-	ComboBoxAddArea->AddOption(TEXT("Electric"));
-	ComboBoxAddArea->AddOption(TEXT("Lava"));
-	ComboBoxAddArea->AddOption(TEXT("Lava Falls"));
-	ComboBoxAddArea->AddOption(TEXT("Liquid"));
-	ComboBoxAddArea->AddOption(TEXT("Power Station"));
-	ComboBoxAddArea->AddOption(TEXT("Sludge"));
+
+	for (const auto &Item : EnvironmentAreaDataAsset->AssetItems)
+		ComboBoxAddArea->AddOption(Item.Name);
+	
 	ComboBoxAddArea->SetSelectedIndex(0);
+
+	ComboBoxAddArea->OnSelectionChanged.Clear();
+	ComboBoxAddArea->OnSelectionChanged.AddDynamic(this, &UAscMapKitEditorToolsUtilityWidget::ComboBoxAddAreaOnSelectionChanged);
 
 	ComboBoxAddAreaCount->ClearOptions();
 	ComboBoxAddAreaCount->AddOption(TEXT("How Many?"));
@@ -525,11 +450,15 @@ void UAscMapKitEditorToolsUtilityWidget::NativeConstruct()
 
 	// Create Decor
 	ComboBoxAddDecorType->ClearOptions();
+	ComboBoxAddDecorType->AddOption(TEXT("Please Select"));
 
-	for (const auto &Item : DecorTypeMap)
-		ComboBoxAddDecorType->AddOption(Item.Value);
+	for (const auto &Item : DecorDataAsset->AssetItems)
+		ComboBoxAddDecorType->AddOption(Item.Name);
 
 	ComboBoxAddDecorType->SetSelectedIndex(0);
+
+	ComboBoxAddDecorType->OnSelectionChanged.Clear();
+	ComboBoxAddDecorType->OnSelectionChanged.AddDynamic(this, &UAscMapKitEditorToolsUtilityWidget::ComboBoxAddDecorTypeOnSelectionChanged);
 
 	ComboBoxAddDecorColor->ClearOptions();
 
@@ -559,18 +488,23 @@ void UAscMapKitEditorToolsUtilityWidget::NativeConstruct()
 
 	// Create Door
 	ComboBoxAddDoorType->ClearOptions();
+	ComboBoxAddDoorType->AddOption(TEXT("Please Select"));
 
-	for (const auto &Item : DoorTypeMap)
-		ComboBoxAddDoorType->AddOption(Item.Value);
+	for (const auto &Item : DoorDataAsset->AssetItems)
+		ComboBoxAddDoorType->AddOption(Item.Name);
 
 	ComboBoxAddDoorType->SetSelectedIndex(0);
 
-	ComboBoxAddDoorColor->ClearOptions();
+	ComboBoxAddDoorType->OnSelectionChanged.Clear();
+	ComboBoxAddDoorType->OnSelectionChanged.AddDynamic(this, &UAscMapKitEditorToolsUtilityWidget::ComboBoxAddDoorTypeOnSelectionChanged);
 
-	for (const auto &Item : MaterialEmitColorTypeMap)
-		ComboBoxAddDoorColor->AddOption(Item.Value);
-
-	ComboBoxAddDoorColor->SetSelectedIndex(0);
+	// todo: @reminder: disabled color feature for doors
+	// ComboBoxAddDoorColor->ClearOptions();
+	//
+	// for (const auto &Item : MaterialEmitColorTypeMap)
+	// 	ComboBoxAddDoorColor->AddOption(Item.Value);
+	//
+	// ComboBoxAddDoorColor->SetSelectedIndex(0);
 
 	ComboBoxAddDoorCount->ClearOptions();
 	ComboBoxAddDoorCount->AddOption(TEXT("How Many?"));
@@ -589,13 +523,53 @@ void UAscMapKitEditorToolsUtilityWidget::NativeConstruct()
 	BtnAddDoor->OnClicked.Clear();
 	BtnAddDoor->OnClicked.AddDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnAddDoorOnClick);
 
+	// Create Door Frame
+	ComboBoxAddDoorFrameType->ClearOptions();
+	ComboBoxAddDoorFrameType->AddOption(TEXT("Please Select"));
+
+	for (const auto &Item : DoorFrameDataAsset->AssetItems)
+		ComboBoxAddDoorFrameType->AddOption(Item.Name);
+
+	ComboBoxAddDoorFrameType->SetSelectedIndex(0);
+
+	ComboBoxAddDoorFrameType->OnSelectionChanged.Clear();
+	ComboBoxAddDoorFrameType->OnSelectionChanged.AddDynamic(this, &UAscMapKitEditorToolsUtilityWidget::ComboBoxAddDoorFrameTypeOnSelectionChanged);
+
+	ComboBoxAddDoorFrameColor->ClearOptions();
+
+	for (const auto &Item : MaterialEmitColorTypeMap)
+		ComboBoxAddDoorFrameColor->AddOption(Item.Value);
+
+	ComboBoxAddDoorFrameColor->SetSelectedIndex(0);
+
+	ComboBoxAddDoorFrameCount->ClearOptions();
+	ComboBoxAddDoorFrameCount->AddOption(TEXT("How Many?"));
+
+	for (auto i = 1; i <= 10; i++)
+		ComboBoxAddDoorFrameCount->AddOption(FString::Printf(TEXT("%d"), i));
+
+	ComboBoxAddDoorFrameCount->SetSelectedIndex(1);
+
+	ComboBoxAddDoorFrameWhere->ClearOptions();
+	ComboBoxAddDoorFrameWhere->AddOption(TEXT("Where?"));
+	ComboBoxAddDoorFrameWhere->AddOption(TEXT("0, 0, 0"));
+	ComboBoxAddDoorFrameWhere->AddOption(TEXT("Selected"));
+	ComboBoxAddDoorFrameWhere->SetSelectedIndex(2);
+
+	BtnAddDoorFrame->OnClicked.Clear();
+	BtnAddDoorFrame->OnClicked.AddDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnAddDoorFrameOnClick);
+
 	// Create Enemy
 	ComboBoxAddEnemyType->ClearOptions();
+	ComboBoxAddEnemyType->AddOption(TEXT("Please Select"));
 
-	for (const auto &Item : EnemyTypeMap)
-		ComboBoxAddEnemyType->AddOption(Item.Value);
+	for (const auto &Item : EnemyDataAsset->AssetItems)
+		ComboBoxAddEnemyType->AddOption(Item.Name);
 
 	ComboBoxAddEnemyType->SetSelectedIndex(0);
+
+	ComboBoxAddEnemyType->OnSelectionChanged.Clear();
+	ComboBoxAddEnemyType->OnSelectionChanged.AddDynamic(this, &UAscMapKitEditorToolsUtilityWidget::ComboBoxAddEnemyTypeOnSelectionChanged);
 
 	ComboBoxAddEnemyColor->ClearOptions();
 
@@ -623,11 +597,15 @@ void UAscMapKitEditorToolsUtilityWidget::NativeConstruct()
 
 	// Create Fan
 	ComboBoxAddFanType->ClearOptions();
+	ComboBoxAddFanType->AddOption(TEXT("Please Select"));
 
-	for (const auto &Item : FanTypeMap)
-		ComboBoxAddFanType->AddOption(Item.Value);
+	for (const auto &Item : FanDataAsset->AssetItems)
+		ComboBoxAddFanType->AddOption(Item.Name);
 
 	ComboBoxAddFanType->SetSelectedIndex(0);
+
+	ComboBoxAddFanType->OnSelectionChanged.Clear();
+	ComboBoxAddFanType->OnSelectionChanged.AddDynamic(this, &UAscMapKitEditorToolsUtilityWidget::ComboBoxAddFanTypeOnSelectionChanged);
 
 	ComboBoxAddFanColor->ClearOptions();
 
@@ -750,6 +728,7 @@ void UAscMapKitEditorToolsUtilityWidget::NativeConstruct()
 	ComboBoxAddPowerupWhere->AddOption(TEXT("Where?"));
 	ComboBoxAddPowerupWhere->AddOption(TEXT("0, 0, 0"));
 	ComboBoxAddPowerupWhere->AddOption(TEXT("Selected"));
+	ComboBoxAddPowerupWhere->AddOption(TEXT("Random"));
 	ComboBoxAddPowerupWhere->SetSelectedIndex(2);
 
 	ChkBoxAddPowerupIncludeDefaultNames->SetIsChecked(true);
@@ -761,6 +740,7 @@ void UAscMapKitEditorToolsUtilityWidget::NativeConstruct()
 	ComboBoxAddPowerupDefaultsWhere->AddOption(TEXT("Where?"));
 	ComboBoxAddPowerupDefaultsWhere->AddOption(TEXT("0, 0, 0"));
 	ComboBoxAddPowerupDefaultsWhere->AddOption(TEXT("Selected"));
+	ComboBoxAddPowerupDefaultsWhere->AddOption(TEXT("Random"));
 	ComboBoxAddPowerupDefaultsWhere->SetSelectedIndex(2);
 
 	ChkBoxAddDefaultPowerupIncludeDefaultNames->SetIsChecked(true);
@@ -768,13 +748,34 @@ void UAscMapKitEditorToolsUtilityWidget::NativeConstruct()
 	BtnAddPowerupsDefaults->OnClicked.Clear();
 	BtnAddPowerupsDefaults->OnClicked.AddDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnAddPowerupsDefaultsOnClick);
 
+	ComboBoxAddPowerupRespawnTriggerCount->ClearOptions();
+	ComboBoxAddPowerupRespawnTriggerCount->AddOption(TEXT("How Many?"));
+
+	for (auto i = 1; i <= 10; i++)
+		ComboBoxAddPowerupRespawnTriggerCount->AddOption(FString::Printf(TEXT("%d"), i));
+
+	ComboBoxAddPowerupRespawnTriggerCount->SetSelectedIndex(1);
+
+	ComboBoxAddPowerupRespawnTriggerWhere->ClearOptions();
+	ComboBoxAddPowerupRespawnTriggerWhere->AddOption(TEXT("Where?"));
+	ComboBoxAddPowerupRespawnTriggerWhere->AddOption(TEXT("0, 0, 0"));
+	ComboBoxAddPowerupRespawnTriggerWhere->AddOption(TEXT("Selected"));
+	ComboBoxAddPowerupRespawnTriggerWhere->SetSelectedIndex(2);
+
+	BtnAddPowerupRespawnTrigger->OnClicked.Clear();
+	BtnAddPowerupRespawnTrigger->OnClicked.AddDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnAddPowerupRespawnTriggerOnClick);
+
 	// Create Trigger
 	ComboBoxAddTriggerType->ClearOptions();
+	ComboBoxAddTriggerType->AddOption(TEXT("Please Select"));
 
-	for (const auto &Item : TriggerTypeMap)
-		ComboBoxAddTriggerType->AddOption(Item.Value);
+	for (const auto &Item : TriggerDataAsset->AssetItems)
+		ComboBoxAddTriggerType->AddOption(Item.Name);
 
 	ComboBoxAddTriggerType->SetSelectedIndex(0);
+
+	ComboBoxAddTriggerType->OnSelectionChanged.Clear();
+	ComboBoxAddTriggerType->OnSelectionChanged.AddDynamic(this, &UAscMapKitEditorToolsUtilityWidget::ComboBoxAddTriggerTypeOnSelectionChanged);
 
 	ComboBoxAddTriggerColor->ClearOptions();
 
@@ -906,145 +907,6 @@ void UAscMapKitEditorToolsUtilityWidget::NativeConstruct()
 
 	BtnLinksAmbientCgLink->OnClicked.Clear();
 	BtnLinksAmbientCgLink->OnClicked.AddDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnLinksAmbientCgLinkOnClick);
-
-	// Easy Buttons
-	BtnCreateAreaAcid->SelfRefButtonOnClicked.Clear();
-	BtnCreateAreaAcid->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
-
-	BtnCreateAreaElectric->SelfRefButtonOnClicked.Clear();
-	BtnCreateAreaElectric->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
-
-	BtnCreateAreaLava->SelfRefButtonOnClicked.Clear();
-	BtnCreateAreaLava->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
-
-	BtnCreateAreaLavaFalls->SelfRefButtonOnClicked.Clear();
-	BtnCreateAreaLavaFalls->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
-
-	BtnCreateAreaLiquid->SelfRefButtonOnClicked.Clear();
-	BtnCreateAreaLiquid->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
-
-	BtnCreateAreaPowerStation->SelfRefButtonOnClicked.Clear();
-	BtnCreateAreaPowerStation->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
-
-	BtnCreateAreaSludge->SelfRefButtonOnClicked.Clear();
-	BtnCreateAreaSludge->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
-
-	BtnCreateDecorGrate10x20mBasic001->SelfRefButtonOnClicked.Clear();
-	BtnCreateDecorGrate10x20mBasic001->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
-	
-	BtnCreateDecorGrate20x5mBasic001->SelfRefButtonOnClicked.Clear();
-	BtnCreateDecorGrate20x5mBasic001->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
-	
-	BtnCreateDecorGrate20x5mBasic002->SelfRefButtonOnClicked.Clear();
-	BtnCreateDecorGrate20x5mBasic002->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
-
-	BtnCreateDecorGrate20x20mBasic001->SelfRefButtonOnClicked.Clear();
-	BtnCreateDecorGrate20x20mBasic001->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
-
-	BtnCreateDecorLadderSet001->SelfRefButtonOnClicked.Clear();
-	BtnCreateDecorLadderSet001->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
-	
-	BtnCreateDecorLetter->SelfRefButtonOnClicked.Clear();
-	BtnCreateDecorLetter->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
-
-	BtnCreateDecorPiece001->SelfRefButtonOnClicked.Clear();
-	BtnCreateDecorPiece001->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
-
-	BtnCreateDecorSign001->SelfRefButtonOnClicked.Clear();
-	BtnCreateDecorSign001->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
-
-	BtnCreateDecorSign002->SelfRefButtonOnClicked.Clear();
-	BtnCreateDecorSign002->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
-
-	BtnCreateDecorSign003->SelfRefButtonOnClicked.Clear();
-	BtnCreateDecorSign003->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
-
-	BtnCreateDecorSign004->SelfRefButtonOnClicked.Clear();
-	BtnCreateDecorSign004->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
-
-	BtnCreateDecorSign005->SelfRefButtonOnClicked.Clear();
-	BtnCreateDecorSign005->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
-
-	BtnCreateDecorSign006->SelfRefButtonOnClicked.Clear();
-	BtnCreateDecorSign006->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
-
-	BtnCreateDoorAnimated20x20mBasic001->SelfRefButtonOnClicked.Clear();
-	BtnCreateDoorAnimated20x20mBasic001->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
-
-	BtnCreateDoorAnimated20x20mBasic002->SelfRefButtonOnClicked.Clear();
-	BtnCreateDoorAnimated20x20mBasic002->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
-
-	BtnCreateDoorAnimated20x20mBasic003->SelfRefButtonOnClicked.Clear();
-	BtnCreateDoorAnimated20x20mBasic003->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
-
-	BtnCreateDoorAnimated20x20mBasic004->SelfRefButtonOnClicked.Clear();
-	BtnCreateDoorAnimated20x20mBasic004->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
-
-	BtnCreateDoorAnimated20x20mBasic005->SelfRefButtonOnClicked.Clear();
-	BtnCreateDoorAnimated20x20mBasic005->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
-
-	BtnCreateDoorAnimated20x20mSciFiDoorsDoor1->SelfRefButtonOnClicked.Clear();
-	BtnCreateDoorAnimated20x20mSciFiDoorsDoor1->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
-
-	BtnCreateDoorAnimated20x20mSciFiDoorsDoor2->SelfRefButtonOnClicked.Clear();
-	BtnCreateDoorAnimated20x20mSciFiDoorsDoor2->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
-
-	BtnCreateDoorAnimated20x20mSciFiDoorsDoor4->SelfRefButtonOnClicked.Clear();
-	BtnCreateDoorAnimated20x20mSciFiDoorsDoor4->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
-
-	BtnCreateDoorAnimated20x20mSciFiPropsDoor1->SelfRefButtonOnClicked.Clear();
-	BtnCreateDoorAnimated20x20mSciFiPropsDoor1->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
-
-	BtnCreateDoorAnimated40x20mBasic001->SelfRefButtonOnClicked.Clear();
-	BtnCreateDoorAnimated40x20mBasic001->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
-
-	BtnCreateDoorAnimated40x20mSciFiDoorsDoor3->SelfRefButtonOnClicked.Clear();
-	BtnCreateDoorAnimated40x20mSciFiDoorsDoor3->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
-
-	BtnCreateDoorDestructible20x20mBasic001->SelfRefButtonOnClicked.Clear();
-	BtnCreateDoorDestructible20x20mBasic001->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
-
-	BtnCreateDoorCustom->SelfRefButtonOnClicked.Clear();
-	BtnCreateDoorCustom->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
-
-	BtnCreateEnemyAlienCylon->SelfRefButtonOnClicked.Clear();
-	BtnCreateEnemyAlienCylon->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
-	
-	BtnCreateEnemyAlienGrawn->SelfRefButtonOnClicked.Clear();
-	BtnCreateEnemyAlienGrawn->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
-	
-	BtnCreateEnemyMachineAssaultCache->SelfRefButtonOnClicked.Clear();
-	BtnCreateEnemyMachineAssaultCache->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
-	
-	BtnCreateEnemyMachineAssaultTank->SelfRefButtonOnClicked.Clear();
-	BtnCreateEnemyMachineAssaultTank->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
-	
-	BtnCreateEnemyMachineGeminiTurret->SelfRefButtonOnClicked.Clear();
-	BtnCreateEnemyMachineGeminiTurret->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
-	
-	BtnCreateEnemyMachineSarkTurret->SelfRefButtonOnClicked.Clear();
-	BtnCreateEnemyMachineSarkTurret->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
-	
-	BtnCreateEnemyMachineSecureGage->SelfRefButtonOnClicked.Clear();
-	BtnCreateEnemyMachineSecureGage->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
-	
-	BtnCreateEnemyMachineServasTurret->SelfRefButtonOnClicked.Clear();
-	BtnCreateEnemyMachineServasTurret->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
-
-	BtnCreateFanAnimated20x20mBasic001->SelfRefButtonOnClicked.Clear();
-	BtnCreateFanAnimated20x20mBasic001->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
-	
-	BtnCreateFanCustom->SelfRefButtonOnClicked.Clear();
-	BtnCreateFanCustom->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
-
-	BtnCreateTriggerInvisible->SelfRefButtonOnClicked.Clear();
-	BtnCreateTriggerInvisible->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
-
-	BtnCreateTriggerBasic001->SelfRefButtonOnClicked.Clear();
-	BtnCreateTriggerBasic001->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
-
-	BtnCreateTriggerCustom->SelfRefButtonOnClicked.Clear();
-	BtnCreateTriggerCustom->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
 }
 
 void UAscMapKitEditorToolsUtilityWidget::BtnCreateOnClick()
@@ -1101,9 +963,84 @@ void UAscMapKitEditorToolsUtilityWidget::ResetAllTabColors()
 	BtnAbout->SetBackgroundColor(TabUnselectedColor);
 }
 
+void UAscMapKitEditorToolsUtilityWidget::SetupGridPanelButtons(
+	const TArray<FAscEditorToolDataAssetStruct> &AssetItems,
+	const FString &AssetCategoryName,
+	UGridPanel *GridPanel,
+	TMap<FString, UAscMapKitEditorToolsSelfRefButtonWidget *> &ButtonMap
+)
+{
+	if (GridPanel == nullptr)
+		return;
+
+	ButtonMap.Reset();
+
+	GridPanel->ClearChildren();
+
+	auto RowCount = 0;
+	auto ColumnCount = 0;
+
+	for (const auto &Item : AssetItems)
+	{
+		const auto NameClean = Item.Name.Replace(TEXT(" "), TEXT(""));
+
+		USizeBox *NewSizeBox = NewObject<USizeBox>(GridPanel, FName(FString::Printf(TEXT("SizeBoxCreate%s%s"), *AssetCategoryName, *NameClean)));
+		UBorder *NewBorder = NewObject<UBorder>(NewSizeBox, FName(FString::Printf(TEXT("BorderCreate%s%s"), *AssetCategoryName, *NameClean)));
+		UAscMapKitEditorToolsSelfRefButtonWidget *NewButton = NewObject<UAscMapKitEditorToolsSelfRefButtonWidget>(NewBorder, FName(FString::Printf(TEXT("BtnCreate%s%s"), *AssetCategoryName, *NameClean)));
+		UImage *NewImage = NewObject<UImage>(NewButton, FName(FString::Printf(TEXT("ImgCreate%s%s"), *AssetCategoryName, *NameClean)));
+
+		NewButton->SetBackgroundColor(FLinearColor::Black);
+		NewButton->SetToolTipText(FText::FromString(*Item.Name));
+		NewSizeBox->SetWidthOverride(76.f);
+		NewSizeBox->SetHeightOverride(76.f);
+		NewBorder->SetPadding(3.f);
+		NewBorder->SetBrushColor(FLinearColor::Black);
+		NewImage->SetBrushFromTexture(Item.EditorToolsSprite);
+		NewImage->SetBrushSize(FVector2D(74.f, 74.f));
+
+		NewSizeBox->AddChild(NewBorder);
+		NewBorder->AddChild(NewButton);
+		NewButton->AddChild(NewImage);
+
+		UGridSlot *GridSlot = GridPanel->AddChildToGrid(NewSizeBox);
+
+		if (GridSlot)
+		{
+			GridSlot->SetPadding(FMargin(0.f, 0.f, 2.f, 2.f));
+			GridSlot->SetHorizontalAlignment(HAlign_Center);
+			GridSlot->SetVerticalAlignment(VAlign_Center);
+
+			GridSlot->SetColumn(ColumnCount);
+			GridSlot->SetRow(RowCount);
+
+			if (ColumnCount < 3)
+				ColumnCount++;
+			else
+			{
+				ColumnCount = 0;
+				RowCount++;
+			}
+		}
+
+		NewButton->SelfRefButtonOnClicked.AddUniqueDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick);
+
+		ButtonMap.Add(NameClean, NewButton);
+	}
+}
+
 void UAscMapKitEditorToolsUtilityWidget::BtnSubTitleCreateAreaOnClick()
 {
 	ToggleSection(TEXT("Area"), TxtSubTitleCreateArea, SectionPanelArea);
+}
+
+void UAscMapKitEditorToolsUtilityWidget::ComboBoxAddAreaOnSelectionChanged(const FString SelectedItem, const ESelectInfo::Type SelectionType)
+{
+	const auto NameClean = SelectedItem.Replace(TEXT(" "), TEXT(""));
+
+	if (AreaButtonMap.Contains(NameClean))
+		AreaButtonMap[NameClean]->OnClicked.Broadcast();
+	else
+		HandleButtonSelectionHighlighting(GridPanelArea, true);
 }
 
 void UAscMapKitEditorToolsUtilityWidget::BtnAddAreaOnClick()
@@ -1145,7 +1082,7 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddAreaOnClick()
 	}
 
 	const TSubclassOf<AActor> AreaActorClass = AAscMapKitEnvironmentAreaActor::StaticClass();
-	
+
 	auto AreaType = EAscMapKitEnvironmentAreaTypeEnum::Unknown;
 
 	const auto bIsLavaFalls = Area == TEXT("Lava Falls");
@@ -1154,12 +1091,16 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddAreaOnClick()
 		AreaType = EAscMapKitEnvironmentAreaTypeEnum::Acid;
 	else if (Area == TEXT("Electric"))
 		AreaType = EAscMapKitEnvironmentAreaTypeEnum::Electric;
+	else if (Area == TEXT("Enemy Generator"))
+		AreaType = EAscMapKitEnvironmentAreaTypeEnum::EnemyGenerator;
 	else if (Area == TEXT("Lava") || bIsLavaFalls)
 		AreaType = EAscMapKitEnvironmentAreaTypeEnum::Lava;
 	else if (Area == TEXT("Liquid"))
 		AreaType = EAscMapKitEnvironmentAreaTypeEnum::Liquid;
 	else if (Area == TEXT("Power Station"))
 		AreaType = EAscMapKitEnvironmentAreaTypeEnum::PowerStationWithoutEffects;
+	else if (Area == TEXT("Shield Station"))
+		AreaType = EAscMapKitEnvironmentAreaTypeEnum::ShieldStationWithoutEffects;
 	else if (Area == TEXT("Sludge"))
 		AreaType = EAscMapKitEnvironmentAreaTypeEnum::Sludge;
 
@@ -1175,6 +1116,7 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddAreaOnClick()
 			bHasFog = true;
 			break;
 		case EAscMapKitEnvironmentAreaTypeEnum::Electric:
+		case EAscMapKitEnvironmentAreaTypeEnum::EnemyGenerator:
 			bHasParticle = true;
 			break;
 		case EAscMapKitEnvironmentAreaTypeEnum::Lava:
@@ -1189,6 +1131,7 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddAreaOnClick()
 			bHasParticle = true;
 			break;
 		case EAscMapKitEnvironmentAreaTypeEnum::PowerStationWithoutEffects:
+		case EAscMapKitEnvironmentAreaTypeEnum::ShieldStationWithoutEffects:
 			bHasParticle = true;
 			break;
 		case EAscMapKitEnvironmentAreaTypeEnum::Sludge:
@@ -1267,26 +1210,25 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddAreaOnClick()
 							if (bIsLavaFalls)
 								SurfaceStaticMeshComponent->SetRelativeRotation(FRotator(-90.f, 0.f, 0.f));
 
-							auto UseMaterial = LiquidMaterial;
+							UMaterialInstanceConstant *UseMaterial = nullptr;
 
-							switch (AreaType)
+							for (const auto &Item : EnvironmentAreaDataAsset->AssetItems)
 							{
-								case EAscMapKitEnvironmentAreaTypeEnum::Acid:
-									UseMaterial = AcidMaterial;
-									break;
-								case EAscMapKitEnvironmentAreaTypeEnum::Lava:
-									UseMaterial = LavaMaterial;
-									break;
-								case EAscMapKitEnvironmentAreaTypeEnum::Liquid:
-									UseMaterial = LiquidMaterial;
-									break;
-								case EAscMapKitEnvironmentAreaTypeEnum::Sludge:
-									UseMaterial = SludgeMaterial;
-									break;
-							}
+								if (Item.EditorWorldDefaultSurfaceMaterial == nullptr)
+									continue;
 
-							if (bIsLavaFalls)
-								UseMaterial = LavaFallsMaterial;
+								if (!bIsLavaFalls && Item.EnvironmentAreaType == AreaType)
+								{
+									UseMaterial = Item.EditorWorldDefaultSurfaceMaterial;
+									break;
+								}
+
+								if (bIsLavaFalls && Item.Name == TEXT("Lava Falls"))
+								{
+									UseMaterial = Item.EditorWorldDefaultSurfaceMaterial;
+									break;
+								}
+							}
 
 							if (UseMaterial)
 								SurfaceStaticMeshComponent->SetMaterial(0, UseMaterial);
@@ -1301,7 +1243,7 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddAreaOnClick()
 
 						SurfaceActor->Rename(*(SurfaceActorName + FGuid::NewGuid().ToString()));
 						SurfaceActor->SetActorLabel(*SurfaceActorName);
-						SurfaceActor->AttachToActor(AscMapKitEnvironmentAreaActor, FAttachmentTransformRules::KeepRelativeTransform);
+						SurfaceActor->AttachToActor(AscMapKitEnvironmentAreaActor, bIsLavaFalls ? FAttachmentTransformRules::KeepWorldTransform : FAttachmentTransformRules::KeepRelativeTransform);
 
 						UKismetSystemLibrary::TransactObject(SurfaceActor);
 					}
@@ -1322,22 +1264,18 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddAreaOnClick()
 							FogStaticMeshComponent->SetRelativeLocation(FVector(0.f, 0.f, 0.f));
 							FogStaticMeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
-							auto UseMaterial = LiquidFogMaterial;
+							UMaterialInstanceConstant *UseMaterial = nullptr;
 
-							switch (AreaType)
+							for (const auto &Item : EnvironmentAreaDataAsset->AssetItems)
 							{
-								case EAscMapKitEnvironmentAreaTypeEnum::Acid:
-									UseMaterial = AcidFogMaterial;
+								if (Item.EditorWorldDefaultFogMaterial == nullptr)
+									continue;
+
+								if (Item.EnvironmentAreaType == AreaType)
+								{
+									UseMaterial = Item.EditorWorldDefaultFogMaterial;
 									break;
-								case EAscMapKitEnvironmentAreaTypeEnum::Lava:
-									UseMaterial = LavaFogMaterial;
-									break;
-								case EAscMapKitEnvironmentAreaTypeEnum::Liquid:
-									UseMaterial = LiquidFogMaterial;
-									break;
-								case EAscMapKitEnvironmentAreaTypeEnum::Sludge:
-									UseMaterial = SludgeFogMaterial;
-									break;
+								}
 							}
 							
 							if (UseMaterial)
@@ -1360,13 +1298,17 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddAreaOnClick()
 
 					if (ParticleEmitter)
 					{
+						ParticleEmitter->SetActorRelativeLocation(FVector::ZeroVector);
+
 #if USE_PARTICLES_CASCADE
-						UParticleSystemComponent *ParticleComponent = NewObject<UParticleSystemComponent>(ParticleEmitter);
+						//UParticleSystemComponent *ParticleComponent = NewObject<UParticleSystemComponent>(ParticleEmitter, UParticleSystemComponent::StaticClass(), NAME_None, RF_Transactional);
 						UParticleSystem *UseParticleTemplate = PowerStationParticleTemplate;
 #else
-						UNiagaraComponent *ParticleComponent = NewObject<UNiagaraComponent>(LiquidBubblesParticleActor);
+						//UNiagaraComponent *ParticleComponent = NewObject<UNiagaraComponent>(LiquidBubblesParticleActor, UNiagaraComponent::StaticClass(), NAME_None, RF_Transactional);
 						UNiagaraSystem *UseParticleTemplate = LiquidBubblesParticleTemplate;
 #endif
+
+						const auto ParticleComponent = ParticleEmitter->GetParticleSystemComponent();
 
 						if (ParticleComponent)
 						{
@@ -1375,6 +1317,9 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddAreaOnClick()
 								case EAscMapKitEnvironmentAreaTypeEnum::Electric:
 									UseParticleTemplate = ElectricalZapsParticleTemplate;
 									break;
+								case EAscMapKitEnvironmentAreaTypeEnum::EnemyGenerator:
+									UseParticleTemplate = EnemyGeneratorParticleTemplate;
+									break;
 								case EAscMapKitEnvironmentAreaTypeEnum::Liquid:
 									UseParticleTemplate = LiquidBubblesParticleTemplate;
 									break;
@@ -1382,14 +1327,28 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddAreaOnClick()
 								case EAscMapKitEnvironmentAreaTypeEnum::PowerStationWithoutEffects:
 									UseParticleTemplate = PowerStationParticleTemplate;
 									break;
+								case EAscMapKitEnvironmentAreaTypeEnum::ShieldStationWithEffects:
+								case EAscMapKitEnvironmentAreaTypeEnum::ShieldStationWithoutEffects:
+									UseParticleTemplate = ShieldStationParticleTemplate;
+									break;
 							}
 
-							ParticleComponent->SetupAttachment(ParticleEmitter->GetRootComponent());
+							ParticleEmitter->Modify();
+							ParticleComponent->Modify();
+
 							ParticleComponent->SetTemplate(UseParticleTemplate);
+
+							auto AttachmentTransformRules = FAttachmentTransformRules::KeepRelativeTransform;
 
 							if (AreaType == EAscMapKitEnvironmentAreaTypeEnum::Electric)
 								ParticleComponent->SetRelativeLocation(FVector(-1000.f, 0.f, 0.f));
-							else if (AreaType != EAscMapKitEnvironmentAreaTypeEnum::PowerStationWithoutEffects)
+							else if (
+								AreaType != EAscMapKitEnvironmentAreaTypeEnum::EnemyGenerator &&
+								AreaType != EAscMapKitEnvironmentAreaTypeEnum::PowerStationWithoutEffects &&
+								AreaType != EAscMapKitEnvironmentAreaTypeEnum::PowerStationWithEffects &&
+								AreaType != EAscMapKitEnvironmentAreaTypeEnum::ShieldStationWithoutEffects &&
+								AreaType != EAscMapKitEnvironmentAreaTypeEnum::ShieldStationWithEffects
+							)
 								ParticleComponent->SetRelativeLocation(FVector(0.f, 0.f, 1000.f));
 
 							ParticleComponent->RegisterComponent();
@@ -1398,7 +1357,7 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddAreaOnClick()
 
 							ParticleEmitter->Rename(*(ParticleActorName + FGuid::NewGuid().ToString()));
 							ParticleEmitter->SetActorLabel(*ParticleActorName);
-							ParticleEmitter->AttachToActor(AscMapKitEnvironmentAreaActor, FAttachmentTransformRules::KeepRelativeTransform);
+							ParticleEmitter->AttachToActor(AscMapKitEnvironmentAreaActor, AttachmentTransformRules);
 
 							UKismetSystemLibrary::TransactObject(ParticleEmitter);
 						}
@@ -1419,7 +1378,9 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddAreaOnClick()
 							AscMapKitEnvironmentAreaActor->MapKit.PostProcess.PostProcessComponent->Settings.FilmShadowTint = FLinearColor(1.414633f, 2.f, 0.108292f, 1.f);
 							break;
 						case EAscMapKitEnvironmentAreaTypeEnum::Electric:
+						case EAscMapKitEnvironmentAreaTypeEnum::EnemyGenerator:
 						case EAscMapKitEnvironmentAreaTypeEnum::PowerStationWithoutEffects:
+						case EAscMapKitEnvironmentAreaTypeEnum::ShieldStationWithoutEffects:
 							AscMapKitEnvironmentAreaActor->MapKit.PostProcess.EnableForPlayer = false;
 							break;
 						case EAscMapKitEnvironmentAreaTypeEnum::Lava:
@@ -1451,7 +1412,7 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddAreaOnClick()
 							break;
 					}
 				}
-				
+
 				switch (AreaType)
 				{
 					case EAscMapKitEnvironmentAreaTypeEnum::Acid:
@@ -1474,13 +1435,30 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddAreaOnClick()
 						AscMapKitEnvironmentAreaActor->MapKit.PlayerShaking.Factor = 15.f;
 						AscMapKitEnvironmentAreaActor->MapKit.PlayerMovementModifier.Enable = false;
 						AscMapKitEnvironmentAreaActor->MapKit.ProjectileMovementModifier.Enable = false;
+						AscMapKitEnvironmentAreaActor->MapKit.PowerupMovementModifier.Enable = false;
 						AscMapKitEnvironmentAreaActor->MapKit.EnemyMovementModifier.Enable = false;
-
 						AscMapKitEnvironmentAreaActor->MapKit.DamageShared.DamageEventType = EAscMapKitDamageEventTypeEnum::Electricity;
 						AscMapKitEnvironmentAreaActor->MapKit.DamageShared.AutoDestroyBombs = true;
 						AscMapKitEnvironmentAreaActor->MapKit.DamagePlayers.Enable = true;
 						AscMapKitEnvironmentAreaActor->MapKit.DamageEnemies.Enable = true;
 						AscMapKitEnvironmentAreaActor->MapKit.SplashDamage.Enable = true;
+						break;
+					case EAscMapKitEnvironmentAreaTypeEnum::EnemyGenerator:
+						AscMapKitEnvironmentAreaActor->MapKit.EnemyGenerator.Enable = true;
+						AscMapKitEnvironmentAreaActor->MapKit.EnemyGenerator.InitialState = EAscMapKitEnvironmentAreaEnemyGeneratorStateEnum::Active;
+						AscMapKitEnvironmentAreaActor->MapKit.LiquidDrips.EnableForPlayerOnOverlapEnd = false;
+						AscMapKitEnvironmentAreaActor->MapKit.LiquidDripsCockpit.EnableForPlayerOnOverlapEnd = false;
+						AscMapKitEnvironmentAreaActor->MapKit.PlayerShaking.Enable = false;
+						AscMapKitEnvironmentAreaActor->MapKit.PlayerMovementModifier.Enable = false;
+						AscMapKitEnvironmentAreaActor->MapKit.ProjectileMovementModifier.Enable = false;
+						AscMapKitEnvironmentAreaActor->MapKit.PowerupMovementModifier.Enable = false;
+						AscMapKitEnvironmentAreaActor->MapKit.EnemyMovementModifier.Enable = false;
+						AscMapKitEnvironmentAreaActor->MapKit.DestructibleChunkMovementModifier.Enable = false;
+						AscMapKitEnvironmentAreaActor->MapKit.DamageShared.DamageEventType = EAscMapKitDamageEventTypeEnum::Unknown;
+						AscMapKitEnvironmentAreaActor->MapKit.DamageShared.AutoDestroyBombs = false;
+						AscMapKitEnvironmentAreaActor->MapKit.DamagePlayers.Enable = false;
+						AscMapKitEnvironmentAreaActor->MapKit.DamageEnemies.Enable = false;
+						AscMapKitEnvironmentAreaActor->MapKit.SplashDamage.Enable = false;
 						break;
 					case EAscMapKitEnvironmentAreaTypeEnum::Lava:
 						AscMapKitEnvironmentAreaActor->MapKit.LiquidDrips.EnableForPlayerOnOverlapEnd = true;
@@ -1503,6 +1481,7 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddAreaOnClick()
 						AscMapKitEnvironmentAreaActor->MapKit.LiquidDripsCockpit.EmitColor = FLinearColor(0.f, 1.f, 10.f, 1.f);
 						break;
 					case EAscMapKitEnvironmentAreaTypeEnum::PowerStationWithoutEffects:
+					case EAscMapKitEnvironmentAreaTypeEnum::ShieldStationWithoutEffects:
 						AscMapKitEnvironmentAreaActor->MapKit.LiquidDrips.EnableForPlayerOnOverlapEnd = false;
 						AscMapKitEnvironmentAreaActor->MapKit.LiquidDripsCockpit.EnableForPlayerOnOverlapEnd = false;
 						AscMapKitEnvironmentAreaActor->MapKit.PlayerMovementModifier.Enable = false;
@@ -1532,7 +1511,52 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddAreaOnClick()
 						break;
 				}
 
-				if (AreaType == EAscMapKitEnvironmentAreaTypeEnum::Liquid)
+				if (AreaType == EAscMapKitEnvironmentAreaTypeEnum::EnemyGenerator)
+				{
+					const auto PointLightActorName = FString::Printf(TEXT("PointLight_%s"), *AscMapKitEnvironmentAreaActor->GetHumanReadableName());
+
+					auto bPointLightNameAlreadyExists = false;
+
+					FString OutPointLightActorName = TEXT("");
+					FString OutPointLightActorDefaultName = TEXT("");
+
+					const auto AscMapKitLightActorSpawned = UAscMapKitEditorToolsHelper::SpawnInEditor(
+						APointLight::StaticClass(),
+						FTransform(SpawnLocation),
+						PointLightActorName,
+						-1,
+						bPointLightNameAlreadyExists,
+						OutPointLightActorName,
+						OutPointLightActorDefaultName
+					);
+
+					if (bPointLightNameAlreadyExists)
+						UAscMapKitEditorToolsHelper::ShowWarnMessage(FString::Printf(TEXT("Light for enemy generator '%s' already exists (name conflict?). Using a default name instead (sorry): %s"), *OutPointLightActorName, *OutPointLightActorDefaultName));
+
+					if (AscMapKitLightActorSpawned && AscMapKitLightActorSpawned->IsA(APointLight::StaticClass()))
+					{
+						const auto PointLightActor = Cast<APointLight>(AscMapKitLightActorSpawned);
+
+						if (PointLightActor && PointLightActor->PointLightComponent)
+						{
+							UAscMapKitEditorToolsLightHelper::SetPointLightDefaults(
+								PointLightActor,
+								EAscMapKitMaterialEmitColorTypeEnum::Purple,
+								3.f,
+								false
+							);
+
+							PointLightActor->PointLightComponent->RegisterComponent();
+							PointLightActor->AttachToActor(AscMapKitEnvironmentAreaActor, FAttachmentTransformRules::KeepWorldTransform);
+
+							PointLightActor->PointLightComponent->SetMobility(EComponentMobility::Movable);
+							PointLightActor->PointLightComponent->SetAttenuationRadius(4000.f);
+
+							UKismetSystemLibrary::TransactObject(PointLightActor);
+						}
+					}
+				}
+				else if (AreaType == EAscMapKitEnvironmentAreaTypeEnum::Liquid)
 				{
 					const auto CausticSpotLightActorName = FString::Printf(TEXT("SpotLight_%s"), *AscMapKitEnvironmentAreaActor->GetHumanReadableName());
 
@@ -1616,7 +1640,49 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddAreaOnClick()
 							);
 
 							PointLightActor->PointLightComponent->RegisterComponent();
-							PointLightActor->AttachToActor(AscMapKitEnvironmentAreaActor, FAttachmentTransformRules::KeepRelativeTransform);
+							PointLightActor->AttachToActor(AscMapKitEnvironmentAreaActor, FAttachmentTransformRules::KeepWorldTransform);
+
+							UKismetSystemLibrary::TransactObject(PointLightActor);
+						}
+					}
+				}
+				else if (AreaType == EAscMapKitEnvironmentAreaTypeEnum::ShieldStationWithoutEffects)
+				{
+					const auto PointLightActorName = FString::Printf(TEXT("PointLight_%s"), *AscMapKitEnvironmentAreaActor->GetHumanReadableName());
+
+					auto bPointLightNameAlreadyExists = false;
+
+					FString OutPointLightActorName = TEXT("");
+					FString OutPointLightActorDefaultName = TEXT("");
+
+					const auto AscMapKitLightActorSpawned = UAscMapKitEditorToolsHelper::SpawnInEditor(
+						APointLight::StaticClass(),
+						FTransform(SpawnLocation),
+						PointLightActorName,
+						-1,
+						bPointLightNameAlreadyExists,
+						OutPointLightActorName,
+						OutPointLightActorDefaultName
+					);
+
+					if (bPointLightNameAlreadyExists)
+						UAscMapKitEditorToolsHelper::ShowWarnMessage(FString::Printf(TEXT("Light for shield station '%s' already exists (name conflict?). Using a default name instead (sorry): %s"), *OutPointLightActorName, *OutPointLightActorDefaultName));
+
+					if (AscMapKitLightActorSpawned && AscMapKitLightActorSpawned->IsA(APointLight::StaticClass()))
+					{
+						const auto PointLightActor = Cast<APointLight>(AscMapKitLightActorSpawned);
+
+						if (PointLightActor && PointLightActor->PointLightComponent)
+						{
+							UAscMapKitEditorToolsLightHelper::SetPointLightDefaults(
+								PointLightActor,
+								EAscMapKitMaterialEmitColorTypeEnum::Green,
+								10.f
+							);
+
+							PointLightActor->PointLightComponent->RegisterComponent();
+							PointLightActor->AttachToActor(AscMapKitEnvironmentAreaActor, FAttachmentTransformRules::KeepWorldTransform);
+							PointLightActor->SetRadius(4000.f);
 
 							UKismetSystemLibrary::TransactObject(PointLightActor);
 						}
@@ -1638,11 +1704,23 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddAreaOnClick()
 	GEditor->NoteSelectionChange();
 
 	UKismetSystemLibrary::EndTransaction();
+
+	UAscMapKitEditorToolsHelper::ShowWarnMessage(TEXT("'Undo' after actor creation may not work. This is a known issue with Unreal Engine (sorry)."));
 }
 
 void UAscMapKitEditorToolsUtilityWidget::BtnSubTitleCreateDecorOnClick()
 {
 	ToggleSection(TEXT("Decor"), TxtSubTitleCreateDecor, SectionPanelDecor);
+}
+
+void UAscMapKitEditorToolsUtilityWidget::ComboBoxAddDecorTypeOnSelectionChanged(const FString SelectedItem, const ESelectInfo::Type SelectionType)
+{
+	const auto NameClean = SelectedItem.Replace(TEXT(" "), TEXT(""));
+
+	if (DecorButtonMap.Contains(NameClean))
+		DecorButtonMap[NameClean]->OnClicked.Broadcast();
+	else
+		HandleButtonSelectionHighlighting(GridPanelDecor, true);
 }
 
 void UAscMapKitEditorToolsUtilityWidget::BtnAddDecorOnClick()
@@ -1688,6 +1766,8 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddDecorOnClick()
 		UAscMapKitEditorToolsHelper::ShowErrorMessage(FString::Printf(TEXT("Developer error (contact Ascentroid support)! DecorTypeMap does not contain: %s"), *DecorTypeAsFString));
 		return;
 	}
+
+	const auto DecorData = DecorDataAsset->Get(DecorType);
 
 	auto bFoundDecorColorType = false;
 	auto DecorColorType = EAscMapKitMaterialEmitColorTypeEnum::None;
@@ -1760,30 +1840,40 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddDecorOnClick()
 		{
 			const auto AscMapKitDecorActor = Cast<AAscMapKitDecorActor>(AscMapKitDecorActorSpawned);
 
+			auto bFolderNameOverridden = false;
+
 			if (AscMapKitDecorActor)
 			{
 				if (AscMapKitDecorActor->StaticMeshComponent)
 				{
-					UStaticMesh *UseStaticMesh = nullptr;
-
-					if (DecorTypeStaticMeshMap.Contains(DecorType))
-						UseStaticMesh = DecorTypeStaticMeshMap[DecorType];
+					const auto UseStaticMesh = DecorData.StaticMesh;
 
 					if (UseStaticMesh)
 					{
 						AscMapKitDecorActor->StaticMeshComponent->SetStaticMesh(UseStaticMesh);
 						AscMapKitDecorActor->StaticMeshComponent->SetCastShadow(false);
-						
+
+						// todo: data property for group/set? how to set this up for multiple types? new enum?
 						if (DecorType == EAscMapKitDecorTypeEnum::Ladder_Set_001)
 						{
+							// note: we cannot use sequence for name because it is based on the parent piece
+							// note: when I tested it, we ended up with sequences 001, 007, 013, etc, because it includes the other actor names
+							// note: so to get around this, we just generate a random string instead
+							const auto LadderFolderName = FString::Printf(TEXT("Ladder_%s"), *UAscMapKitEditorToolsHelper::GenerateRandomString());
+
+							bFolderNameOverridden = true;
+							
+							TArray<AActor*> SpawnedLadderActors;
+							SpawnedLadderActors.Add(AscMapKitDecorActor);
+							
 							for (auto x = 1; x <= 6; x++)
 							{
 								auto bLadderActorNameAlreadyExists = false;
 
 								FString OutLadderActorName = TEXT("");
 								FString OutLadderActorDefaultName = TEXT("");
-							
-								const auto LadderActorName = FString::Printf(TEXT("Ladder_%s_%d"), *AscMapKitDecorActor->GetHumanReadableName(), x);
+
+								const auto LadderActorName = FString::Printf(TEXT("%s_%d"), *AscMapKitDecorActor->GetHumanReadableName(), x);
 
 								const auto LadderSetPieceActor = UAscMapKitEditorToolsHelper::SpawnInEditor(
 									DecorActorClass,
@@ -1801,7 +1891,7 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddDecorOnClick()
 								if (LadderSetPieceActor && LadderSetPieceActor->IsA(DecorActorClass))
 								{
 									const auto LadderSetPieceStaticMeshActor = Cast<AAscMapKitDecorActor>(LadderSetPieceActor);
-									
+
 									if (LadderSetPieceStaticMeshActor && LadderSetPieceStaticMeshActor->StaticMeshComponent)
 									{
 										LadderSetPieceStaticMeshActor->StaticMeshComponent->SetStaticMesh(UseStaticMesh);
@@ -1809,7 +1899,6 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddDecorOnClick()
 
 										LadderSetPieceStaticMeshActor->Rename(*(LadderActorName + FGuid::NewGuid().ToString()));
 										LadderSetPieceStaticMeshActor->SetActorLabel(*LadderActorName);
-										LadderSetPieceStaticMeshActor->AttachToActor(AscMapKitDecorActor, FAttachmentTransformRules::KeepRelativeTransform);
 
 										auto UseZOffset = 0.f;
 
@@ -1835,31 +1924,59 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddDecorOnClick()
 												break;
 										}
 
-										LadderSetPieceStaticMeshActor->SetActorRelativeLocation(FVector(0.f, 0.f, UseZOffset));
+										auto LadderWorldLocation = AscMapKitDecorActor->GetActorLocation();
+										LadderWorldLocation.Z += UseZOffset;
+
+										LadderSetPieceStaticMeshActor->SetActorLocation(LadderWorldLocation);
+										LadderSetPieceStaticMeshActor->SetFolderPath(FName(FString::Printf(TEXT("Decor/%s"), *LadderFolderName)));
+
+										SpawnedLadderActors.Add(LadderSetPieceStaticMeshActor);
 									}
 								}
+							}
+
+							if (SpawnedLadderActors.Num() > 0)
+							{
+								if (AscMapKitDecorActor)
+									AscMapKitDecorActor->SetFolderPath(FName(FString::Printf(TEXT("Decor/%s"), *LadderFolderName)));
+								
+								if (UActorGroupingUtils *Grouping1 = UActorGroupingUtils::Get())
+									Grouping1->GroupActors(SpawnedLadderActors);
+								else
+								{
+									GEditor->SelectNone(false, true, false);
+									
+									for (AActor *A : SpawnedLadderActors)
+									{
+										if (A)
+											GEditor->SelectActor(A, true, false, true);
+									}
+
+									if (UActorGroupingUtils *Grouping2 = UActorGroupingUtils::Get())
+										Grouping2->GroupSelected();
+								}
+
+								if (ULevel *L = SpawnedLadderActors[0]->GetLevel())
+									L->MarkPackageDirty();
+
+								if (GEditor)
+									GEditor->RedrawLevelEditingViewports();
 							}
 						}
 						else
 						{
-							if (DecorColorType != EAscMapKitMaterialEmitColorTypeEnum::None &&
-								MaterialEmitColorTypeMaterialMap.Contains(DecorColorType) &&
-								DecorTypeStaticMeshMaterialEmitColorOverrideMap.Contains(DecorType))
-							{
-								FAscMapKitDecorPropertiesCustomMaterialStruct OverrideMaterialStruct;
-								OverrideMaterialStruct.OverrideMaterial = true;
-								OverrideMaterialStruct.MaterialIndex = DecorTypeStaticMeshMaterialEmitColorOverrideMap[DecorType];
-								OverrideMaterialStruct.Material = MaterialEmitColorTypeMaterialMap[DecorColorType];
-
-								AscMapKitDecorActor->MapKit.OverrideMaterials.Add(OverrideMaterialStruct);
-
-								AscMapKitDecorActor->StaticMeshComponent->SetMaterial(OverrideMaterialStruct.MaterialIndex, OverrideMaterialStruct.Material);
-							}
+							if (DecorColorType != EAscMapKitMaterialEmitColorTypeEnum::None && MaterialEmitColorTypeMaterialMap.Contains(DecorColorType))
+								AscMapKitDecorActor->StaticMeshComponent->SetMaterialByName(FName(TEXT("Emit")), MaterialEmitColorTypeMaterialMap[DecorColorType]);
 						}
 					}
 				}
 
-				if (ChkBoxAddDecorLight->IsChecked() && DecorTypeLightSupport.Contains(DecorType))
+				AscMapKitDecorActor->MapKit.Destructible.Enable = DecorData.bHasDestructibleSupport && ChkBoxAddDecorDestructible->IsChecked();
+
+				if (DecorData.DestructibleAnimationBlueprint)
+					AscMapKitDecorActor->MapKit.Destructible.DestructibleClass = DecorData.DestructibleAnimationBlueprint;
+
+				if (ChkBoxAddDecorLight->IsChecked() && DecorData.bHasLightSupport)
 				{
 					const auto PointLightActorName = FString::Printf(TEXT("PointLight_%s"), *AscMapKitDecorActor->GetHumanReadableName());
 
@@ -1895,27 +2012,13 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddDecorOnClick()
 
 							AscMapKitLightActorSpawned->AttachToActor(AscMapKitDecorActor, FAttachmentTransformRules::KeepRelativeTransform);
 
-							switch (DecorType)
-							{
-								case EAscMapKitDecorTypeEnum::Grate_20x20m_Basic_001:
-									AscMapKitLightActorSpawned->SetActorRelativeLocation(FVector(0.f, 0.f, 1000.f));
-									break;
-								case EAscMapKitDecorTypeEnum::Letter:
-								case EAscMapKitDecorTypeEnum::Sign_001:
-								case EAscMapKitDecorTypeEnum::Sign_002:
-								case EAscMapKitDecorTypeEnum::Sign_004:
-								case EAscMapKitDecorTypeEnum::Sign_005:
-									AscMapKitLightActorSpawned->SetActorRelativeLocation(FVector(0.f, 500.f, 0.f));
-									break;
-								case EAscMapKitDecorTypeEnum::Sign_006:
-									AscMapKitLightActorSpawned->SetActorRelativeLocation(FVector(500.f, 0.f, 0.f));
-									break;
-							}
+							if (!DecorData.LightRelativeLocationOffset.IsZero())
+								AscMapKitLightActorSpawned->SetActorRelativeLocation(DecorData.LightRelativeLocationOffset);
 						}
 					}
 				}
 
-				if (DecorType == EAscMapKitDecorTypeEnum::Sign_003)
+				if (DecorData.bHasReflectionSupport)
 				{
 					ASphereReflectionCapture *SphereReflectionCaptureActorSpawned =
 						UAscMapKitEditorToolsHelper::GetEditorWorld()->SpawnActorDeferred<ASphereReflectionCapture>(
@@ -1942,7 +2045,9 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddDecorOnClick()
 								SphereReflectionCaptureActor->SetActorLabel(*ReflectionCaptureActorName);
 
 								SphereReflectionCaptureActor->AttachToActor(AscMapKitDecorActor, FAttachmentTransformRules::KeepRelativeTransform);
-								SphereReflectionCaptureActor->SetActorRelativeLocation(FVector(0.f, 1000.f, 0.f));
+
+								if (!DecorData.ReflectionRelativeLocationOffset.IsZero())
+									SphereReflectionCaptureActor->SetActorRelativeLocation(DecorData.ReflectionRelativeLocationOffset);
 
 								USphereReflectionCaptureComponent *ReflectionComponent = Cast<USphereReflectionCaptureComponent>(SphereReflectionCaptureActor->GetCaptureComponent());
 
@@ -1959,7 +2064,8 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddDecorOnClick()
 					}
 				}
 
-				AscMapKitDecorActor->SetFolderPath(FName("Decor"));
+				if (!bFolderNameOverridden)
+					AscMapKitDecorActor->SetFolderPath(FName("Decor"));
 
 				GEditor->SelectActor(AscMapKitDecorActor, true, true);
 
@@ -1985,6 +2091,16 @@ void UAscMapKitEditorToolsUtilityWidget::BtnSubTitleCreateDoorOnClick()
 	ToggleSection(TEXT("Door"), TxtSubTitleCreateDoor, SectionPanelDoor);
 }
 
+void UAscMapKitEditorToolsUtilityWidget::ComboBoxAddDoorTypeOnSelectionChanged(const FString SelectedItem, const ESelectInfo::Type SelectionType)
+{
+	const auto NameClean = SelectedItem.Replace(TEXT(" "), TEXT(""));
+
+	if (DoorButtonMap.Contains(NameClean))
+		DoorButtonMap[NameClean]->OnClicked.Broadcast();
+	else
+		HandleButtonSelectionHighlighting(GridPanelDoor, true);
+}
+
 void UAscMapKitEditorToolsUtilityWidget::BtnAddDoorOnClick()
 {
 	if (ComboBoxAddDoorType->GetSelectedIndex() == 0)
@@ -2006,7 +2122,7 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddDoorOnClick()
 	}
 
 	const auto DoorTypeAsFString = ComboBoxAddDoorType->GetSelectedOption();
-	const auto DoorColorTypeAsFString = ComboBoxAddDoorColor->GetSelectedOption();
+	//const auto DoorColorTypeAsFString = ComboBoxAddDoorColor->GetSelectedOption(); // todo: @reminder: disabled color feature for doors
 	const auto Count = FCString::Atoi(*ComboBoxAddDoorCount->GetSelectedOption());
 	const auto Where = ComboBoxAddDoorWhere->GetSelectedOption();
 
@@ -2031,27 +2147,29 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddDoorOnClick()
 		return;
 	}
 
-	auto bFoundDoorColorType = false;
-	auto DoorColorType = EAscMapKitMaterialEmitColorTypeEnum::None;
+	// todo: @reminder: disabled color feature for doors
+	// auto bFoundDoorColorType = false;
+	// auto DoorColorType = EAscMapKitMaterialEmitColorTypeEnum::None;
+	//
+	// for (const TPair<EAscMapKitMaterialEmitColorTypeEnum, FString> &Pair : MaterialEmitColorTypeMap)
+	// {
+	// 	if (Pair.Value == DoorColorTypeAsFString)
+	// 	{
+	// 		bFoundDoorColorType = true;
+	// 		DoorColorType = Pair.Key;
+	// 		break;
+	// 	}
+	// }
 
-	for (const TPair<EAscMapKitMaterialEmitColorTypeEnum, FString> &Pair : MaterialEmitColorTypeMap)
-	{
-		if (Pair.Value == DoorColorTypeAsFString)
-		{
-			bFoundDoorColorType = true;
-			DoorColorType = Pair.Key;
-			break;
-		}
-	}
-
-	if (!bFoundDoorColorType)
-	{
-		UAscMapKitEditorToolsHelper::ShowErrorMessage(FString::Printf(TEXT("Developer error (contact Ascentroid support)! DoorColorTypeMap does not contain: %s"), *DoorColorTypeAsFString));
-		return;
-	}
-
-	if (DoorColorType == EAscMapKitMaterialEmitColorTypeEnum::None)
-		DoorColorType = EAscMapKitMaterialEmitColorTypeEnum::Green;
+	// todo: @reminder: disabled color feature for doors
+	// if (!bFoundDoorColorType)
+	// {
+	// 	UAscMapKitEditorToolsHelper::ShowErrorMessage(FString::Printf(TEXT("Developer error (contact Ascentroid support)! DoorColorTypeMap does not contain: %s"), *DoorColorTypeAsFString));
+	// 	return;
+	// }
+	//
+	// if (DoorColorType == EAscMapKitMaterialEmitColorTypeEnum::None)
+	// 	DoorColorType = EAscMapKitMaterialEmitColorTypeEnum::Green;
 
 	auto SpawnLocation = FVector::ZeroVector;
 
@@ -2082,27 +2200,18 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddDoorOnClick()
 	{
 		auto UseDoorId = 0;
 
-		TArray<AActor *> FoundDoors;
-		UGameplayStatics::GetAllActorsOfClass(UAscMapKitEditorToolsHelper::GetEditorWorld(), DoorActorClass, FoundDoors);
+		TArray<int32> FoundDoorIds;
 
-		if (FoundDoors.Num() > 0)
+		for (TActorIterator<AAscMapKitDoorActor> ActorItr(UAscMapKitEditorToolsHelper::GetEditorWorld()); ActorItr; ++ActorItr)
 		{
-			TArray<int32> FoundDoorIds;
-
-			for (const auto &FoundDoor : FoundDoors)
-			{
-				if (FoundDoor && FoundDoor->IsA(DoorActorClass))
-				{
-					const auto Door = Cast<AAscMapKitDoorActor>(FoundDoor);
-
-					if (Door)
-						FoundDoorIds.AddUnique(FCString::Atoi(*Door->MapKit.Id));
-				}
-			}
-
-			if (FoundDoorIds.Num() > 0)
-				UseDoorId = *Algo::MaxElement(FoundDoorIds);
+			const auto FoundDoor = *ActorItr;
+			
+			if (FoundDoor)
+				FoundDoorIds.AddUnique(FCString::Atoi(*FoundDoor->MapKit.Id));
 		}
+
+		if (FoundDoorIds.Num() > 0)
+			UseDoorId = *Algo::MaxElement(FoundDoorIds);
 
 		auto bDoorNameAlreadyExists = false;
 
@@ -2124,32 +2233,51 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddDoorOnClick()
 
 		if (AscMapKitDoorActorSpawned && AscMapKitDoorActorSpawned->IsA(DoorActorClass))
 		{
+			// todo: left off here
+			// todo: this is a problem, because the BPs are AscDoor, not AAscMapKitDoorActor
+			// todo: so, how are we gonna handle this??
 			const auto AscMapKitDoorActor = Cast<AAscMapKitDoorActor>(AscMapKitDoorActorSpawned);
 
 			if (AscMapKitDoorActor)
 			{
 				AscMapKitDoorActor->MapKit.Id = FString::Printf(TEXT("%0*d"), 3, UseDoorId + 1);
 				AscMapKitDoorActor->MapKit.DoorType = DoorType;
+				AscMapKitDoorActor->MapKit.NonDestructible.DisableEntireCollisionOnOpen = true;
+				AscMapKitDoorActor->MapKit.NonDestructible.DisableEntireCollisionOnOpenDelaySeconds = 0.f;
+				AscMapKitDoorActor->MapKit.NonDestructible.DisableDefaultToggleCollisionBoneNamesDelaySeconds = 0.3f;
 
-				if (DoorColorType != EAscMapKitMaterialEmitColorTypeEnum::None &&
-					MaterialEmitColorTypeMaterialMap.Contains(DoorColorType) &&
-					DoorTypeStaticMeshMaterialEmitColorOverrideMap.Contains(DoorType))
-				{
-					FAscMapKitDoorPropertiesCustomMaterialStruct OverrideMaterialStruct;
-					OverrideMaterialStruct.OverrideMaterial = true;
-					OverrideMaterialStruct.MaterialIndex = DoorTypeStaticMeshMaterialEmitColorOverrideMap[DoorType];
-					OverrideMaterialStruct.Material = MaterialEmitColorTypeMaterialMap[DoorColorType];
+				// todo: @reminder: disabled color feature for doors
+				// if (DoorColorType != EAscMapKitMaterialEmitColorTypeEnum::None &&
+				// 	MaterialEmitColorTypeMaterialMap.Contains(DoorColorType) &&
+				// 	DoorTypeStaticMeshMaterialEmitColorOverrideMap.Contains(DoorType))
+				// {
+				// 	FAscMapKitDoorPropertiesCustomMaterialStruct OverrideMaterialStruct;
+				// 	OverrideMaterialStruct.OverrideMaterial = true;
+				// 	OverrideMaterialStruct.MaterialIndex = DoorTypeStaticMeshMaterialEmitColorOverrideMap[DoorType];
+				// 	OverrideMaterialStruct.Material = MaterialEmitColorTypeMaterialMap[DoorColorType];
+				//
+				// 	AscMapKitDoorActor->MapKit.NonDestructible.OverrideMaterials.Add(OverrideMaterialStruct);
+				//
+				// 	AscMapKitDoorActor->StaticMeshComponent->SetMaterial(OverrideMaterialStruct.MaterialIndex, OverrideMaterialStruct.Material);
+				// }
 
-					AscMapKitDoorActor->MapKit.Custom.NonDestructible.OverrideMaterials.Add(OverrideMaterialStruct);
-
-					// todo: implement later?
-					//AscMapKitDoorActor->MapKit.Custom.Destructible.OverrideMaterials.Add(OverrideMaterialStruct);
-					//AscMapKitDoorActor->MapKit.Custom.Destructible.OverrideMaterialsDestroyed.Add(OverrideMaterialStruct);
-
-					AscMapKitDoorActor->StaticMeshComponent->SetMaterial(OverrideMaterialStruct.MaterialIndex, OverrideMaterialStruct.Material);
-				}
+				// todo: @reminder: @refactor: better way to detect destructible?? how to keep in sync with actor defaults??
+				// todo: @doorshit
+				// if (DoorType == EAscMapKitDoorTypeEnum::Destructible20x20mBasic001)
+				// {
+				// 	AscMapKitDoorActor->MapKit.Destructible.Enable = true;
+				// 	AscMapKitDoorActor->MapKit.Destructible.Shared.ScaleOverTime = false;
+				// 	AscMapKitDoorActor->MapKit.Destructible.Shared.Disappear.Enable = true;
+				// 	AscMapKitDoorActor->MapKit.Destructible.Shared.Disappear.ChanceDisappearOnStart = 50;
+				// 	AscMapKitDoorActor->MapKit.Destructible.Shared.Disappear.IterationDelaySeconds = 0.3f;
+				// 	AscMapKitDoorActor->MapKit.Destructible.Shared.Disappear.DelaySecondsRangeMin = 0.3f;
+				// 	AscMapKitDoorActor->MapKit.Destructible.Shared.Disappear.DelaySecondsRangeMax = 0.5f;
+				// 	AscMapKitDoorActor->MapKit.Destructible.Shared.Disappear.EffectsDelaySeconds = 0.5f;
+				// 	AscMapKitDoorActor->MapKit.Destructible.Shared.Disappear.EffectMaterial = MaterialEmitColorTypeMaterialMap[EAscMapKitMaterialEmitColorTypeEnum::OrangeDarkBright];
+				// }
 
 				AscMapKitDoorActor->EditorUpdateDoorType(AscMapKitDoorActor->MapKit.DoorType);
+				AscMapKitDoorActor->EditorUpdateMaterialInfo();
 				AscMapKitDoorActor->SetFolderPath(FName("Doors"));
 
 				GEditor->SelectActor(AscMapKitDoorActor, true, true);
@@ -2158,6 +2286,8 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddDoorOnClick()
 
 				UAscMapKitEditorToolsHelper::ShowInfoMessage(FString::Printf(TEXT("Created door: %s"), *AscMapKitDoorActor->GetHumanReadableName()));
 			}
+			else
+				UAscMapKitEditorToolsHelper::ShowErrorMessage(FString::Printf(TEXT("Could not cast door to AAscMapKitDoorActor: %s"), *AscMapKitDoorActorSpawned->GetHumanReadableName()));
 		}
 	}
 
@@ -2166,9 +2296,185 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddDoorOnClick()
 	UKismetSystemLibrary::EndTransaction();
 }
 
+void UAscMapKitEditorToolsUtilityWidget::ComboBoxAddDoorFrameTypeOnSelectionChanged(const FString SelectedItem, const ESelectInfo::Type SelectionType)
+{
+	const auto NameClean = SelectedItem.Replace(TEXT(" "), TEXT(""));
+
+	if (DoorFrameButtonMap.Contains(NameClean))
+		DoorFrameButtonMap[NameClean]->OnClicked.Broadcast();
+	else
+		HandleButtonSelectionHighlighting(GridPanelDoorFrame, true);
+}
+
+void UAscMapKitEditorToolsUtilityWidget::BtnAddDoorFrameOnClick()
+{
+	if (ComboBoxAddDoorFrameType->GetSelectedIndex() == 0)
+	{
+		UAscMapKitEditorToolsHelper::ShowErrorMessage(TEXT("Please select a DoorFrame type!"));
+		return;
+	}
+
+	if (ComboBoxAddDoorFrameCount->GetSelectedIndex() == 0)
+	{
+		UAscMapKitEditorToolsHelper::ShowErrorMessage(TEXT("Please select how many DoorFrame(s) to add!"));
+		return;
+	}
+
+	if (ComboBoxAddDoorFrameWhere->GetSelectedIndex() == 0)
+	{
+		UAscMapKitEditorToolsHelper::ShowErrorMessage(TEXT("Please select where to add the DoorFrame(s)!"));
+		return;
+	}
+
+	const auto DoorFrameTypeAsFString = ComboBoxAddDoorFrameType->GetSelectedOption();
+	const auto DoorFrameColorTypeAsFString = ComboBoxAddDoorFrameColor->GetSelectedOption();
+	const auto Count = FCString::Atoi(*ComboBoxAddDoorFrameCount->GetSelectedOption());
+	const auto Where = ComboBoxAddDoorFrameWhere->GetSelectedOption();
+
+	auto bFoundDoorFrameType = false;
+	auto DoorFrameType = EAscMapKitDoorFrameTypeEnum::None;
+
+	for (const TPair<EAscMapKitDoorFrameTypeEnum, FString> &Pair : DoorFrameTypeMap)
+	{
+		if (Pair.Value == DoorFrameTypeAsFString)
+		{
+			bFoundDoorFrameType = true;
+			DoorFrameType = Pair.Key;
+			break;
+		}
+	}
+
+	if (!bFoundDoorFrameType)
+	{
+		UAscMapKitEditorToolsHelper::ShowErrorMessage(FString::Printf(TEXT("Developer error (contact Ascentroid support)! DoorFrameTypeMap does not contain: %s"), *DoorFrameTypeAsFString));
+		return;
+	}
+
+	auto bFoundDoorFrameColorType = false;
+	auto DoorFrameColorType = EAscMapKitMaterialEmitColorTypeEnum::None;
+
+	for (const TPair<EAscMapKitMaterialEmitColorTypeEnum, FString> &Pair : MaterialEmitColorTypeMap)
+	{
+		if (Pair.Value == DoorFrameColorTypeAsFString)
+		{
+			bFoundDoorFrameColorType = true;
+			DoorFrameColorType = Pair.Key;
+			break;
+		}
+	}
+
+	if (!bFoundDoorFrameColorType)
+	{
+		UAscMapKitEditorToolsHelper::ShowErrorMessage(FString::Printf(TEXT("Developer error (contact Ascentroid support)! DoorFrameColorTypeMap does not contain: %s"), *DoorFrameColorTypeAsFString));
+		return;
+	}
+
+	if (DoorFrameColorType == EAscMapKitMaterialEmitColorTypeEnum::None)
+		DoorFrameColorType = EAscMapKitMaterialEmitColorTypeEnum::Green;
+
+	auto SpawnLocation = FVector::ZeroVector;
+
+	if (Where == TEXT("Selected"))
+	{
+		const auto bFoundSelectedActor = UAscMapKitEditorToolsHelper::GetEditorFirstSelectedActor(SpawnLocation);
+
+		if (!bFoundSelectedActor)
+			UAscMapKitEditorToolsHelper::ShowWarnMessage(TEXT("Nothing was selected in the editor. Using spawn location (0, 0, 0)."));
+	}
+
+	if (DoorFrameType == EAscMapKitDoorFrameTypeEnum::None)
+	{
+		UAscMapKitEditorToolsHelper::ShowErrorMessage(FString::Printf(TEXT("Developer error (contact Ascentroid support)! DoorFrameTypeMap resolved to 'None': %s"), *DoorFrameTypeAsFString));
+		return;
+	}
+
+	const auto DoorFrameActorClass = AStaticMeshActor::StaticClass();
+	const auto DoorFrameData = DoorFrameDataAsset->Get(DoorFrameType);
+
+	if (DoorFrameData.StaticMesh)
+	{
+		const auto DoorFrameNamePrefix = FString::Printf(TEXT("DoorFrame_%s"), *DoorFrameTypeAsFString.Replace(TEXT(" "), TEXT("_")));
+		const auto DoorFrameNameSequence = UAscMapKitEditorToolsHelper::GetEditorNextActorSequence(DoorFrameActorClass, DoorFrameNamePrefix);
+		const auto TransactionContext = FString::Printf(TEXT("%s::%hc"), *GetClass()->GetName(), *__FUNCTION__);
+
+		UKismetSystemLibrary::BeginTransaction(TransactionContext, FText::FromString(TEXT("Add Door Frame(s)")), nullptr);
+
+		GEditor->SelectNone(true, true, false);
+
+		for (auto i = 0; i < Count; i++)
+		{
+			auto bDoorFrameNameAlreadyExists = false;
+
+			FString OutActorName = TEXT("");
+			FString OutActorDefaultName = TEXT("");
+
+			const auto DoorFrameActorSpawned = UAscMapKitEditorToolsHelper::SpawnInEditor(
+				DoorFrameActorClass,
+				FTransform(SpawnLocation),
+				DoorFrameNamePrefix,
+				DoorFrameNameSequence + i,
+				bDoorFrameNameAlreadyExists,
+				OutActorName,
+				OutActorDefaultName
+			);
+
+			if (bDoorFrameNameAlreadyExists)
+				UAscMapKitEditorToolsHelper::ShowWarnMessage(FString::Printf(TEXT("Decor '%s' already exists (name conflict?). Using a default name instead (sorry): %s"), *OutActorName, *OutActorDefaultName));
+
+			if (DoorFrameActorSpawned && DoorFrameActorSpawned->IsA(DoorFrameActorClass))
+			{
+				AStaticMeshActor *DoorFrameActor = Cast<AStaticMeshActor>(DoorFrameActorSpawned);
+
+				if (DoorFrameActor && DoorFrameActor->GetStaticMeshComponent())
+				{
+					const auto DoorFrameStaticMeshComponent = DoorFrameActor->GetStaticMeshComponent();
+
+					if (DoorFrameStaticMeshComponent)
+					{
+						DoorFrameStaticMeshComponent->SetStaticMesh(DoorFrameData.StaticMesh);
+
+						if (DoorFrameColorType != EAscMapKitMaterialEmitColorTypeEnum::None && MaterialEmitColorTypeMaterialMap.Contains(DoorFrameColorType))
+							DoorFrameStaticMeshComponent->SetMaterialByName(TEXT("Emit"), MaterialEmitColorTypeMaterialMap[DoorFrameColorType]);
+
+						// todo: @reminder: needs to be configurable?
+						//DoorFrameStaticMeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+						//DoorFrameStaticMeshComponent->SetCollisionProfileName(UCollisionProfile::NoCollision_ProfileName);
+					}
+
+					// todo: @reminder: also add "include light" option
+
+					DoorFrameActor->SetFolderPath(FName("Doors"));
+
+					GEditor->SelectActor(DoorFrameActor, true, true);
+
+					UKismetSystemLibrary::TransactObject(DoorFrameActor);
+
+					UAscMapKitEditorToolsHelper::ShowInfoMessage(FString::Printf(TEXT("Created door frame: %s"), *DoorFrameActor->GetHumanReadableName()));
+				}
+			}
+		}
+
+		GEditor->NoteSelectionChange();
+
+		UKismetSystemLibrary::EndTransaction();
+	}
+	else
+		UAscMapKitEditorToolsHelper::ShowErrorMessage(FString::Printf(TEXT("Developer error (contact Ascentroid support)! Could not find static mesh for: %s"), *DoorFrameTypeAsFString));
+}
+
 void UAscMapKitEditorToolsUtilityWidget::BtnSubTitleCreateEnemyOnClick()
 {
 	ToggleSection(TEXT("Enemy"), TxtSubTitleCreateEnemy, SectionPanelEnemy);
+}
+
+void UAscMapKitEditorToolsUtilityWidget::ComboBoxAddEnemyTypeOnSelectionChanged(const FString SelectedItem, const ESelectInfo::Type SelectionType)
+{
+	const auto NameClean = SelectedItem.Replace(TEXT(" "), TEXT(""));
+
+	if (EnemyButtonMap.Contains(NameClean))
+		EnemyButtonMap[NameClean]->OnClicked.Broadcast();
+	else
+		HandleButtonSelectionHighlighting(GridPanelEnemy, true);
 }
 
 void UAscMapKitEditorToolsUtilityWidget::BtnAddEnemyOnClick()
@@ -2307,6 +2613,16 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddEnemyOnClick()
 				AscMapKitEnemyActor->EditorUpdateWeaponSockets();
 				AscMapKitEnemyActor->SetFolderPath(FName("Enemies"));
 
+				// todo: @reminder: disabled because it looks stupid
+				AscMapKitEnemyActor->MapKit.Destructible.ScaleOverTime = false;
+
+				AscMapKitEnemyActor->MapKit.Destructible.Disappear.Enable = true;
+				AscMapKitEnemyActor->MapKit.Destructible.Disappear.ChanceDisappearOnStart = 50;
+				AscMapKitEnemyActor->MapKit.Destructible.Disappear.IterationDelaySeconds = 0.3f;
+				AscMapKitEnemyActor->MapKit.Destructible.Disappear.DelaySecondsRangeMin = 0.3f;
+				AscMapKitEnemyActor->MapKit.Destructible.Disappear.DelaySecondsRangeMax = 0.5f;
+				AscMapKitEnemyActor->MapKit.Destructible.Disappear.EffectsDelaySeconds = 0.5f;
+
 				GEditor->SelectActor(AscMapKitEnemyActor, true, true);
 
 				UKismetSystemLibrary::TransactObject(AscMapKitEnemyActor);
@@ -2324,6 +2640,16 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddEnemyOnClick()
 void UAscMapKitEditorToolsUtilityWidget::BtnSubTitleCreateFanOnClick()
 {
 	ToggleSection(TEXT("Fan"), TxtSubTitleCreateFan, SectionPanelFan);
+}
+
+void UAscMapKitEditorToolsUtilityWidget::ComboBoxAddFanTypeOnSelectionChanged(const FString SelectedItem, const ESelectInfo::Type SelectionType)
+{
+	const auto NameClean = SelectedItem.Replace(TEXT(" "), TEXT(""));
+
+	if (FanButtonMap.Contains(NameClean))
+		FanButtonMap[NameClean]->OnClicked.Broadcast();
+	else
+		HandleButtonSelectionHighlighting(GridPanelFan, true);
 }
 
 void UAscMapKitEditorToolsUtilityWidget::BtnAddFanOnClick()
@@ -2372,6 +2698,8 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddFanOnClick()
 		return;
 	}
 
+	const auto FanData = FanDataAsset->Get(FanType);
+	
 	auto bFoundFanColorType = false;
 	auto FanColorType = EAscMapKitMaterialEmitColorTypeEnum::None;
 
@@ -2447,18 +2775,66 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddFanOnClick()
 			{
 				AscMapKitFanActor->MapKit.FanType = FanType;
 
-				if (FanColorType != EAscMapKitMaterialEmitColorTypeEnum::None &&
-					MaterialEmitColorTypeMaterialMap.Contains(FanColorType) &&
-					FanTypeStaticMeshMaterialEmitColorOverrideMap.Contains(FanType))
+				if (FanData.AnimationSequence)
 				{
-					FAscMapKitFanPropertiesCustomMaterialStruct OverrideMaterialStruct;
-					OverrideMaterialStruct.OverrideMaterial = true;
-					OverrideMaterialStruct.MaterialIndex = FanTypeStaticMeshMaterialEmitColorOverrideMap[FanType];
-					OverrideMaterialStruct.Material = MaterialEmitColorTypeMaterialMap[FanColorType];
+					AscMapKitFanActor->SkeletalMeshComponent->SetAnimationMode(EAnimationMode::AnimationSingleNode);
+					AscMapKitFanActor->SkeletalMeshComponent->AnimationData.AnimToPlay = FanData.AnimationSequence;
+				}
 
-					AscMapKitFanActor->MapKit.Custom.OverrideMaterials.Add(OverrideMaterialStruct);
+				if (FanColorType != EAscMapKitMaterialEmitColorTypeEnum::None && MaterialEmitColorTypeMaterialMap.Contains(FanColorType))
+				{
+					const auto MaterialAsset = MaterialEmitColorTypeMaterialMap[FanColorType];
 
-					AscMapKitFanActor->StaticMeshComponent->SetMaterial(OverrideMaterialStruct.MaterialIndex, OverrideMaterialStruct.Material);
+					if (MaterialAsset)
+						AscMapKitFanActor->SkeletalMeshComponent->SetMaterialByName(FName(TEXT("Emit")), MaterialAsset);
+				}
+
+				AscMapKitFanActor->MapKit.DisableCollision = ChkBoxAddFanDisableCollision->IsChecked();
+				AscMapKitFanActor->MapKit.Destructible.Enable = FanData.bHasDestructibleSupport && ChkBoxAddFanDestructible->IsChecked();
+
+				if (AscMapKitFanActor->MapKit.DisableCollision)
+					AscMapKitFanActor->MapKit.AnimationSpeed = 0.f;
+
+				if (FanData.DestructibleAnimationBlueprint)
+					AscMapKitFanActor->MapKit.Destructible.DestructibleClass = FanData.DestructibleAnimationBlueprint;
+
+				if (FanData.bHasParticleSupport)
+				{
+					AscMapKitFanActor->MapKit.PlayAmbientSoundCuePitch = FanData.PlayAmbientSoundCuePitch > 0.f ? FanData.PlayAmbientSoundCuePitch : 1.f;
+
+					AEmitter *ParticleEmitter = UAscMapKitEditorToolsHelper::GetEditorWorld()->SpawnActor<AEmitter>(SpawnLocation, FRotator::ZeroRotator);
+					
+					if (ParticleEmitter)
+					{
+						ParticleEmitter->SetActorRelativeLocation(FanData.ParticleRelativeLocationOffset);
+						ParticleEmitter->SetActorRelativeRotation(FanData.ParticleRelativeRotationOffset);
+
+#if USE_PARTICLES_CASCADE
+						//UParticleSystemComponent *ParticleComponent = NewObject<UParticleSystemComponent>(XXX, UParticleSystemComponent::StaticClass(), NAME_None, RF_Transactional);
+						UParticleSystem *UseParticleTemplate = FanData.Particle;
+#else
+						//UNiagaraComponent *ParticleComponent = NewObject<UNiagaraComponent>(XXX, UNiagaraComponent::StaticClass(), NAME_None, RF_Transactional);
+						UNiagaraSystem *UseParticleTemplate = FanData.Particle;
+#endif
+
+						const auto ParticleComponent = ParticleEmitter->GetParticleSystemComponent();
+
+						if (ParticleComponent)
+						{
+							ParticleEmitter->Modify();
+							ParticleComponent->Modify();
+
+							ParticleComponent->SetTemplate(UseParticleTemplate);
+
+							ParticleComponent->RegisterComponent();
+
+							const auto ParticleActorName = FString::Printf(TEXT("Particle_%s"), *AscMapKitFanActor->GetHumanReadableName());
+
+							ParticleEmitter->Rename(*(ParticleActorName + FGuid::NewGuid().ToString()));
+							ParticleEmitter->SetActorLabel(*ParticleActorName);
+							ParticleEmitter->AttachToActor(AscMapKitFanActor, FAttachmentTransformRules::KeepRelativeTransform);
+						}
+					}
 				}
 
 				AscMapKitFanActor->EditorUpdateFan(TEXT("FanType"), AscMapKitFanActor->MapKit.FanType);
@@ -2550,27 +2926,18 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddForcefieldOnClick()
 	{
 		auto UseForcefieldId = 0;
 
-		TArray<AActor *> FoundForcefields;
-		UGameplayStatics::GetAllActorsOfClass(UAscMapKitEditorToolsHelper::GetEditorWorld(), ForcefieldActorClass, FoundForcefields);
+		TArray<int32> FoundForcefieldIds;
 
-		if (FoundForcefields.Num() > 0)
+		for (TActorIterator<AAscMapKitForcefieldActor> ActorItr(UAscMapKitEditorToolsHelper::GetEditorWorld()); ActorItr; ++ActorItr)
 		{
-			TArray<int32> FoundForcefieldIds;
+			const auto FoundForcefield = *ActorItr;
 
-			for (const auto &FoundForcefield : FoundForcefields)
-			{
-				if (FoundForcefield && FoundForcefield->IsA(ForcefieldActorClass))
-				{
-					const auto Forcefield = Cast<AAscMapKitForcefieldActor>(FoundForcefield);
-
-					if (Forcefield)
-						FoundForcefieldIds.AddUnique(FCString::Atoi(*Forcefield->MapKit.Id));
-				}
-			}
-
-			if (FoundForcefieldIds.Num() > 0)
-				UseForcefieldId = *Algo::MaxElement(FoundForcefieldIds);
+			if (FoundForcefield)
+				FoundForcefieldIds.AddUnique(FCString::Atoi(*FoundForcefield->MapKit.Id));
 		}
+
+		if (FoundForcefieldIds.Num() > 0)
+			UseForcefieldId = *Algo::MaxElement(FoundForcefieldIds);
 
 		auto bForcefieldNameAlreadyExists = false;
 
@@ -3056,12 +3423,45 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddPowerupOnClick()
 
 	GEditor->SelectNone(true, true, false);
 
+	const auto bUseRandomLocations = Where == TEXT("Random");
+
+	TArray<FVector> RandomLocations;
+
+	if (bUseRandomLocations)
+	{
+		RandomLocations = UAscMapKitEditorToolsLevelGeometryHelper::GetRandomLocations();
+
+		if (RandomLocations.Num() <= 0)
+		{
+			UAscMapKitEditorToolsHelper::ShowErrorMessage(TEXT("Unable to generate random locations!"));
+			return;
+		}
+
+		auto TotalPowerupCount = 0;
+
+		for (const auto &PowerupDefault : PowerupDefaultCounts)
+			TotalPowerupCount += PowerupDefault.Value;
+
+		if (RandomLocations.Num() < TotalPowerupCount)
+		{
+			UAscMapKitEditorToolsHelper::ShowErrorMessage(FString::Printf(TEXT("Unable to generate enough random locations! Needs to be %d or more. Only generated %d."), TotalPowerupCount, RandomLocations.Num()));
+			return;
+		}
+	}
+
 	for (auto i = 0; i < Count; i++)
 	{
 		auto bPowerupNameAlreadyExists = false;
 
 		FString OutActorName = TEXT("");
 		FString OutActorDefaultName = TEXT("");
+
+		if (bUseRandomLocations)
+		{
+			const auto RandomIndex = FMath::RandRange(0, RandomLocations.Num() - 1);
+			SpawnLocation = RandomLocations[RandomIndex];
+			RandomLocations.RemoveAt(RandomIndex);
+		}
 
 		const auto AscMapKitPowerupActorSpawned = UAscMapKitEditorToolsHelper::SpawnInEditor(
 			PowerupActorClass,
@@ -3094,6 +3494,8 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddPowerupOnClick()
 			}
 		}
 	}
+
+	RandomLocations.Empty();
 
 	GEditor->NoteSelectionChange();
 
@@ -3128,6 +3530,49 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddPowerupsDefaultsOnClick()
 
 	UKismetSystemLibrary::BeginTransaction(TransactionContext, FText::FromString(TEXT("Add Default Powerups")), nullptr);
 
+	if (ChkBoxAddDefaultPowerupDeleteExisting->IsChecked())
+	{
+		for (FActorIterator ActorItr(UAscMapKitEditorToolsHelper::GetEditorWorld()); ActorItr; ++ActorItr)
+		{
+			const auto Actor = *ActorItr;
+			
+			if (Actor == nullptr)
+				continue;
+
+			if (Actor->IsA(AAscMapKitPowerupActor::StaticClass()))
+			{
+				UKismetSystemLibrary::TransactObject(Actor);
+				UAscMapKitEditorToolsHelper::GetEditorWorld()->DestroyActor(Actor, true);
+			}
+		}
+	}
+
+	const auto bUseRandomLocations = Where == TEXT("Random");
+
+	TArray<FVector> RandomLocations;
+
+	if (bUseRandomLocations)
+	{
+		RandomLocations = UAscMapKitEditorToolsLevelGeometryHelper::GetRandomLocations();
+
+		if (RandomLocations.Num() <= 0)
+		{
+			UAscMapKitEditorToolsHelper::ShowErrorMessage(TEXT("Unable to generate random locations!"));
+			return;
+		}
+
+		auto TotalPowerupCount = 0;
+
+		for (const auto &PowerupDefault : PowerupDefaultCounts)
+			TotalPowerupCount += PowerupDefault.Value;
+
+		if (RandomLocations.Num() < TotalPowerupCount)
+		{
+			UAscMapKitEditorToolsHelper::ShowErrorMessage(FString::Printf(TEXT("Unable to generate enough random locations! Needs to be %d or more. Only generated %d."), TotalPowerupCount, RandomLocations.Num()));
+			return;
+		}
+	}
+
 	for (const auto &PowerupDefault : PowerupDefaultCounts)
 	{
 		const auto PowerupType = PowerupDefault.Key;
@@ -3149,6 +3594,13 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddPowerupsDefaultsOnClick()
 		
 			FString OutActorName = TEXT("");
 			FString OutActorDefaultName = TEXT("");
+
+			if (bUseRandomLocations)
+			{
+				const auto RandomIndex = FMath::RandRange(0, RandomLocations.Num() - 1);
+				SpawnLocation = RandomLocations[RandomIndex];
+				RandomLocations.RemoveAt(RandomIndex);
+			}
 
 			const auto AscMapKitPowerupActorSpawned = UAscMapKitEditorToolsHelper::SpawnInEditor(
 				PowerupActorClass,
@@ -3183,14 +3635,184 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddPowerupsDefaultsOnClick()
 		}
 	}
 
+	if (ChkBoxAddDefaultPowerupClusterLasers->IsChecked())
+	{
+		TArray<AAscMapKitPowerupActor *> LaserCouplers;
+		TArray<AAscMapKitPowerupActor *> Lasers;
+
+		for (FActorIterator ActorItr(UAscMapKitEditorToolsHelper::GetEditorWorld()); ActorItr; ++ActorItr)
+		{
+			const auto Actor = *ActorItr;
+				
+			if (Actor == nullptr)
+				continue;
+
+			if (Actor->IsA(AAscMapKitPowerupActor::StaticClass()))
+			{
+				const auto PowerupActor = Cast<AAscMapKitPowerupActor>(Actor);
+
+				if (PowerupActor)
+				{
+					if (PowerupActor->MapKit.PowerupType == EAscMapKitPowerupTypeEnum::Aux_05)
+						LaserCouplers.AddUnique(PowerupActor);
+					else if (PowerupActor->MapKit.PowerupType == EAscMapKitPowerupTypeEnum::Weapon_Pri_01)
+						Lasers.AddUnique(PowerupActor);
+				}
+			}
+		}
+
+		if (LaserCouplers.Num() > 0 && Lasers.Num() > 0)
+		{
+			for (const auto &LaserCoupler : LaserCouplers)
+			{
+				if (Lasers.Num() > 0)
+				{
+					for (auto i = 0; i < 5; i++)
+					{
+						const auto Laser = Lasers.Pop();
+
+						switch (i)
+						{
+							case 0:
+								Laser->SetActorLocation(LaserCoupler->GetActorLocation() + FVector(300.f, 0.f, 0.f));
+								break;
+							case 1:
+								Laser->SetActorLocation(LaserCoupler->GetActorLocation() + FVector(-300.f, 0.f, 0.f));
+								break;
+							case 2:
+								Laser->SetActorLocation(LaserCoupler->GetActorLocation() + FVector(0.f, 0.f, 300.f));
+								break;
+							case 3:
+								Laser->SetActorLocation(LaserCoupler->GetActorLocation() + FVector(0.f, 0.f, -300.f));
+								break;
+							case 4:
+								Laser->SetActorLocation(LaserCoupler->GetActorLocation() + FVector(0.f, FMath::RandRange(0, 1) == 1 ? 300.f : -300.f, 0.f));
+								break;
+						}
+
+						UKismetSystemLibrary::TransactObject(Laser);
+
+						if (Lasers.Num() <= 0)
+							break;
+					}
+				}
+				
+				if (Lasers.Num() <= 0)
+					break;
+			}
+
+			LaserCouplers.Empty();
+			Lasers.Empty();
+		}
+	}
+
+	RandomLocations.Empty();
+
 	GEditor->NoteSelectionChange();
 
 	UKismetSystemLibrary::EndTransaction();
 }
 
+void UAscMapKitEditorToolsUtilityWidget::BtnAddPowerupRespawnTriggerOnClick()
+{
+	if (ComboBoxAddPowerupRespawnTriggerCount->GetSelectedIndex() == 0)
+	{
+		UAscMapKitEditorToolsHelper::ShowErrorMessage(TEXT("Please select how many powerup respawn trigger(s) to add!"));
+		return;
+	}
+
+	if (ComboBoxAddPowerupRespawnTriggerWhere->GetSelectedIndex() == 0)
+	{
+		UAscMapKitEditorToolsHelper::ShowErrorMessage(TEXT("Please select where to add the powerup respawn trigger(s)!"));
+		return;
+	}
+
+	const auto Count = FCString::Atoi(*ComboBoxAddPowerupRespawnTriggerCount->GetSelectedOption());
+	const auto Where = ComboBoxAddPowerupRespawnTriggerWhere->GetSelectedOption();
+
+	const TSubclassOf<AActor> PowerupRespawnTriggerActorClass = AAscMapKitPowerupRespawnTriggerBox::StaticClass();
+
+	auto SpawnLocation = FVector::ZeroVector;
+
+	if (Where == TEXT("Selected"))
+	{
+		const auto bFoundSelectedActor = UAscMapKitEditorToolsHelper::GetEditorFirstSelectedActor(SpawnLocation);
+
+		if (!bFoundSelectedActor)
+			UAscMapKitEditorToolsHelper::ShowWarnMessage(TEXT("Nothing was selected in the editor. Using spawn location (0, 0, 0)."));
+	}
+
+	const FString PowerupRespawnTriggerNamePrefix = TEXT("PowerupRespawnTrigger");
+	const auto PowerupRespawnTriggerNameSequence = UAscMapKitEditorToolsHelper::GetEditorNextActorSequence(PowerupRespawnTriggerActorClass, PowerupRespawnTriggerNamePrefix);
+
+	const auto TransactionContext = FString::Printf(TEXT("%s::%hc"), *GetClass()->GetName(), *__FUNCTION__);
+
+	UKismetSystemLibrary::BeginTransaction(TransactionContext, FText::FromString(TEXT("Add Powerup Respawn Trigger(s)")), nullptr);
+
+	GEditor->SelectNone(true, true, false);
+
+	for (auto i = 0; i < Count; i++)
+	{
+		auto bPowerupRespawnTriggerNameAlreadyExists = false;
+
+		FString OutActorName = TEXT("");
+		FString OutActorDefaultName = TEXT("");
+
+		const auto AscMapKitPowerupRespawnTriggerActorSpawned = UAscMapKitEditorToolsHelper::SpawnInEditor(
+			PowerupRespawnTriggerActorClass,
+			FTransform(SpawnLocation),
+			PowerupRespawnTriggerNamePrefix,
+			PowerupRespawnTriggerNameSequence + i,
+			bPowerupRespawnTriggerNameAlreadyExists,
+			OutActorName,
+			OutActorDefaultName
+		);
+
+		if (bPowerupRespawnTriggerNameAlreadyExists)
+			UAscMapKitEditorToolsHelper::ShowWarnMessage(FString::Printf(TEXT("Powerup respawn trigger '%s' already exists (name conflict?). Using a default name instead (sorry): %s"), *OutActorName, *OutActorDefaultName));
+
+		if (AscMapKitPowerupRespawnTriggerActorSpawned && AscMapKitPowerupRespawnTriggerActorSpawned->IsA(PowerupRespawnTriggerActorClass))
+		{
+			const auto AscMapKitPowerupRespawnTriggerActor = Cast<AAscMapKitPowerupRespawnTriggerBox>(AscMapKitPowerupRespawnTriggerActorSpawned);
+
+			if (AscMapKitPowerupRespawnTriggerActor)
+			{
+				AscMapKitPowerupRespawnTriggerActor->BoxBounds.X = 1000.f;
+				AscMapKitPowerupRespawnTriggerActor->BoxBounds.Y = 1000.f;
+				AscMapKitPowerupRespawnTriggerActor->BoxBounds.Z = 1000.f;
+				AscMapKitPowerupRespawnTriggerActor->SyncBoxes(false);
+
+				AscMapKitPowerupRespawnTriggerActor->SetFolderPath(FName("Powerups/RespawnTriggers"));
+
+				GEditor->SelectActor(AscMapKitPowerupRespawnTriggerActor, true, true);
+
+				UKismetSystemLibrary::TransactObject(AscMapKitPowerupRespawnTriggerActor);
+
+				UAscMapKitEditorToolsHelper::ShowInfoMessage(FString::Printf(TEXT("Created powerup respawn trigger: %s"), *AscMapKitPowerupRespawnTriggerActor->GetHumanReadableName()));
+			}
+		}
+	}
+
+	GEditor->NoteSelectionChange();
+
+	UKismetSystemLibrary::EndTransaction();
+
+	UAscMapKitEditorToolsHelper::ShowWarnMessage(TEXT("'Undo' after actor creation may not work. This is a known issue with Unreal Engine (sorry)."));
+}
+
 void UAscMapKitEditorToolsUtilityWidget::BtnSubTitleCreateTriggerOnClick()
 {
 	ToggleSection(TEXT("Trigger"), TxtSubTitleCreateTrigger, SectionPanelTrigger);
+}
+
+void UAscMapKitEditorToolsUtilityWidget::ComboBoxAddTriggerTypeOnSelectionChanged(const FString SelectedItem, const ESelectInfo::Type SelectionType)
+{
+	const auto NameClean = SelectedItem.Replace(TEXT(" "), TEXT(""));
+
+	if (TriggerButtonMap.Contains(NameClean))
+		TriggerButtonMap[NameClean]->OnClicked.Broadcast();
+	else
+		HandleButtonSelectionHighlighting(GridPanelTrigger, true);
 }
 
 void UAscMapKitEditorToolsUtilityWidget::BtnAddTriggerOnClick()
@@ -3290,27 +3912,18 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddTriggerOnClick()
 	{
 		auto UseTriggerId = 0;
 
-		TArray<AActor *> FoundTriggers;
-		UGameplayStatics::GetAllActorsOfClass(UAscMapKitEditorToolsHelper::GetEditorWorld(), TriggerActorClass, FoundTriggers);
+		TArray<int32> FoundTriggerIds;
 
-		if (FoundTriggers.Num() > 0)
+		for (TActorIterator<AAscMapKitTriggerActor> ActorItr(UAscMapKitEditorToolsHelper::GetEditorWorld()); ActorItr; ++ActorItr)
 		{
-			TArray<int32> FoundTriggerIds;
+			const auto FoundTrigger = *ActorItr;
 
-			for (const auto &FoundTrigger : FoundTriggers)
-			{
-				if (FoundTrigger && FoundTrigger->IsA(TriggerActorClass))
-				{
-					const auto Trigger = Cast<AAscMapKitTriggerActor>(FoundTrigger);
-
-					if (Trigger)
-						FoundTriggerIds.AddUnique(FCString::Atoi(*Trigger->MapKit.Id));
-				}
-			}
-
-			if (FoundTriggerIds.Num() > 0)
-				UseTriggerId = *Algo::MaxElement(FoundTriggerIds);
+			if (FoundTrigger)
+				FoundTriggerIds.AddUnique(FCString::Atoi(*FoundTrigger->MapKit.Id));
 		}
+
+		if (FoundTriggerIds.Num() > 0)
+			UseTriggerId = *Algo::MaxElement(FoundTriggerIds);
 		
 		auto bTriggerNameAlreadyExists = false;
 
@@ -3382,13 +3995,21 @@ void UAscMapKitEditorToolsUtilityWidget::BtnGenerateEffectsOnClick()
 
 	UKismetSystemLibrary::BeginTransaction(TransactionContext, FText::FromString(TEXT("Generate Effects")), nullptr);
 
+	auto WorldSettings = UAscMapKitEditorToolsHelper::GetEditorWorld()->GetWorldSettings();
+
+	WorldSettings->LightmassSettings.NumSkyLightingBounces = 0.f;
+
+	UKismetSystemLibrary::TransactObject(WorldSettings);
+
 	if (ChkBoxGenerateEffectsFog1->IsChecked())
 	{
 		const auto AtmosphericFogClass = AAtmosphericFog::StaticClass();
 		
-		// todo: @UE5: AAtmosphericFog is deprecated, switch to ASkyAtmosphere, even though is sucks because we almost never use directional lights
-		TArray<AActor *> FoundAtmosphericFogs;
-		UGameplayStatics::GetAllActorsOfClass(UAscMapKitEditorToolsHelper::GetEditorWorld(), AtmosphericFogClass, FoundAtmosphericFogs);
+		// todo: @UE5: AAtmosphericFog is deprecated, switch to ASkyAtmosphere, even though it sucks because we almost never use directional lights
+		TArray<AAtmosphericFog *> FoundAtmosphericFogs;
+
+		for (TActorIterator<AAtmosphericFog> ActorItr(UAscMapKitEditorToolsHelper::GetEditorWorld()); ActorItr; ++ActorItr)
+			FoundAtmosphericFogs.Add(*ActorItr);
 
 		if (FoundAtmosphericFogs.Num() > 0)
 			UAscMapKitEditorToolsHelper::ShowWarnMessage(TEXT("Atmospheric fog already exists. Delete existing actor(s) until none are left, and then this generator will create one."));
@@ -3422,7 +4043,7 @@ void UAscMapKitEditorToolsUtilityWidget::BtnGenerateEffectsOnClick()
 				{
 					AscMapKitFogActor->GetAtmosphericFogComponent()->SetMobility(EComponentMobility::Movable);
 					AscMapKitFogActor->GetAtmosphericFogComponent()->SunMultiplier = 0.01f;
-					AscMapKitFogActor->GetAtmosphericFogComponent()->FogMultiplier = 6.f;
+					AscMapKitFogActor->GetAtmosphericFogComponent()->FogMultiplier = 3.f;
 					AscMapKitFogActor->GetAtmosphericFogComponent()->DensityMultiplier = 6.f;
 					AscMapKitFogActor->GetAtmosphericFogComponent()->DistanceScale = 20.f;
 					AscMapKitFogActor->GetAtmosphericFogComponent()->GroundOffset = -20000.f;
@@ -3452,8 +4073,10 @@ void UAscMapKitEditorToolsUtilityWidget::BtnGenerateEffectsOnClick()
 	{
 		const auto ExponentialHeightFogClass = AExponentialHeightFog::StaticClass();
 
-		TArray<AActor *> FoundExponentialHeightFogs;
-		UGameplayStatics::GetAllActorsOfClass(UAscMapKitEditorToolsHelper::GetEditorWorld(), ExponentialHeightFogClass, FoundExponentialHeightFogs);
+		TArray<AExponentialHeightFog *> FoundExponentialHeightFogs;
+
+		for (TActorIterator<AExponentialHeightFog> ActorItr(UAscMapKitEditorToolsHelper::GetEditorWorld()); ActorItr; ++ActorItr)
+			FoundExponentialHeightFogs.Add(*ActorItr);
 
 		if (FoundExponentialHeightFogs.Num() > 0)
 			UAscMapKitEditorToolsHelper::ShowWarnMessage(TEXT("Exponential height fog already exists. Delete existing actor(s) until none are left, and then this generator will create one."));
@@ -3486,7 +4109,7 @@ void UAscMapKitEditorToolsUtilityWidget::BtnGenerateEffectsOnClick()
 				if (AscMapKitFogActor && AscMapKitFogActor->GetComponent())
 				{
 					AscMapKitFogActor->GetComponent()->SetMobility(EComponentMobility::Movable);
-					AscMapKitFogActor->GetComponent()->FogDensity = 0.006f;
+					AscMapKitFogActor->GetComponent()->FogDensity = 0.004f;
 					AscMapKitFogActor->GetComponent()->FogHeightFalloff = 0.f;
 					AscMapKitFogActor->GetComponent()->FogInscatteringColor = FLinearColor::White;
 					AscMapKitFogActor->GetComponent()->FogMaxOpacity = 0.01f;
@@ -3515,8 +4138,10 @@ void UAscMapKitEditorToolsUtilityWidget::BtnGenerateEffectsOnClick()
 	{
 		const auto LightmassImportanceVolumeClass = ALightmassImportanceVolume::StaticClass();
 
-		TArray<AActor *> FoundLightmassImportanceVolumes;
-		UGameplayStatics::GetAllActorsOfClass(UAscMapKitEditorToolsHelper::GetEditorWorld(), LightmassImportanceVolumeClass, FoundLightmassImportanceVolumes);
+		TArray<ALightmassImportanceVolume *> FoundLightmassImportanceVolumes;
+		
+		for (TActorIterator<ALightmassImportanceVolume> ActorItr(UAscMapKitEditorToolsHelper::GetEditorWorld()); ActorItr; ++ActorItr)
+			FoundLightmassImportanceVolumes.Add(*ActorItr);
 
 		if (FoundLightmassImportanceVolumes.Num() > 0)
 			UAscMapKitEditorToolsHelper::ShowWarnMessage(TEXT("Lightmass importance volume already exists. Delete existing actor(s) until none are left, and then this generator will create one."));
@@ -3555,8 +4180,10 @@ void UAscMapKitEditorToolsUtilityWidget::BtnGenerateEffectsOnClick()
 	{
 		const auto PostProcessClass = AAscMapKitDefaultPostProcessActor::StaticClass();
 
-		TArray<AActor *> FoundPostProcesss;
-		UGameplayStatics::GetAllActorsOfClass(UAscMapKitEditorToolsHelper::GetEditorWorld(), PostProcessClass, FoundPostProcesss);
+		TArray<AAscMapKitDefaultPostProcessActor *> FoundPostProcesss;
+
+		for (TActorIterator<AAscMapKitDefaultPostProcessActor> ActorItr(UAscMapKitEditorToolsHelper::GetEditorWorld()); ActorItr; ++ActorItr)
+			FoundPostProcesss.Add(*ActorItr);
 
 		if (FoundPostProcesss.Num() > 0)
 			UAscMapKitEditorToolsHelper::ShowWarnMessage(TEXT("Default post process already exists. Delete existing actor(s) until none are left, and then this generator will create one."));
@@ -3597,8 +4224,10 @@ void UAscMapKitEditorToolsUtilityWidget::BtnGenerateEffectsOnClick()
 	{
 		const auto NavmapClass = AAscMapKitNavmapActor::StaticClass();
 
-		TArray<AActor *> FoundNavmaps;
-		UGameplayStatics::GetAllActorsOfClass(UAscMapKitEditorToolsHelper::GetEditorWorld(), NavmapClass, FoundNavmaps);
+		TArray<AAscMapKitNavmapActor *> FoundNavmaps;
+
+		for (TActorIterator<AAscMapKitNavmapActor> ActorItr(UAscMapKitEditorToolsHelper::GetEditorWorld()); ActorItr; ++ActorItr)
+			FoundNavmaps.Add(*ActorItr);
 
 		if (FoundNavmaps.Num() > 0)
 			UAscMapKitEditorToolsHelper::ShowWarnMessage(TEXT("Default navmap already exists. Delete existing actor(s) until none are left, and then this generator will create one."));
@@ -3750,44 +4379,38 @@ void UAscMapKitEditorToolsUtilityWidget::BtnGenerateNavmapBoundsOnClick()
 	AAscMapKitNavmapActor *NavmapActor = nullptr;
 	FBox CombinedBox(EForceInit::ForceInitToZero);
 
-	TArray<AActor *> FoundActors;
-	UGameplayStatics::GetAllActorsOfClass(UAscMapKitEditorToolsHelper::GetEditorWorld(), AActor::StaticClass(), FoundActors);
-
-	if (FoundActors.Num() > 0)
+	for (FActorIterator ActorItr(UAscMapKitEditorToolsHelper::GetEditorWorld()); ActorItr; ++ActorItr)
 	{
-		for (auto i = 0; i < FoundActors.Num(); i++)
+		const auto Actor = *ActorItr;
+		
+		if (Actor == nullptr)
+			continue;
+
+		if (Actor->IsA(AAscMapKitNavmapActor::StaticClass()))
 		{
-			const auto Actor = FoundActors[i];
-			
+			NavmapActor = Cast<AAscMapKitNavmapActor>(Actor);
+			bFoundNavmap = true;
+			break;
+		}
+	}
+
+	if (NavmapActor)
+	{
+		for (FActorIterator ActorItr(UAscMapKitEditorToolsHelper::GetEditorWorld()); ActorItr; ++ActorItr)
+		{
+			const auto Actor = *ActorItr;
+		
 			if (Actor == nullptr)
 				continue;
 
-			if (Actor->IsA(AAscMapKitNavmapActor::StaticClass()))
-			{
-				NavmapActor = Cast<AAscMapKitNavmapActor>(Actor);
-				bFoundNavmap = true;
-				break;
-			}
-		}
+			if (!Actor->ActorHasTag(TEXT("Level")))
+				continue;
 
-		if (NavmapActor)
-		{
-			for (auto i = 0; i < FoundActors.Num(); i++)
-			{
-				const auto Actor = FoundActors[i];
-			
-				if (Actor == nullptr)
-					continue;
+			const auto ActorBounds = Actor->GetComponentsBoundingBox(true);
 
-				if (!Actor->ActorHasTag(TEXT("Level")))
-					continue;
+			CombinedBox += ActorBounds;
 
-				const auto ActorBounds = Actor->GetComponentsBoundingBox(true);
-
-				CombinedBox += ActorBounds;
-
-				bFoundLevel = true;
-			}
+			bFoundLevel = true;
 		}
 	}
 
@@ -3854,223 +4477,319 @@ void UAscMapKitEditorToolsUtilityWidget::BtnRunValidateOnClick()
 	auto bFoundErrors = false;
 	auto bFoundWarnings = false;
 
+	// Force No Precomputed Lighting
+	if (UAscMapKitEditorToolsHelper::GetEditorWorld())
+	{
+		if (UAscMapKitEditorToolsHelper::GetEditorWorld()->GetWorldSettings()->bForceNoPrecomputedLighting)
+		{
+			AppendOutput(ScrollBoxOutputValidateErrors, TxtBoxOutputValidateErrors, TEXT("• 'Force No Precomputed Lighting' is ENABLED! This means lighting will be fully dynamic, which is known to cause huge performance/FPS loss! To disable, go to 'World Settings' and uncheck it. Then, setup lightmaps on your assets and cook/build lighting instead. Look at the Ascentroid 'Help' section for tips on lighting."));
+			bFoundErrors = true;
+		}
+	}
+
 	// Navmap
 	auto bFoundNavmap = false;
-	
-	TArray<AActor *> FoundNavmaps;
-	UGameplayStatics::GetAllActorsOfClass(UAscMapKitEditorToolsHelper::GetEditorWorld(), AAscMapKitNavmapActor::StaticClass(), FoundNavmaps);
 
-	if (FoundNavmaps.Num() <= 0)
+	for (TActorIterator<AAscMapKitNavmapActor> ActorItr(UAscMapKitEditorToolsHelper::GetEditorWorld()); ActorItr; ++ActorItr)
+	{
+		if (*ActorItr)
+		{
+			bFoundNavmap = true;
+			break;
+		}
+	}
+
+	if (!bFoundNavmap)
 	{
 		AppendOutput(ScrollBoxOutputValidateErrors, TxtBoxOutputValidateErrors, TEXT("• A default navmap actor is missing!"));
 		bFoundErrors = true;
 	}
 
 	// Post Process
-	TArray<AActor *> FoundPostProcesses;
-	UGameplayStatics::GetAllActorsOfClass(UAscMapKitEditorToolsHelper::GetEditorWorld(), AAscMapKitDefaultPostProcessActor::StaticClass(), FoundPostProcesses);
+	auto bFoundPostProcesses = false;
 
-	if (FoundPostProcesses.Num() <= 0)
+	for (TActorIterator<AAscMapKitDefaultPostProcessActor> ActorItr(UAscMapKitEditorToolsHelper::GetEditorWorld()); ActorItr; ++ActorItr)
+	{
+		if (*ActorItr)
+		{
+			bFoundPostProcesses = true;
+			break;
+		}
+	}
+
+	if (!bFoundPostProcesses)
 	{
 		AppendOutput(ScrollBoxOutputValidateErrors, TxtBoxOutputValidateErrors, TEXT("• A default post process actor is missing!"));
 		bFoundErrors = true;
 	}
 
 	// Player Starts
-	TArray<AActor *> FoundPlayerStarts;
-	UGameplayStatics::GetAllActorsOfClass(UAscMapKitEditorToolsHelper::GetEditorWorld(), AAscMapKitPlayerStart::StaticClass(), FoundPlayerStarts);
+	int32 PlayerStartCount = 0;
 
-	if (FoundPlayerStarts.Num() < 4)
+	for (TActorIterator<AAscMapKitPlayerStart> ActorItr(UAscMapKitEditorToolsHelper::GetEditorWorld()); ActorItr; ++ActorItr)
+	{
+		if (*ActorItr)
+			PlayerStartCount++;
+	}
+
+	if (PlayerStartCount < 4)
 	{
 		AppendOutput(ScrollBoxOutputValidateErrors, TxtBoxOutputValidateErrors, TEXT("• A minimum of four (4) player start positions are required!"));
 		bFoundErrors = true;
 	}
 
-	// Doors
-	TArray<AActor *> FoundDoors;
-	UGameplayStatics::GetAllActorsOfClass(UAscMapKitEditorToolsHelper::GetEditorWorld(), AAscMapKitDoorActor::StaticClass(), FoundDoors);
+	// Areas
+	TArray<FString> AreaIds;
+	int32 AreaCount = 0;
 
-	if (FoundDoors.Num() > 0)
+	for (TActorIterator<AAscMapKitEnvironmentAreaActor> ActorItr(UAscMapKitEditorToolsHelper::GetEditorWorld()); ActorItr; ++ActorItr)
 	{
-		TArray<FString> DoorIds;
+		const auto FoundArea = *ActorItr;
 
-		for (const auto &DoorActor : FoundDoors)
+		if (FoundArea && !FoundArea->MapKit.EnvironmentAreaId.IsEmpty())
 		{
-			if (DoorActor && DoorActor->IsA(AAscMapKitDoorActor::StaticClass()))
-			{
-				const auto Door = Cast<AAscMapKitDoorActor>(DoorActor);
-
-				if (Door)
-					DoorIds.AddUnique(Door->MapKit.Id.ToLower().TrimStartAndEnd());
-			}
-		}
-
-		if (DoorIds.Num() != FoundDoors.Num())
-		{
-			AppendOutput(ScrollBoxOutputValidateErrors, TxtBoxOutputValidateErrors, TEXT("• Door IDs are not unique. Please check and fix door IDs!"));
-			bFoundErrors = true;
+			AreaIds.AddUnique(FoundArea->MapKit.EnvironmentAreaId.ToLower().TrimStartAndEnd());
+			AreaCount++;
 		}
 	}
 
-	// Forcefields
-	TArray<AActor *> FoundForcefields;
-	UGameplayStatics::GetAllActorsOfClass(UAscMapKitEditorToolsHelper::GetEditorWorld(), AAscMapKitForcefieldActor::StaticClass(), FoundForcefields);
-
-	if (FoundForcefields.Num() > 0)
+	if (AreaIds.Num() != AreaCount)
 	{
-		TArray<FString> ForcefieldIds;
+		AppendOutput(ScrollBoxOutputValidateErrors, TxtBoxOutputValidateErrors, TEXT("• Environment Area IDs are not unique. Please check and fix environment area IDs!"));
+		bFoundErrors = true;
+	}
+	
+	// Doors
+	TArray<FString> DoorIds;
+	int32 DoorCount = 0;
 
-		for (const auto &ForcefieldActor : FoundForcefields)
+	for (TActorIterator<AAscMapKitDoorActor> ActorItr(UAscMapKitEditorToolsHelper::GetEditorWorld()); ActorItr; ++ActorItr)
+	{
+		const auto FoundDoor = *ActorItr;
+		
+		if (FoundDoor)
 		{
-			if (ForcefieldActor && ForcefieldActor->IsA(AAscMapKitForcefieldActor::StaticClass()))
-			{
-				const auto Forcefield = Cast<AAscMapKitForcefieldActor>(ForcefieldActor);
-
-				if (Forcefield)
-					ForcefieldIds.AddUnique(Forcefield->MapKit.Id.ToLower().TrimStartAndEnd());
-			}
+			DoorIds.AddUnique(FoundDoor->MapKit.Id.ToLower().TrimStartAndEnd());
+			DoorCount++;
 		}
+	}
 
-		if (ForcefieldIds.Num() != FoundForcefields.Num())
+	if (DoorIds.Num() != DoorCount)
+	{
+		AppendOutput(ScrollBoxOutputValidateErrors, TxtBoxOutputValidateErrors, TEXT("• Door IDs are not unique. Please check and fix door IDs!"));
+		bFoundErrors = true;
+	}
+	
+	// Forcefields
+	TArray<FString> ForcefieldIds;
+	int32 ForcefieldCount = 0;
+
+	for (TActorIterator<AAscMapKitForcefieldActor> ActorItr(UAscMapKitEditorToolsHelper::GetEditorWorld()); ActorItr; ++ActorItr)
+	{
+		const auto Forcefield = *ActorItr;
+		
+		if (Forcefield)
 		{
-			AppendOutput(ScrollBoxOutputValidateErrors, TxtBoxOutputValidateErrors, TEXT("• Forcefield IDs are not unique. Please check and fix forcefield IDs!"));
-			bFoundErrors = true;
+			ForcefieldIds.AddUnique(Forcefield->MapKit.Id.ToLower().TrimStartAndEnd());
+			ForcefieldCount++;
 		}
+	}
+
+	if (ForcefieldIds.Num() != ForcefieldCount)
+	{
+		AppendOutput(ScrollBoxOutputValidateErrors, TxtBoxOutputValidateErrors, TEXT("• Forcefield IDs are not unique. Please check and fix forcefield IDs!"));
+		bFoundErrors = true;
 	}
 
 	// Triggers
-	TArray<AActor *> FoundTriggers;
-	UGameplayStatics::GetAllActorsOfClass(UAscMapKitEditorToolsHelper::GetEditorWorld(), AAscMapKitTriggerActor::StaticClass(), FoundTriggers);
+	TArray<FString> TriggerIds;
+	int32 TriggerCount = 0;
 
-	if (FoundTriggers.Num() > 0)
+	for (TActorIterator<AAscMapKitTriggerActor> ActorItr(UAscMapKitEditorToolsHelper::GetEditorWorld()); ActorItr; ++ActorItr)
 	{
-		TArray<FString> TriggerIds;
+		const auto Trigger = *ActorItr;
 
-		for (const auto &TriggerActor : FoundTriggers)
+		if (Trigger)
 		{
-			if (TriggerActor && TriggerActor->IsA(AAscMapKitTriggerActor::StaticClass()))
-			{
-				const auto Trigger = Cast<AAscMapKitTriggerActor>(TriggerActor);
-
-				if (Trigger)
-					TriggerIds.AddUnique(Trigger->MapKit.Id.ToLower().TrimStartAndEnd());
-			}
+			TriggerIds.AddUnique(Trigger->MapKit.Id.ToLower().TrimStartAndEnd());
+			TriggerCount++;
 		}
+	}
 
-		if (TriggerIds.Num() != FoundTriggers.Num())
-		{
-			AppendOutput(ScrollBoxOutputValidateErrors, TxtBoxOutputValidateErrors, TEXT("• Trigger IDs are not unique. Please check and fix trigger IDs!"));
-			bFoundErrors = true;
-		}
+	if (TriggerIds.Num() != TriggerCount)
+	{
+		AppendOutput(ScrollBoxOutputValidateErrors, TxtBoxOutputValidateErrors, TEXT("• Trigger IDs are not unique. Please check and fix trigger IDs!"));
+		bFoundErrors = true;
 	}
 
 	// Atmospheric Fog
 	// todo: @reminder: UE5
-	TArray<AActor *> FoundFog1;
-	UGameplayStatics::GetAllActorsOfClass(UAscMapKitEditorToolsHelper::GetEditorWorld(), AAtmosphericFog::StaticClass(), FoundFog1);
+	auto bFoundFog1 = false;
 
-	if (FoundFog1.Num() <= 0)
+	for (TActorIterator<AAtmosphericFog> ActorItr(UAscMapKitEditorToolsHelper::GetEditorWorld()); ActorItr; ++ActorItr)
+	{
+		if (*ActorItr)
+		{
+			bFoundFog1 = true;
+			break;
+		}
+	}
+
+	if (!bFoundFog1)
 	{
 		AppendOutput(ScrollBoxOutputValidateWarnings, TxtBoxOutputValidateWarnings, TEXT("• Atmospheric Fog is missing!"));
 		bFoundWarnings = true;
 	}
 
 	// Exponential Height Fog
-	TArray<AActor *> FoundExponentialHeightFog;
-	UGameplayStatics::GetAllActorsOfClass(UAscMapKitEditorToolsHelper::GetEditorWorld(), AExponentialHeightFog::StaticClass(), FoundExponentialHeightFog);
+	auto bFoundExponentialHeightFog = false;
 
-	if (FoundExponentialHeightFog.Num() <= 0)
+	for (TActorIterator<AExponentialHeightFog> ActorItr(UAscMapKitEditorToolsHelper::GetEditorWorld()); ActorItr; ++ActorItr)
+	{
+		if (*ActorItr)
+		{
+			bFoundExponentialHeightFog = true;
+			break;
+		}
+	}
+	
+	if (!bFoundExponentialHeightFog)
 	{
 		AppendOutput(ScrollBoxOutputValidateWarnings, TxtBoxOutputValidateWarnings, TEXT("• Exponential Height Fog is missing!"));
 		bFoundWarnings = true;
 	}
 
 	// Lightmass Importance Volume
-	TArray<AActor *> FoundLightmassImportance;
-	UGameplayStatics::GetAllActorsOfClass(UAscMapKitEditorToolsHelper::GetEditorWorld(), ALightmassImportanceVolume::StaticClass(), FoundLightmassImportance);
+	auto bFoundLightmassImportance = false;
 
-	if (FoundLightmassImportance.Num() <= 0)
+	for (TActorIterator<ALightmassImportanceVolume> ActorItr(UAscMapKitEditorToolsHelper::GetEditorWorld()); ActorItr; ++ActorItr)
+	{
+		if (*ActorItr)
+		{
+			bFoundLightmassImportance = true;
+			break;
+		}
+	}
+	
+	if (!bFoundLightmassImportance)
 	{
 		AppendOutput(ScrollBoxOutputValidateWarnings, TxtBoxOutputValidateWarnings, TEXT("• Lightmass Importance Volume is missing!"));
 		bFoundWarnings = true;
 	}
 
 	// Level Meshes
-	TArray<AActor *> FoundActors;
-	UGameplayStatics::GetAllActorsOfClass(UAscMapKitEditorToolsHelper::GetEditorWorld(), AActor::StaticClass(), FoundActors);
+	auto bFoundLevel = false;
 
-	if (FoundActors.Num() > 0)
+	AAscMapKitNavmapActor *NavmapActor = nullptr;
+	FBox CombinedBox(EForceInit::ForceInitToZero);
+
+	for (FActorIterator ActorItr(UAscMapKitEditorToolsHelper::GetEditorWorld()); ActorItr; ++ActorItr)
 	{
-		auto bFoundLevel = false;
+		const auto Actor = *ActorItr;
 
-		AAscMapKitNavmapActor *NavmapActor = nullptr;
-		FBox CombinedBox(EForceInit::ForceInitToZero);
-
-		for (const auto &Actor : FoundActors)
+		if (Actor)
 		{
-			if (Actor)
+			if (Actor->IsA(AAscMapKitNavmapActor::StaticClass()))
 			{
-				if (Actor->IsA(AAscMapKitNavmapActor::StaticClass()))
-				{
-					NavmapActor = Cast<AAscMapKitNavmapActor>(Actor);
-					bFoundNavmap = true;
-				}
-
-				if (Actor->ActorHasTag(TEXT("Level")))
-				{
-					bFoundLevel = true;
-
-					const auto ActorBounds = Actor->GetComponentsBoundingBox(true);
-
-					CombinedBox += ActorBounds;
-				}
+				NavmapActor = Cast<AAscMapKitNavmapActor>(Actor);
+				bFoundNavmap = true;
 			}
-		}
 
-		if (!bFoundLevel)
-		{
-			AppendOutput(ScrollBoxOutputValidateErrors, TxtBoxOutputValidateErrors, TEXT("• Level actors missing! No actor tag found!"));
-			bFoundErrors = true;
-		}
-		else
-		{
-			if (bFoundNavmap && NavmapActor && NavmapActor->Box)
+			if (Actor->ActorHasTag(TEXT("Level")))
 			{
-				const auto NewCenter = CombinedBox.GetCenter();
-				const auto NewExtent = CombinedBox.GetExtent() + NavmapBoundsPadding;
-				const auto NewExtentSize = NewExtent.Size();
+				bFoundLevel = true;
 
-				const auto CurrentExtentCenter = NavmapActor->GetActorLocation();
-				const auto CurrentExtentSize = NavmapActor->Box->GetScaledBoxExtent().Size();
+				const auto ActorBounds = Actor->GetComponentsBoundingBox(true);
 
-				if (NewExtentSize != CurrentExtentSize || NewCenter != CurrentExtentCenter)
+				CombinedBox += ActorBounds;
+
+				if (Actor->IsA(AStaticMeshActor::StaticClass()))
 				{
-					FString WarnMsg = TEXT("• Level actor(s) and/or navmap bounds may have changed! Do you need to re-generate?");
+					const auto StaticMeshActor = Cast<AStaticMeshActor>(Actor);
 
-					if (NewExtentSize != CurrentExtentSize)
-						WarnMsg += FString::Printf(
-							TEXT(" ° New size detected: %f; Current size: %f"),
-							NewExtentSize,
-							CurrentExtentSize
-						);
+					if (StaticMeshActor)
+					{
+						const auto StaticMeshComponent = StaticMeshActor->GetStaticMeshComponent();
 
-					if (NewCenter != CurrentExtentCenter)
-						WarnMsg += FString::Printf(
-							TEXT(" ° New location detected: %f, %f, %f; Current location: %f, %f, %f"),
-							NewCenter.X, NewCenter.Y, NewCenter.Z,
-							CurrentExtentCenter.X, CurrentExtentCenter.Y, CurrentExtentCenter.Z
-						);
+						if (StaticMeshComponent)
+						{
+							const auto StaticMesh = StaticMeshComponent->GetStaticMesh();
 
-					AppendOutput(ScrollBoxOutputValidateWarnings, TxtBoxOutputValidateWarnings, WarnMsg);
-					bFoundWarnings = true;
+							if (StaticMesh)
+							{
+								if (const auto BodySetup = StaticMesh->BodySetup)
+								{
+									if (BodySetup->CollisionTraceFlag != ECollisionTraceFlag::CTF_UseComplexAsSimple)
+									{
+										const auto WarnMsg = FString::Printf(TEXT("• Level actor '%s' collision complexity is not set to 'Use Complex As Simple'."), *Actor->GetHumanReadableName());
+										AppendOutput(ScrollBoxOutputValidateWarnings, TxtBoxOutputValidateWarnings, WarnMsg);
+									}
+								}
+
+								if (StaticMesh->RenderData)
+								{
+									const FStaticMeshLODResources &LODResources = StaticMesh->RenderData->LODResources[0];
+
+									// Channel 0 = Num += 1; Channel 1 = Num += 2
+									if (LODResources.GetNumTexCoords() < 2)
+									{
+										const auto WarnMsg = FString::Printf(TEXT("• Level actor '%s' is missing UV Channel 1 (default lightmap channel)."), *Actor->GetHumanReadableName());
+										AppendOutput(ScrollBoxOutputValidateWarnings, TxtBoxOutputValidateWarnings, WarnMsg);
+									}
+								}
+							}
+						}
+					}
 				}
 			}
 		}
 	}
 
+	if (!bFoundLevel)
+	{
+		AppendOutput(ScrollBoxOutputValidateErrors, TxtBoxOutputValidateErrors, TEXT("• Level actors missing! No actor tag found!"));
+		bFoundErrors = true;
+	}
+	else
+	{
+		if (bFoundNavmap && NavmapActor && NavmapActor->Box)
+		{
+			const auto NewCenter = CombinedBox.GetCenter();
+			const auto NewExtent = CombinedBox.GetExtent() + NavmapBoundsPadding;
+			const auto NewExtentSize = NewExtent.Size();
+
+			const auto CurrentExtentCenter = NavmapActor->GetActorLocation();
+			const auto CurrentExtentSize = NavmapActor->Box->GetScaledBoxExtent().Size();
+
+			if (NewExtentSize != CurrentExtentSize || NewCenter != CurrentExtentCenter)
+			{
+				FString WarnMsg = TEXT("• Level actor(s) and/or navmap bounds may have changed! Do you need to re-generate?");
+
+				if (NewExtentSize != CurrentExtentSize)
+					WarnMsg += FString::Printf(
+						TEXT(" ° New size detected: %f; Current size: %f"),
+						NewExtentSize,
+						CurrentExtentSize
+					);
+
+				if (NewCenter != CurrentExtentCenter)
+					WarnMsg += FString::Printf(
+						TEXT(" ° New location detected: %f, %f, %f; Current location: %f, %f, %f"),
+						NewCenter.X, NewCenter.Y, NewCenter.Z,
+						CurrentExtentCenter.X, CurrentExtentCenter.Y, CurrentExtentCenter.Z
+					);
+
+				AppendOutput(ScrollBoxOutputValidateWarnings, TxtBoxOutputValidateWarnings, WarnMsg);
+				bFoundWarnings = true;
+			}
+		}
+	}
+
 	// Powerups
-	TArray<AActor *> FoundPowerups;
-	UGameplayStatics::GetAllActorsOfClass(UAscMapKitEditorToolsHelper::GetEditorWorld(), AAscMapKitPowerupActor::StaticClass(), FoundPowerups);
+	TArray<AAscMapKitPowerupActor *> FoundPowerups;
+
+	for (TActorIterator<AAscMapKitPowerupActor> ActorItr(UAscMapKitEditorToolsHelper::GetEditorWorld()); ActorItr; ++ActorItr)
+		FoundPowerups.Add(*ActorItr);
 
 	if (FoundPowerups.Num() <= 0)
 	{
@@ -4133,9 +4852,11 @@ void UAscMapKitEditorToolsUtilityWidget::BtnRunValidateOnClick()
 	}
 
 	// Powerup Respawn Triggers
-	TArray<AActor *> FoundPowerupRespawns;
-	UGameplayStatics::GetAllActorsOfClass(UAscMapKitEditorToolsHelper::GetEditorWorld(), AAscMapKitPowerupRespawnTriggerBox::StaticClass(), FoundPowerupRespawns);
+	TArray<AAscMapKitPowerupRespawnTriggerBox *> FoundPowerupRespawns;
 
+	for (TActorIterator<AAscMapKitPowerupRespawnTriggerBox> ActorItr(UAscMapKitEditorToolsHelper::GetEditorWorld()); ActorItr; ++ActorItr)
+		FoundPowerupRespawns.Add(*ActorItr);
+	
 	if (FoundPowerupRespawns.Num() <= 0)
 	{
 		AppendOutput(ScrollBoxOutputValidateWarnings, TxtBoxOutputValidateWarnings, TEXT("• Powerup respawn triggers are missing!"));
@@ -4148,7 +4869,7 @@ void UAscMapKitEditorToolsUtilityWidget::BtnRunValidateOnClick()
 	}
 
 	// Player Starts
-	if (FoundPlayerStarts.Num() < 8)
+	if (PlayerStartCount < 8)
 	{
 		AppendOutput(ScrollBoxOutputValidateWarnings, TxtBoxOutputValidateWarnings, TEXT("• You may want to add eight (8) or more player start positions."));
 		bFoundWarnings = true;
@@ -4281,7 +5002,7 @@ void UAscMapKitEditorToolsUtilityWidget::BtnOtherToolsFbxReviewDownloadOnClick()
 
 void UAscMapKitEditorToolsUtilityWidget::BtnOtherToolsMeshToolDownloadEpicOnClick()
 {
-	FPlatformProcess::LaunchURL(TEXT("https://www.unrealengine.com/marketplace/en-US/product/mesh-tool"), nullptr, nullptr);
+	FPlatformProcess::LaunchURL(TEXT("https://www.fab.com/listings/c6ad1012-50ce-4552-94bf-a0441250c1d8"), nullptr, nullptr);
 }
 
 void UAscMapKitEditorToolsUtilityWidget::BtnOtherToolsMeshToolDownloadItchOnClick()
@@ -4291,7 +5012,7 @@ void UAscMapKitEditorToolsUtilityWidget::BtnOtherToolsMeshToolDownloadItchOnClic
 
 void UAscMapKitEditorToolsUtilityWidget::BtnOtherToolsSnappingHelperDownloadEpicOnClick()
 {
-	FPlatformProcess::LaunchURL(TEXT("https://www.unrealengine.com/marketplace/en-US/product/snapping-helper"), nullptr, nullptr);
+	FPlatformProcess::LaunchURL(TEXT("https://www.fab.com/listings/fb345179-6943-46c1-aab5-460cdc16975a"), nullptr, nullptr);
 }
 
 void UAscMapKitEditorToolsUtilityWidget::BtnOtherToolsBlenderDownloadOnClick()
@@ -4335,10 +5056,31 @@ void UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick(UAscMapKitEditorToolsSel
 	{
 		const auto ButtonName = Button->GetName();
 
+		// todo
+		//UAscMapKitEditorToolsHelper::ShowInfoMessage(FString::Printf(TEXT("ButtonName: %s"), *ButtonName));
+
+		if (ButtonName.Contains(TEXT("Area")))
+			HandleButtonSelectionHighlighting(GridPanelArea, false, Button);
+		else if (ButtonName.Contains(TEXT("Decor")))
+			HandleButtonSelectionHighlighting(GridPanelDecor, false, Button);
+		else if (ButtonName.Contains(TEXT("Door")) && !ButtonName.Contains(TEXT("DoorFrame")))
+			HandleButtonSelectionHighlighting(GridPanelDoor, false, Button);
+		else if (ButtonName.Contains(TEXT("DoorFrame")))
+			HandleButtonSelectionHighlighting(GridPanelDoorFrame, false, Button);
+		else if (ButtonName.Contains(TEXT("Enemy")))
+			HandleButtonSelectionHighlighting(GridPanelEnemy, false, Button);
+		else if (ButtonName.Contains(TEXT("Fan")))
+			HandleButtonSelectionHighlighting(GridPanelFan, false, Button);
+		else if (ButtonName.Contains(TEXT("Trigger")))
+			HandleButtonSelectionHighlighting(GridPanelTrigger, false, Button);
+
+		// Areas
 		if (ButtonName == TEXT("BtnCreateAreaAcid"))
 			ComboBoxAddArea->SetSelectedOption(TEXT("Acid"));
 		else if (ButtonName == TEXT("BtnCreateAreaElectric"))
 			ComboBoxAddArea->SetSelectedOption(TEXT("Electric"));
+		else if (ButtonName == TEXT("BtnCreateAreaEnemyGenerator"))
+			ComboBoxAddArea->SetSelectedOption(TEXT("Enemy Generator"));
 		else if (ButtonName == TEXT("BtnCreateAreaLava"))
 			ComboBoxAddArea->SetSelectedOption(TEXT("Lava"));
 		else if (ButtonName == TEXT("BtnCreateAreaLavaFalls"))
@@ -4347,8 +5089,36 @@ void UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick(UAscMapKitEditorToolsSel
 			ComboBoxAddArea->SetSelectedOption(TEXT("Liquid"));
 		else if (ButtonName == TEXT("BtnCreateAreaPowerStation"))
 			ComboBoxAddArea->SetSelectedOption(TEXT("Power Station"));
+		else if (ButtonName == TEXT("BtnCreateAreaShieldStation"))
+			ComboBoxAddArea->SetSelectedOption(TEXT("Shield Station"));
 		else if (ButtonName == TEXT("BtnCreateAreaSludge"))
 			ComboBoxAddArea->SetSelectedOption(TEXT("Sludge"));
+
+		// Decor
+		else if (ButtonName == TEXT("BtnCreateDecorGrate20x20mBasic001"))
+			ComboBoxAddDecorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDecorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDecorTypeEnum::Grate_20x20m_Basic_001)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDecorGrate20x20mBasic002"))
+			ComboBoxAddDecorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDecorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDecorTypeEnum::Grate_20x20m_Basic_002)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDecorGrate20x20mBasic003"))
+			ComboBoxAddDecorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDecorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDecorTypeEnum::Grate_20x20m_Basic_003)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDecorGrate20x20mBasic004"))
+			ComboBoxAddDecorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDecorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDecorTypeEnum::Grate_20x20m_Basic_004)
+				).ToString()
+			);
 		else if (ButtonName == TEXT("BtnCreateDecorGrate10x20mBasic001"))
 			ComboBoxAddDecorType->SetSelectedOption(
 				StaticEnum<EAscMapKitDecorTypeEnum>()->GetDisplayNameTextByIndex(
@@ -4367,22 +5137,10 @@ void UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick(UAscMapKitEditorToolsSel
 					static_cast<uint8>(EAscMapKitDecorTypeEnum::Grate_20x5m_Basic_002)
 				).ToString()
 			);
-		else if (ButtonName == TEXT("BtnCreateDecorGrate20x20mBasic001"))
-			ComboBoxAddDecorType->SetSelectedOption(
-				StaticEnum<EAscMapKitDecorTypeEnum>()->GetDisplayNameTextByIndex(
-					static_cast<uint8>(EAscMapKitDecorTypeEnum::Grate_20x20m_Basic_001)
-				).ToString()
-			);
 		else if (ButtonName == TEXT("BtnCreateDecorLadderSet001"))
 			ComboBoxAddDecorType->SetSelectedOption(
 				StaticEnum<EAscMapKitDecorTypeEnum>()->GetDisplayNameTextByIndex(
 					static_cast<uint8>(EAscMapKitDecorTypeEnum::Ladder_Set_001)
-				).ToString()
-			);
-		else if (ButtonName == TEXT("BtnCreateDecorLetter"))
-			ComboBoxAddDecorType->SetSelectedOption(
-				StaticEnum<EAscMapKitDecorTypeEnum>()->GetDisplayNameTextByIndex(
-					static_cast<uint8>(EAscMapKitDecorTypeEnum::Letter)
 				).ToString()
 			);
 		else if (ButtonName == TEXT("BtnCreateDecorPiece001"))
@@ -4391,6 +5149,21 @@ void UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick(UAscMapKitEditorToolsSel
 					static_cast<uint8>(EAscMapKitDecorTypeEnum::Piece_001)
 				).ToString()
 			);
+		else if (ButtonName == TEXT("BtnCreateDecorPiece002"))
+			ComboBoxAddDecorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDecorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDecorTypeEnum::Piece_002)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDecorLetter"))
+			ComboBoxAddDecorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDecorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDecorTypeEnum::Letter)
+				).ToString()
+			);
+
+		// Decor
+		// Signs
 		else if (ButtonName == TEXT("BtnCreateDecorSign001"))
 			ComboBoxAddDecorType->SetSelectedOption(
 				StaticEnum<EAscMapKitDecorTypeEnum>()->GetDisplayNameTextByIndex(
@@ -4427,6 +5200,9 @@ void UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick(UAscMapKitEditorToolsSel
 					static_cast<uint8>(EAscMapKitDecorTypeEnum::Sign_006)
 				).ToString()
 			);
+
+		// Doors
+		// Basic
 		else if (ButtonName == TEXT("BtnCreateDoorAnimated20x20mBasic001"))
 			ComboBoxAddDoorType->SetSelectedOption(
 				StaticEnum<EAscMapKitDoorTypeEnum>()->GetDisplayNameTextByIndex(
@@ -4457,54 +5233,272 @@ void UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick(UAscMapKitEditorToolsSel
 					static_cast<uint8>(EAscMapKitDoorTypeEnum::Animated20x20mBasic005)
 				).ToString()
 			);
-		else if (ButtonName == TEXT("BtnCreateDoorAnimated20x20mSciFiDoorsDoor1"))
+		else if (ButtonName == TEXT("BtnCreateDoorAnimated20x20mBasic006"))
 			ComboBoxAddDoorType->SetSelectedOption(
 				StaticEnum<EAscMapKitDoorTypeEnum>()->GetDisplayNameTextByIndex(
-					static_cast<uint8>(EAscMapKitDoorTypeEnum::Animated20x20mSciFiDoorsDoor1)
+					static_cast<uint8>(EAscMapKitDoorTypeEnum::Animated20x20mBasic006)
 				).ToString()
 			);
-		else if (ButtonName == TEXT("BtnCreateDoorAnimated20x20mSciFiDoorsDoor2"))
+		else if (ButtonName == TEXT("BtnCreateDoorAnimated20x20mBasic007"))
 			ComboBoxAddDoorType->SetSelectedOption(
 				StaticEnum<EAscMapKitDoorTypeEnum>()->GetDisplayNameTextByIndex(
-					static_cast<uint8>(EAscMapKitDoorTypeEnum::Animated20x20mSciFiDoorsDoor2)
+					static_cast<uint8>(EAscMapKitDoorTypeEnum::Animated20x20mBasic007)
 				).ToString()
 			);
-		else if (ButtonName == TEXT("BtnCreateDoorAnimated20x20mSciFiDoorsDoor4"))
+		else if (ButtonName == TEXT("BtnCreateDoorAnimated20x20mBasic008"))
 			ComboBoxAddDoorType->SetSelectedOption(
 				StaticEnum<EAscMapKitDoorTypeEnum>()->GetDisplayNameTextByIndex(
-					static_cast<uint8>(EAscMapKitDoorTypeEnum::Animated20x20mSciFiDoorsDoor4)
+					static_cast<uint8>(EAscMapKitDoorTypeEnum::Animated20x20mBasic008)
 				).ToString()
 			);
-		else if (ButtonName == TEXT("BtnCreateDoorAnimated20x20mSciFiPropsDoor1"))
+
+		// Doors
+		// Flat
+		else if (ButtonName == TEXT("BtnCreateDoorAnimated20x20mFlat001"))
 			ComboBoxAddDoorType->SetSelectedOption(
 				StaticEnum<EAscMapKitDoorTypeEnum>()->GetDisplayNameTextByIndex(
-					static_cast<uint8>(EAscMapKitDoorTypeEnum::Animated20x20mSciFiPropsDoor1)
+					static_cast<uint8>(EAscMapKitDoorTypeEnum::Animated20x20mFlat001)
 				).ToString()
 			);
+		else if (ButtonName == TEXT("BtnCreateDoorAnimated20x20mFlat002"))
+			ComboBoxAddDoorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorTypeEnum::Animated20x20mFlat002)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDoorAnimated20x20mFlat003"))
+			ComboBoxAddDoorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorTypeEnum::Animated20x20mFlat003)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDoorAnimated20x20mFlat004"))
+			ComboBoxAddDoorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorTypeEnum::Animated20x20mFlat004)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDoorAnimated20x20mFlat005"))
+			ComboBoxAddDoorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorTypeEnum::Animated20x20mFlat005)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDoorAnimated20x20mFlat006"))
+			ComboBoxAddDoorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorTypeEnum::Animated20x20mFlat006)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDoorAnimated20x20mFlat007"))
+			ComboBoxAddDoorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorTypeEnum::Animated20x20mFlat007)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDoorAnimated20x20mFlat008"))
+			ComboBoxAddDoorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorTypeEnum::Animated20x20mFlat008)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDoorAnimated20x20mFlat009"))
+			ComboBoxAddDoorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorTypeEnum::Animated20x20mFlat009)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDoorAnimated20x20mFlat010"))
+			ComboBoxAddDoorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorTypeEnum::Animated20x20mFlat010)
+				).ToString()
+			);
+
+		// Doors
+		// Variant
+		else if (ButtonName == TEXT("BtnCreateDoorAnimated20x20mVariant001"))
+			ComboBoxAddDoorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorTypeEnum::Animated20x20mVariant001)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDoorAnimated20x20mVariant002"))
+			ComboBoxAddDoorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorTypeEnum::Animated20x20mVariant002)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDoorAnimated20x20mVariant003"))
+			ComboBoxAddDoorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorTypeEnum::Animated20x20mVariant003)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDoorAnimated20x20mVariant004"))
+			ComboBoxAddDoorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorTypeEnum::Animated20x20mVariant004)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDoorAnimated20x20mVariant005"))
+			ComboBoxAddDoorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorTypeEnum::Animated20x20mVariant005)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDoorAnimated20x20mVariant006"))
+			ComboBoxAddDoorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorTypeEnum::Animated20x20mVariant006)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDoorAnimated20x20mVariant007"))
+			ComboBoxAddDoorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorTypeEnum::Animated20x20mVariant007)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDoorAnimated20x20mVariant008"))
+			ComboBoxAddDoorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorTypeEnum::Animated20x20mVariant008)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDoorAnimated20x20mVariant009"))
+			ComboBoxAddDoorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorTypeEnum::Animated20x20mVariant009)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDoorAnimated20x20mVariant010"))
+			ComboBoxAddDoorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorTypeEnum::Animated20x20mVariant010)
+				).ToString()
+			);
+		
+		// Doors
+		// Round
+		else if (ButtonName == TEXT("BtnCreateDoorAnimated20x20mRound001"))
+			ComboBoxAddDoorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorTypeEnum::Animated20x20mRound001)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDoorAnimated20x20mRound002"))
+			ComboBoxAddDoorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorTypeEnum::Animated20x20mRound002)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDoorAnimated20x20mRound003"))
+			ComboBoxAddDoorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorTypeEnum::Animated20x20mRound003)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDoorAnimated20x20mRound004"))
+			ComboBoxAddDoorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorTypeEnum::Animated20x20mRound004)
+				).ToString()
+			);
+
+		// Doors
+		// 40x20m
 		else if (ButtonName == TEXT("BtnCreateDoorAnimated40x20mBasic001"))
 			ComboBoxAddDoorType->SetSelectedOption(
 				StaticEnum<EAscMapKitDoorTypeEnum>()->GetDisplayNameTextByIndex(
 					static_cast<uint8>(EAscMapKitDoorTypeEnum::Animated40x20mBasic001)
 				).ToString()
 			);
-		else if (ButtonName == TEXT("BtnCreateDoorAnimated40x20mSciFiDoorsDoor3"))
-			ComboBoxAddDoorType->SetSelectedOption(
-				StaticEnum<EAscMapKitDoorTypeEnum>()->GetDisplayNameTextByIndex(
-					static_cast<uint8>(EAscMapKitDoorTypeEnum::Animated40x20mSciFiDoorsDoor3)
+
+		// Door Frames
+		// Basic
+		else if (ButtonName == TEXT("BtnCreateDoorFrame20x20mBasic001"))
+			ComboBoxAddDoorFrameType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorFrameTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorFrameTypeEnum::Frame20x20mBasic001)
 				).ToString()
 			);
+		else if (ButtonName == TEXT("BtnCreateDoorFrame20x20mBasic002"))
+			ComboBoxAddDoorFrameType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorFrameTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorFrameTypeEnum::Frame20x20mBasic002)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDoorFrame20x20mBasic003"))
+			ComboBoxAddDoorFrameType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorFrameTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorFrameTypeEnum::Frame20x20mBasic003)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDoorFrame20x20mBasic004"))
+			ComboBoxAddDoorFrameType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorFrameTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorFrameTypeEnum::Frame20x20mBasic004)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDoorFrame20x20mBasic005"))
+			ComboBoxAddDoorFrameType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorFrameTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorFrameTypeEnum::Frame20x20mBasic005)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDoorFrame20x20mBasic006"))
+			ComboBoxAddDoorFrameType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorFrameTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorFrameTypeEnum::Frame20x20mBasic006)
+				).ToString()
+			);
+
+		// Door Frames
+		// Round
+		else if (ButtonName == TEXT("BtnCreateDoorFrame20x20mRound001"))
+			ComboBoxAddDoorFrameType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorFrameTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorFrameTypeEnum::Frame20x20mRound001)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDoorFrame20x20mRound002"))
+			ComboBoxAddDoorFrameType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorFrameTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorFrameTypeEnum::Frame20x20mRound002)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDoorFrame20x20mRound003"))
+			ComboBoxAddDoorFrameType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorFrameTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorFrameTypeEnum::Frame20x20mRound003)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDoorFrame20x20mRound004"))
+			ComboBoxAddDoorFrameType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorFrameTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorFrameTypeEnum::Frame20x20mRound004)
+				).ToString()
+			);
+
+		// Doors
+		// Destructible
 		else if (ButtonName == TEXT("BtnCreateDoorDestructible20x20mBasic001"))
 			ComboBoxAddDoorType->SetSelectedOption(
 				StaticEnum<EAscMapKitDoorTypeEnum>()->GetDisplayNameTextByIndex(
 					static_cast<uint8>(EAscMapKitDoorTypeEnum::Destructible20x20mBasic001)
 				).ToString()
 			);
+
+		// Doors
+		// Custom
 		else if (ButtonName == TEXT("BtnCreateDoorCustom"))
 			ComboBoxAddDoorType->SetSelectedOption(
 				StaticEnum<EAscMapKitDoorTypeEnum>()->GetDisplayNameTextByIndex(
 					static_cast<uint8>(EAscMapKitDoorTypeEnum::Custom)
 				).ToString()
 			);
+
+		// Enemies
 		else if (ButtonName == TEXT("BtnCreateEnemyAlienCylon"))
 			ComboBoxAddEnemyType->SetSelectedOption(
 				StaticEnum<EAscMapKitEnemyTypeEnum>()->GetDisplayNameTextByIndex(
@@ -4553,18 +5547,28 @@ void UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick(UAscMapKitEditorToolsSel
 					static_cast<uint8>(EAscMapKitEnemyTypeEnum::MachineServasTurret)
 				).ToString()
 			);
+
+		// Fans
 		else if (ButtonName == TEXT("BtnCreateFanAnimated20x20mBasic001"))
 			ComboBoxAddFanType->SetSelectedOption(
 				StaticEnum<EAscMapKitFanTypeEnum>()->GetDisplayNameTextByIndex(
 					static_cast<uint8>(EAscMapKitFanTypeEnum::Animated20x20mBasic001)
 				).ToString()
 			);
-		else if (ButtonName == TEXT("BtnCreateFanCustom"))
+		else if (ButtonName == TEXT("BtnCreateFanAnimated20x20mBasic002"))
 			ComboBoxAddFanType->SetSelectedOption(
 				StaticEnum<EAscMapKitFanTypeEnum>()->GetDisplayNameTextByIndex(
-					static_cast<uint8>(EAscMapKitFanTypeEnum::Custom)
+					static_cast<uint8>(EAscMapKitFanTypeEnum::Animated20x20mBasic002)
 				).ToString()
 			);
+		else if (ButtonName == TEXT("BtnCreateFanAnimated20x20mBasic003"))
+			ComboBoxAddFanType->SetSelectedOption(
+				StaticEnum<EAscMapKitFanTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitFanTypeEnum::Animated20x20mBasic003)
+				).ToString()
+			);
+
+		// Triggers
 		else if (ButtonName == TEXT("BtnCreateTriggerInvisible"))
 			ComboBoxAddTriggerType->SetSelectedOption(
 				StaticEnum<EAscMapKitTriggerTypeEnum>()->GetDisplayNameTextByIndex(
@@ -4583,6 +5587,68 @@ void UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick(UAscMapKitEditorToolsSel
 					static_cast<uint8>(EAscMapKitTriggerTypeEnum::Custom)
 				).ToString()
 			);
+	}
+}
+
+void UAscMapKitEditorToolsUtilityWidget::HandleButtonSelectionHighlighting(UGridPanel *GridPanel, const bool &bReset, UAscMapKitEditorToolsSelfRefButtonWidget *Button)
+{
+	if (GridPanel)
+	{
+		for (const auto &Child : GridPanel->GetAllChildren())
+		{
+			if (Child && Child->IsA(USizeBox::StaticClass()))
+			{
+				// todo
+				//UAscMapKitEditorToolsHelper::ShowInfoMessage(FString::Printf(TEXT("Child: %s"), *Child->GetName()));
+
+				const auto SizeBox = Cast<USizeBox>(Child);
+
+				if (SizeBox && SizeBox->HasAnyChildren())
+				{
+					// todo
+					//UAscMapKitEditorToolsHelper::ShowInfoMessage(FString::Printf(TEXT("SizeBox: %s"), *SizeBox->GetName()));
+						
+					for (const auto &SizeBoxChild : SizeBox->GetAllChildren())
+					{
+						const auto Border = Cast<UBorder>(SizeBoxChild);
+
+						if (Border && Border->HasAnyChildren())
+						{
+							// todo
+							//UAscMapKitEditorToolsHelper::ShowInfoMessage(FString::Printf(TEXT("Border: %s"), *Border->GetName()));
+
+							auto bFoundButton = false;
+
+							if (!bReset && Button != nullptr)
+							{
+								for (const auto &BorderChild : Border->GetAllChildren())
+								{
+									if (BorderChild && BorderChild->IsA(UAscMapKitEditorToolsSelfRefButtonWidget::StaticClass()))
+									{
+										// todo
+										//UAscMapKitEditorToolsHelper::ShowInfoMessage(FString::Printf(TEXT("BorderChild: %s"), *BorderChild->GetName()));
+
+										const auto PanelButton = Cast<UButton>(BorderChild);
+
+										if (PanelButton && PanelButton == Button)
+										{
+											// todo
+											//UAscMapKitEditorToolsHelper::ShowInfoMessage(FString::Printf(TEXT("PanelButton: %s"), *PanelButton->GetName()));
+											Border->SetBrushColor(FColor::FromHex(TEXT("#ffaf09")).ReinterpretAsLinear());
+											bFoundButton = true;
+											break;
+										}
+									}
+								}
+							}
+
+							if (!bFoundButton)
+								Border->SetBrushColor(FLinearColor::Black);
+						}
+					}
+				}
+			}
+		}
 	}
 }
 

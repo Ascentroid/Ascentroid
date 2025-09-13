@@ -3,12 +3,15 @@
 // Generated
 #include "AscMapKitUtil.generated.h"
 
-UCLASS(BlueprintType)
+UCLASS(Blueprintable, BlueprintType)
 class ASCMAPKIT_API UAscMapKitUtil : public UObject
 {
 	GENERATED_BODY()
 
 public:
+	UFUNCTION()
+	static void Log(const FString &Message);
+	
 	UFUNCTION()
 	static FString RegexReplace(const FString &Pattern, const FString &Input, const FString &ReplaceWith);
 	

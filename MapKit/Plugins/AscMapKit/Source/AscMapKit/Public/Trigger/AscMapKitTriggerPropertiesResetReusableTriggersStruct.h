@@ -1,6 +1,7 @@
 #pragma once
 
 // Ascentroid
+#include "AscMapKit/Public/Trigger/AscMapKitTriggerPropertiesEnemyGeneratorStruct.h"
 #include "AscMapKit/Public/Trigger/AscMapKitTriggerPropertiesResetReusableTriggersRuleStruct.h"
 
 // Generated
@@ -23,6 +24,9 @@ struct ASCMAPKIT_API FAscMapKitTriggerPropertiesResetReusableTriggersStruct
     // A list of reset rules when this operation executes.
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     TArray<FAscMapKitTriggerPropertiesResetReusableTriggersRuleStruct> ResetRules;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    FAscMapKitTriggerPropertiesEnemyGeneratorStruct EnemyGenerator;
 
     // Check this if you want to show a HUD message after all of the trigger rules are executed.
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)

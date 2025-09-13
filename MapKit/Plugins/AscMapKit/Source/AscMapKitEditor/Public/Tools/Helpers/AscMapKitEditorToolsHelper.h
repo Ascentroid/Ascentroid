@@ -3,7 +3,7 @@
 // Generated
 #include "AscMapKitEditorToolsHelper.generated.h"
 
-UCLASS(BlueprintType)
+UCLASS(Blueprintable, BlueprintType)
 class ASCMAPKITEDITOR_API UAscMapKitEditorToolsHelper : public UObject
 {
 	GENERATED_BODY()
@@ -44,6 +44,9 @@ public:
 		FString &OutActorName,
 		FString &OutActorDefaultName
 	);
+
+	UFUNCTION()
+	static FString GenerateRandomString(int32 MaxLength = 8);
 
 	UFUNCTION()
 	static void ShowErrorMessage(const FString &Arg);

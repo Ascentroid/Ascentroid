@@ -5,6 +5,7 @@
 #include "Runtime/Engine/Classes/Components/StaticMeshComponent.h"
 
 // Ascentroid
+#include "AscMapKit/Public/Core/Global/AscMapKitBaseActor.h"
 #include "AscMapKit/Public/Trigger/AscMapKitTriggerBillboardComponent.h"
 #include "AscMapKit/Public/Trigger/AscMapKitTriggerPropertiesStruct.h"
 #include "AscMapKit/Public/Trigger/AscMapKitTriggerTypeEnum.h"
@@ -12,13 +13,15 @@
 // Generated
 #include "AscMapKitTriggerActor.generated.h"
 
-UCLASS(HideCategories=("Activation", "Asset User Data", "Collision", "Cooking", "HLOD", "Input", "LOD", "Lighting", "Mobile", "Physics", "Rendering", "Replication", "Sprite", "Tags", "Virtual Texture"))
-class ASCMAPKIT_API AAscMapKitTriggerActor : public AActor
+UCLASS(Blueprintable, HideCategories=("Activation", "Asset User Data", "Collision", "Cooking", "HLOD", "Input", "LOD", "Lighting", "Mobile", "Physics", "Rendering", "Replication", "Sprite", "Tags", "Virtual Texture"))
+class ASCMAPKIT_API AAscMapKitTriggerActor : public AAscMapKitBaseActor
 {
     GENERATED_BODY()
 
 public:
     AAscMapKitTriggerActor();
+
+    static FAscMapKitTriggerPropertiesStruct GetMapKitDefaults(UAscMapKitTriggerDefaultGameRuntimeBoundingBox *InDefaultGameRuntimeBoundingBox);
 
     // Edit the majority of the map kit actor properties here.
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category="Ascentroid")
@@ -67,4 +70,8 @@ public:
 
     UFUNCTION(BlueprintImplementableEvent, Category="Ascentroid")
     void OnDeactivate();
+
+private:
+    UPROPERTY()
+    UAscMapKitTriggerDefaultGameRuntimeBoundingBox *DefaultGameRuntimeBoundingBoxInternal;
 };

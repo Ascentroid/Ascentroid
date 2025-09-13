@@ -5,6 +5,7 @@
 #include "Runtime/Core/Public/Internationalization/Regex.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "Runtime/Engine/Classes/Engine/Selection.h"
+#include "Runtime/Engine/Public/EngineUtils.h"
 
 // Ascentroid
 #include "AscMapKit/Public/Core/Util/AscMapKitUtil.h"
@@ -43,38 +44,34 @@ int32 UAscMapKitEditorToolsHelper::GetEditorNextActorSequence(const TSubclassOf<
 
 	if (ActorNamePrefix.Len() > 0)
 	{
-		TArray<AActor *> FoundActors;
-		UGameplayStatics::GetAllActorsOfClass(GetEditorWorld(), ActorClass, FoundActors);
-
-		if (FoundActors.Num() > 0)
+		TArray<int32> ExtractedSequences;
+		
+		for (FActorIterator ActorItr(GetEditorWorld()); ActorItr; ++ActorItr)
 		{
-			TArray<int32> ExtractedSequences;
+			const auto FoundActor = *ActorItr;
 			
-			for (const auto &FoundActor : FoundActors)
+			if (FoundActor && FoundActor->GetActorLabel().StartsWith(ActorNamePrefix)) //if (FoundActor->GetName().StartsWith(ActorNamePrefix))
 			{
-				if (FoundActor->GetActorLabel().StartsWith(ActorNamePrefix)) //if (FoundActor->GetName().StartsWith(ActorNamePrefix))
-				{
-					const FRegexPattern ActorNameRegexPattern(TEXT("(\\d+)(?!.*\\d)"));
-					FRegexMatcher ActorNameRegexMatcher(ActorNameRegexPattern, FoundActor->GetActorLabel()); //FRegexMatcher ActorNameRegexMatcher(ActorNameRegexPattern, FoundActor->GetName());
+				const FRegexPattern ActorNameRegexPattern(TEXT("(\\d+)(?!.*\\d)"));
+				FRegexMatcher ActorNameRegexMatcher(ActorNameRegexPattern, FoundActor->GetActorLabel()); //FRegexMatcher ActorNameRegexMatcher(ActorNameRegexPattern, FoundActor->GetName());
 
-					while (ActorNameRegexMatcher.FindNext())
-					{
-						const auto ExtractedNumber = FCString::Atoi(*ActorNameRegexMatcher.GetCaptureGroup(0));
-						ExtractedSequences.AddUnique(ExtractedNumber);
-						// UE_LOG(LogTemp, Log, TEXT("Added ExtractedNumber = %d"), ExtractedNumber);
-					}
+				while (ActorNameRegexMatcher.FindNext())
+				{
+					const auto ExtractedNumber = FCString::Atoi(*ActorNameRegexMatcher.GetCaptureGroup(0));
+					ExtractedSequences.AddUnique(ExtractedNumber);
+					// UE_LOG(LogTemp, Log, TEXT("Added ExtractedNumber = %d"), ExtractedNumber);
 				}
 			}
+		}
 
-			if (ExtractedSequences.Num() > 0)
-			{
-				Sequence = *Algo::MaxElement(ExtractedSequences);
-				// UE_LOG(LogTemp, Log, TEXT("Found max Sequence = %d"), Sequence);
-				
-				Sequence++;
+		if (ExtractedSequences.Num() > 0)
+		{
+			Sequence = *Algo::MaxElement(ExtractedSequences);
+			// UE_LOG(LogTemp, Log, TEXT("Found max Sequence = %d"), Sequence);
+			
+			Sequence++;
 
-				// UE_LOG(LogTemp, Log, TEXT("Incremented Sequence = %d"), Sequence);
-			}
+			// UE_LOG(LogTemp, Log, TEXT("Incremented Sequence = %d"), Sequence);
 		}
 	}
 
@@ -86,7 +83,8 @@ int32 UAscMapKitEditorToolsHelper::GetEditorNextActorSequence(const TSubclassOf<
 bool UAscMapKitEditorToolsHelper::GetEditorActorNameAlreadyExists(const TSubclassOf<AActor> ActorClass, const FString &ActorName, const FGuid &ActorGuid)
 {
 	bool Result = false;
-	
+
+	// note: not using TActorIteractor because this is easier to lookup by ActorClass, even though it is a bit slower
 	TArray<AActor *> FoundActors;
 	UGameplayStatics::GetAllActorsOfClass(GetEditorWorld(), ActorClass, FoundActors);
 
@@ -196,6 +194,24 @@ void UAscMapKitEditorToolsHelper::EditorRenameSequentialActorName(
 
 	Actor->Rename(*(UseActorName + FGuid::NewGuid().ToString()));
 	Actor->SetActorLabel(*UseActorName);
+}
+
+FString UAscMapKitEditorToolsHelper::GenerateRandomString(int32 MaxLength)
+{
+	const FString CharSet = TEXT("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789");
+	const int32 CharSetLength = CharSet.Len();
+
+	MaxLength = FMath::Max(1, MaxLength);
+
+	FString Result;
+
+	for (int32 i = 0; i < MaxLength; i++)
+	{
+		const int32 RandomIndex = FMath::RandRange(0, CharSetLength - 1);
+		Result += CharSet[RandomIndex];
+	}
+
+	return Result;
 }
 
 void UAscMapKitEditorToolsHelper::ShowErrorMessage(const FString &Arg)

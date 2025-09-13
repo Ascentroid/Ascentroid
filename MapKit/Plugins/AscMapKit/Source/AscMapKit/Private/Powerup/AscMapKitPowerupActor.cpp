@@ -14,7 +14,7 @@ AAscMapKitPowerupActor::AAscMapKitPowerupActor()
     // todo: @reminder: keep defaults in sync with game actor
     // todo: map kit defaults go here
 
-#if !(UE_BUILD_SHIPPING)
+#if !UE_BUILD_SHIPPING
     BillboardComponent->SetHiddenInGame(false);
 #endif
 
@@ -37,7 +37,7 @@ void AAscMapKitPowerupActor::BeginPlay()
 {
     Super::BeginPlay();
 
-#if !(UE_BUILD_SHIPPING)
+#if !UE_BUILD_SHIPPING
     if (BillboardComponent && BillboardComponent->CurrentTexture != nullptr)
         BillboardComponent->SetSprite(BillboardComponent->CurrentTexture);
 #endif

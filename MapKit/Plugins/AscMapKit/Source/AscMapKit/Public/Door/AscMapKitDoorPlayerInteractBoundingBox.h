@@ -6,7 +6,7 @@
 // Generated
 #include "AscMapKitDoorPlayerInteractBoundingBox.generated.h"
 
-UCLASS()
+UCLASS(Blueprintable)
 class ASCMAPKIT_API UAscMapKitDoorPlayerInteractBoundingBox : public UBoxComponent
 {
     GENERATED_BODY()

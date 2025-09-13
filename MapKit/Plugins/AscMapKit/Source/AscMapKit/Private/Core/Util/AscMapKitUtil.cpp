@@ -3,6 +3,12 @@
 // UE
 #include "Runtime/Core/Public/Internationalization/Regex.h"
 
+void UAscMapKitUtil::Log(const FString &Message)
+{
+	UE_LOG(LogTemp, Log, TEXT("%s"), *Message);
+	GEngine->AddOnScreenDebugMessage(-1, 20.f, FColor::Cyan, *Message);
+}
+
 FString UAscMapKitUtil::RegexReplace(const FString &Pattern, const FString &Input, const FString &ReplaceWith)
 {
 	FString Result;

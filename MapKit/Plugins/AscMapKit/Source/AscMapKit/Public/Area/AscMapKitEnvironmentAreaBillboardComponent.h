@@ -9,7 +9,7 @@
 // Generated
 #include "AscMapKitEnvironmentAreaBillboardComponent.generated.h"
 
-UCLASS()
+UCLASS(Blueprintable)
 class ASCMAPKIT_API UAscMapKitEnvironmentAreaBillboardComponent : public UBillboardComponent
 {
     GENERATED_BODY()
@@ -33,11 +33,20 @@ private:
     UTexture2D *ElectricTexture;
 
     UPROPERTY()
+    UTexture2D *EnemyGeneratorTexture;
+
+    UPROPERTY()
     UTexture2D *LavaTexture;
 
+    UPROPERTY()
+    UTexture2D *LiquidTexture;
+    
     UPROPERTY()
     UTexture2D *PowerStationTexture;
 
     UPROPERTY()
-    UTexture2D *LiquidTexture;
+    UTexture2D *ShieldStationTexture;
+
+    UPROPERTY()
+    UTexture2D *SludgeTexture;
 };

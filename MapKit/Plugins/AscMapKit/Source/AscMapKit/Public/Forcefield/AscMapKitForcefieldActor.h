@@ -5,13 +5,14 @@
 #include "Runtime/Engine/Classes/Materials/MaterialInstanceDynamic.h"
 
 // Ascentroid
+#include "AscMapKit/Public/Core/Global/AscMapKitBaseActor.h"
 #include "AscMapKit/Public/Forcefield/AscMapKitForcefieldPropertiesStruct.h"
 
 // Generated
 #include "AscMapKitForcefieldActor.generated.h"
 
-UCLASS(HideCategories=("Activation", "Asset User Data", "Collision", "Cooking", "HLOD", "Input", "LOD", "Lighting", "Mobile", "Physics", "Rendering", "Replication", "Sprite", "Tags", "Virtual Texture"))
-class ASCMAPKIT_API AAscMapKitForcefieldActor : public AActor
+UCLASS(Blueprintable, HideCategories=("Activation", "Asset User Data", "Collision", "Cooking", "HLOD", "Input", "LOD", "Lighting", "Mobile", "Physics", "Rendering", "Replication", "Sprite", "Tags", "Virtual Texture"))
+class ASCMAPKIT_API AAscMapKitForcefieldActor : public AAscMapKitBaseActor
 {
     GENERATED_BODY()
 
