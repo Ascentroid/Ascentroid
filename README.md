@@ -229,9 +229,7 @@ If you have any questions about the map kit content, properties, etc, please [em
 
 * <b><i><u>Use baked lighting</u></i></b>. Avoid full dynamic lighting. What I've learned to do is to use full dynamic lighting while developing a level and testing it out. When I get close to finishing a level, I will switch all of the lighting from dynamic to baked. When ready for production, I'll change the <b>Lighting Quality</b> to <b>Production</b>, and change all of my static mesh asset's <b>Lightmap Resolutions</b> to <b>1024</b> (or higher). <i>Caution</i>: baking lights requires lightmap UVs to be setup on your static meshes, and none of them can be overlapping. Different kinds of [3D Tools](#3d-tools) handle this by placing the lightmap UVs on a separate channel. Due to the subjective nature of this process, you will have to handle this on your own. You should be able to find tutorials on [YouTube](https://www.youtube.com/results?search_query=UE+blender+lightmap) to figure out how to do this.
 
-* If possible, use [Instanced Static Meshes](https://www.google.com/search?q=UE+instanced+static+mesh+site%3Aanswers.unrealengine.com) and/or [Hierarchical Instanced Static Meshes (HISM)](https://www.google.com/search?q=UE+hierarchical+instanced+static+mesh+site:answers.unrealengine.com). You can do [amazing optimizations](https://www.youtube.com/watch?v=oMIbV2rQO4k) using these techniques/tools:
-
-![Imgur](https://i.imgur.com/QrXhiMB.jpg)
+* If possible, use [Instanced Static Meshes](https://www.google.com/search?q=UE+instanced+static+mesh+site%3Aanswers.unrealengine.com) and/or [Hierarchical Instanced Static Meshes (HISM)](https://www.google.com/search?q=UE+hierarchical+instanced+static+mesh+site:answers.unrealengine.com). You can do [amazing optimizations](https://www.youtube.com/watch?v=oMIbV2rQO4k) using these techniques/tools.
 
 * If you are going to use high-poly 3D meshes, I recommend learning how to setup LOD groups. Here is a tutorial: https://www.youtube.com/watch?v=li5qraDIZIM
 
