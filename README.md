@@ -93,11 +93,11 @@ Note: you may need to run all installations as a <b>Windows Administrator</b> us
 
 <br/>
 
-#### If you don't want to learn 3D modeling tools, you can try some Marketplace assets:
+#### If you don't want to learn 3D modeling tools, you can try some Fab assets:
 
-##### <a name="mesh-tool"></a>[Mesh Tool](https://forums.unrealengine.com/unreal-engine/marketplace/107840-mesh-tool-a-mesh-editor) - <i>highly recommended</i>!
+##### <a name="mesh-tool"></a>[Mesh Tool](https://www.fab.com/tr/listings/c6ad1012-50ce-4552-94bf-a0441250c1d8) - <i>highly recommended</i>!
 
-[Mesh Tool](https://marynate.itch.io/mesh-tool) is a commercial (paid) UE plugin which allows you to edit mesh assets and prototype props and levels without leaving the UE Editor. It also includes basic UV mapping tools!
+Mesh Tool is available on [Fab](https://www.fab.com/tr/listings/c6ad1012-50ce-4552-94bf-a0441250c1d8) or [Itch](https://marynate.itch.io/mesh-tool). It is a commercial (paid) UE plugin which allows you to edit mesh assets and prototype props and levels without leaving the UE Editor. It also includes basic UV mapping tools!
 
 ![MeshTool](https://d3kjluh73b9h9o.cloudfront.net/original/3X/5/3/53e2d19b206094fc4216cbdd4e95c5769c93dd91.jpeg)
 
@@ -105,8 +105,7 @@ Note: you may need to run all installations as a <b>Windows Administrator</b> us
 
 Mesh Tool links:
 
-* [Unreal Engine Forums](https://forums.unrealengine.com/unreal-engine/marketplace/107840-mesh-tool-a-mesh-editor)
-* [Get Mesh Tool on the Marketplace](https://www.unrealengine.com/marketplace/mesh-tool)
+* [Get Mesh Tool on Fab](https://www.fab.com/tr/listings/c6ad1012-50ce-4552-94bf-a0441250c1d8)
 * [Get Mesh Tool on itch.io](https://marynate.itch.io/mesh-tool)
 * [YouTube Tutorials](https://www.youtube.com/playlist?list=PLAKCoctl4aHxyY9fZbQIpdtEdzlj09GSn)
 * [User Guide](https://docs.google.com/document/d/1yCEFGz4LEWdhZEw3bk_tCPI3Gg6D-29_AhtkeWJqm1g/pub)
@@ -116,7 +115,7 @@ Tip: Keep an eye out for asset sales. Sometimes you can get a helpful tool for l
 
 <br/>
 
-##### <a name="other-marketplace-content"></a>Other Fab Assets
+##### <a name="other-fab-content"></a>Other Fab Assets
 
 You can try using more [assets](https://www.fab.com/) from Fab here: https://www.fab.com/
 
@@ -170,12 +169,11 @@ Convert OBJ to FBX using AutoDesk FBX Converter 2013:
 
 ![Imgur](https://i.imgur.com/PbdjoPb.png)
 
-Common steps in Unreal Engine's editor (not in order) to perform a level conversion:
-* Unreal Engine project settings: Generate project a ID, otherwise the campaign won't cook
+Common steps in Unreal Engine's editor (not in order) to perform a level conversion (this might become obsolete over time):
 * Unreal Engine world settings: Set num skylights to 0 (this saves some light build processing time)
 * Unreal Engine world settings: Check "Force no precompute lights" (this sets lights to fully dynamic, so you can build without having to light build)
-* Unreal Engine level: Place global items and effects (copy from Template campaign)
-* Unreal Engine level: Place global lights, amount, positioning (copy from Template campaign)
+* Unreal Engine level: Place global items and effects
+* Unreal Engine level: Place global lights, amount, positioning
 * Unreal Engine level: Setup navmap, positioning, sizing to encompass the level with some padding (necessary, otherwise the navmap fog of war won't work)
 * Unreal Engine world outliner: Folder organization!
 * Unreal Engine content manager: Folder organization!
@@ -184,7 +182,7 @@ Common steps in Unreal Engine's editor (not in order) to perform a level convers
 * Unreal Engine content manager: Update your level static mesh Light Map Resolution to something high like "1024" or "2048" ("1024" is usually high enough)
 * Unreal Engine content manager: Move textures to its own content folder
 * Unreal Engine content manager: Move materials to its own content folder
-* Unreal Engine content manager: Edit materials (for cartoony style, set Metallic and Specular to "0" (zero), and Roughness to "1")
+* Unreal Engine content manager: Edit materials (for cartoony style, set Metallic and Specular to "0" (zero), and Roughness to "1"); alternatively, use the "M_Conversion" material in the map kit as a parent material for your own material interfaces
 * Unreal Engine level: Add player starts from the map kit
 * Unreal Engine level: Add powerup respawn triggers from the map kit
 * Unreal Engine level: Add doors from the map kit (remember to set unique IDs for all!)
@@ -192,15 +190,15 @@ Common steps in Unreal Engine's editor (not in order) to perform a level convers
 * Unreal Engine level: Add lights (copy from template campaign if you want)
 * Unreal Engine level: Add powerups from the map kit
 * Unreal Engine level: Add level author decor letters and lights for them (if you want)
-* Unreal Engine world settings: Uncheck "Force no precompute lights" (turns off dynamic lights to prepare for light building)
 * Unreal Engine level: Add any desired triggers from the map kit (if applicable)
 * Unreal Engine level: Add any desired Blueprint scripting (if applicable)
+* Unreal Engine world settings: Uncheck "Force no precompute lights" (turns off dynamic lights to prepare for light building)
 * Unreal Engine level: Adjust global lights (lights will be brighter when light building, so turn them down)
 * Unreal Engine light build settings: Set the light build quality to "Production"
 * Unreal Engine level: Build lights
-* Unreal Engine content manager: Fix level light map UVs and resolution if necessary
+* Unreal Engine content manager: Fix level light map UVs and resolution if necessary; you may have to break up your level static meshes to fix lightmap UV overlaps; also give all your level static meshes an actor tag of "Level" (without quotes, case sensitive)
 * Unreal Engine level: Tweak and build lights repeatedly until you get it right (toggle "Force no precompute lights" in world settings to help; switch from dynamic to static to dynamic to static repeatedly to help figure out good lighting techniques in combination with light building [with the goal of producing final, baked, static lights])
-* Unreal Engine level: Run Cook.bat
+* Unreal Engine level: Run Cook
 * Finally: Test your campaign in the game. If it looks good, zip the campaign json and pak files, and offer to players (mission database may become available in the future, recommend something like Google Drive in the meantime)
 
 <br/><br/><br/>
@@ -245,69 +243,9 @@ If you have any questions about the map kit content, properties, etc, please [em
 
 #### MOD Support
 
-Tentatively, Ascentroid may support scripting with limited Blueprints support, and [UnLua](https://github.com/Tencent/UnLua/blob/master/Docs/EN/UnLua_Programming_Guide.md).
+Ascentroid has limited Blueprint scripting support. More to come later.
 
-The Ascentroid Map Kit Tool currently has pre-alpha/prototype support for [UnLua](https://github.com/Tencent/UnLua/blob/master/Docs/EN/UnLua_Programming_Guide.md). Download the tool and take a look at the MOD section.
-
-<br/><br/><br/>
-
-## <a name="faq"></a>FAQ
-
-Where can I learn more about the game?
-
-`See: ` https://ascentroid.com/faq.html
-
-How do I handle different game modes?
-
-`Ascentroid currently only has one game mode: deathmatch. When that changes, this documentation will be updated.`
-
-How do I handle single player versus multiplayer?
-
-`Currently, you can run campaigns in either mode (no restrictions). However, cooperative does not work. All enemies will run client-side and are not replicated in multiplayer (yet).`
-
-Why don't you have more pre-defined assets we can use?
-
-`This is a solo indie game development effort, currently without funding.`
-
-Why is it so difficult to convert levels from other games?
-
-`Well, this is a solo indie game development effort, currently without funding.`
-
-Why do I have to use 3D tools to build maps? Why didn't you build something easier for people?
-
-`UE is capable to doing a lot out-of-the-box, however, this means you have to put in the effort and learn how to do things yourself. To get started quickly, I highly recommend using ` [SuperGrid](#supergrid)
-
-Why is the setup so complicated?
-
-`It depends on your capabilities. When testing the setup utility, Blarget2 was up and running with his first campaign in about 15 minutes. If you are not technically capable, you probably shouldn't be trying to make campaigns in Ascentroid.`
-
-Is there a reactor?
-
-`No. Single player and cooperative game modes have yet to be developed.`
-
-Is there an escape tunnel?
-
-`Well, no. Single player and cooperative game modes have yet to be developed.`
-
-Do campaigns/levels auto-download if other players don't have them?
-
-`Currently, no. You have to send the file(s) to other players manually. If this changes, I will update this documentation.`
-
-How can I setup my campaign to transition between levels?
-
-`This is not supported yet. It should be coming in the future. However, currently, you can select individual levels in a campaign when starting a single player game, or when hosting a new multiplayer game.`
-
-Can I contribute to the map kit to provide more pre-fab asset content?
-
-`Maybe! Let's chat! See: ` [Contact](#contact)
-
-Why does the Ascentroid map kit limit modding abilities?
-
-`Because I'm learning how to do this stuff while working on this project. Depending on how much effort it will take, and where the direction of the project goes, I may expand what it is capable of. For now, it is limited.`
-
-I have more questions, what should I do?
-
-`See:` [Contact](#contact)
+The [Ascentroid Map Kit Tool](https://drive.google.com/file/d/1d6aqJWmnY3m9d7hqudIg-Gp79zMO0AAs/view?usp=sharing) currently has pre-alpha/prototype support for [UnLua](https://github.com/Tencent/UnLua/blob/master/Docs/EN/UnLua_Programming_Guide.md). [Download the tool](https://drive.google.com/file/d/1d6aqJWmnY3m9d7hqudIg-Gp79zMO0AAs/view?usp=sharing) and take a look at the MOD section. Also, more to come later.
 
 <br/><br/><br/>
 
@@ -319,7 +257,7 @@ I highly recommend something like [Git](https://git-scm.com/book/en/v2/Getting-S
 
 You can setup free accounts with services like [Github](https://github.com/), or [Bitbucket](https://bitbucket.org/product).
 
-Alternatively, you could setup a local Git server using something like [Bonobo Git Server](https://bonobogitserver.com/).
+Alternatively, you could setup a local Git server using something like [Bonobo Git Server](https://bonobogitserver.com/), or [Gitea](https://about.gitea.com/).
 
 You could also use [Linux](https://www.linux.com/training-tutorials/how-run-your-own-git-server/) to host a Git server.
 
@@ -334,7 +272,10 @@ Note: when Ascentroid gets updated, sometimes I have to upgrade <i><u>UE core en
 ## Acknowledgments
 
 * Special thanks to <b>Diamond Wolf</b> for contributing a lot of feedback on the map kit while it was being developed. A lot of his ideas were incorporated into what you see. He also made the level in the campaign <b>Rubicon</b>, which was the first community-based level imported into Ascentroid using the map kit.
-* Special thanks to <b>[Blarget2](https://www.twitch.tv/blarget2)</b> for testing out the [Ascentroid Map Kit Setup Utility](https://github.com/Ascentroid/Ascentroid/blob/latest-stable/MapKit/Setup/AscMapKitSetup.zip), and being the first person to start using the map kit.
+* Special thanks to <b>[Blarget2](https://www.twitch.tv/blarget2)</b> for testing out the map kit first.
+* Special thanks to Arne for making DesLevelObj and allowing me to submit pull requests.
+* Special thanks to rethink for testing the map kit extensively and offering tons of suggestions/improvements.
+* Special thanks to Obi-Wan and rethink for helping test the entire game.
 
 ## <a name="contact"></a>Contact
 
