@@ -14,7 +14,7 @@ What's great about this is that it allows map creators to utilize <b><i>almost a
 
 2) Since UE treats a campaign like a <b>MOD</b>, it <b>requires Microsoft's C++ compiler</b>. You have two options:
 
-* <b><i>Option #1</i></b> (free, smaller download size): Install [Visual Studio Code](https://code.visualstudio.com/docs/?dv=win) + [Visual Studio 2019 Build Tools](https://visualstudio.microsoft.com/vs/older-downloads/) following this [installation tutorial](http://jollymonsterstudio.com/2018/11/02/unreal-c-with-visual-studio-code/). ✅ <b><u>RECOMMENDED</u></b>
+* <b><i>Option #1</i></b> (free, smaller download size): Install [Visual Studio Code](https://code.visualstudio.com/docs/?dv=win) + [Visual Studio 2019 Build Tools](https://drive.google.com/file/d/1tjPzES5Yf-pTOqqYqEWvvamk6hFzUpRt/view?usp=sharing) following this [installation tutorial](http://jollymonsterstudio.com/2018/11/02/unreal-c-with-visual-studio-code/). ✅ <b><u>RECOMMENDED</u></b>
 
 * <b><i>Option 2</i></b> (free, larger download size): Install [Visual Studio 2019 or 2017 Community Edition](https://visualstudio.microsoft.com/downloads/) following this [installation tutorial](https://docs.unrealengine.com/4.26/en-US/ProductionPipelines/DevelopmentSetup/VisualStudioSetup/). ❌ <b><u>NOT RECOMMENDED</u></b>
 
@@ -32,7 +32,7 @@ What's great about this is that it allows map creators to utilize <b><i>almost a
 
 ![Imgur](https://i.imgur.com/w4ats9o.png)
 
-4) If not already installed, install the [.NET Framework 4.7.2 Runtime](https://dotnet.microsoft.com/download/dotnet-framework/thank-you/net472-web-installer). This is <b>required</b> for the [Ascentroid Map Kit Setup Utility](https://github.com/Ascentroid/Ascentroid/blob/latest-stable/MapKit/Setup/AscMapKitSetup.zip).
+4) If not already installed, install the [.NET SDK 4.6.2](https://drive.google.com/file/d/1DxFDQJG4bHocba8UK5NfXTtq5BEbpihQ/view?usp=sharing). This is <b>required</b> for the Unreal Engine Swarm Engine (needed for light building).
 
 Note: you may need to run all installations as a <b>Windows Administrator</b> user.
 
@@ -87,120 +87,17 @@ Note: you may need to run all installations as a <b>Windows Administrator</b> us
 
 #### You may want to learn some basics about Unreal Engine:
 
-* Tutorial to convert old levels using Blender and Unreal Engine: https://www.youtube.com/watch?v=H6XOQAU8rJ8
-* https://www.informit.com/articles/article.aspx?p=2819033&seqNum=3
 * https://docs.unrealengine.com/en-US/index.html
-* https://docs.unrealengine.com/en-US/WorkingWithContent/index.html
-* https://docs.unrealengine.com/en-US/WorkingWithContent/Importing/FBX/StaticMeshes/index.html
-* https://docs.unrealengine.com/en-US/WorkingWithContent/Importing/HowTo/index.html
-* https://docs.unrealengine.com/en-US/Resources/ContentExamples/Lighting/index.html
-* https://docs.unrealengine.com/en-US/Resources/ContentExamples/MaterialNodes/index.html
-* https://docs.unrealengine.com/en-US/RenderingAndGraphics/index.html
 * Import 3D meshes: https://www.youtube.com/watch?v=_FgedJWInL0
 * Lighting basics: https://www.youtube.com/watch?v=FsjqVIyr0O4
-* Hierarchical Instanced Static Meshes: https://www.youtube.com/watch?v=GmFYPotzLhc
 
 <br/>
 
 #### If you don't want to learn 3D modeling tools, you can try some Marketplace assets:
 
-##### <a name="supergrid"></a> [SuperGrid](https://www.unrealengine.com/marketplace/en-US/product/supergrid-starter-pack) - <i>highly recommended</i>!
-
-![SuperGrid](https://cdn1.epicgames.com/ue/item/SuperGrid_Screenshot_02-1920x1080-a7795c4363fe32b96e0e4cdc22262f71.png?resize=1&w=1600)
-
-If you want to make maps quickly without having to learn a 3D modeling program, I highly recommend [SuperGrid](https://www.unrealengine.com/marketplace/en-US/product/supergrid-starter-pack) (which is free!).
-
-Download it from the UE Marketplace here: https://www.unrealengine.com/marketplace/en-US/product/supergrid-starter-pack
-
-SuperGrid has a series of preview videos here: https://www.youtube.com/playlist?list=PLx7zxUeK-7HiAsH4DyaklZW0NAIyKGc2N
-
-Here is another small demo video:
-https://www.youtube.com/watch?v=NxUq_rD8PVM
-
-Tip: you can use SuperGrid <b><i>in addition to</i></b> a 3D modeling tool if you wish! It can be very handy to use both in your campaign(s)!
-
-To get SuperGrid setup in your campaign project, do the following:
-
-1) From the Marketplace, click <b>Create Project</b>:
-
-![Imgur](https://i.imgur.com/WgLnsJ8.png)
-
-2) Use the default project locations and click <b>Create</b>. We will be manually copying the content out of this project and into your campaign project next:
-
-![Imgur](https://i.imgur.com/lbXh1Dw.png)
-
-3) Copy the content folder for the default SuperGrid project to the content folder for your campaign project:
-
-From:
-```
-[SuperGrid project root]\Content\SuperGrid
-```
-
-To:
-```
-[campaign project root]\Content\SuperGrid
-```
-
-For example, from:
-
-![Imgur](https://i.imgur.com/d6072TT.png)
-
-To:
-
-![Imgur](https://i.imgur.com/qy563ms.png)
-
-4) Now, open your UE campaign project.
-
-5) If it worked, you should now see the <b>SuperGrid</b> folder in the <b>Content Browser</b> under the root <b>Content</b> folder:
-
-![Imgur](https://i.imgur.com/T2WVpfH.png)
-
-Note: You <b>cannot</b> start using SuperGrid yet! The next steps are <b>critical</b>! Remember: all content must be placed in the <b>Campaign Content</b> folder, or it will not get cooked into your <b>\*.pak</b> file! See <b>[Other Marketplace Content](#other-marketplace-content)</b> for details on why these next steps are absolutely necessary.
-
-6) Drag and drop the SuperGrid folder from the <b>Content</b> folder to the <b>Campaign Content</b> folder (optionally, if you want to place SuperGrid into sub-folder(s) under <b>Campaign Content</b>, create them and move the assets there):
-
-![Imgur](https://i.imgur.com/TPeCXMs.png)
-
-7) When prompted, select <b>Move Here</b>:
-
-![Imgur](https://i.imgur.com/9LNKNwE.png)
-
-8) The UE editor will begin migrating assets to your <b>Campaign Content</b> folder:
-
-![Imgur](https://i.imgur.com/JvoW17Z.png)
-
-9) You should now be able to start using SuperGrid in your level(s). Just be sure you use everything that is in the <b>Campaign Content</b> folder!
-
-![Imgur](https://i.imgur.com/KggNFL7.png)
-
-Tip: if you would like to save on some disk space, I recommend that you delete unused asset files when using Marketplace content. For example, for SuperGrid, I would delete everything in the <b>TutorialLevel</b> folder, the <b>Blueprints</b> folder, and the <b>Overview</b> file(s).
-
-Tip: after everything has been moved; if there is a set of empty SuperGrid folders still visible in the <b>Content</b> folder, just delete them from the file system / using file explorer.
-
-To reiterate: see <b>[Other Marketplace Content](#other-marketplace-content)</b> for details on why these steps are absolutely necessary.
-
-<br/>
-
-##### Built-In Editor UE Mesh Plugins - <i>highly recommended!</i>
-
-UE has a few plugins included (free!) you can enable which will allow you to work with 3D meshes directly in the editor. Just go to Edit -> Plugins and enable them:
-
-![Imgur](https://i.imgur.com/5nxvjrM.png)
-
-![Imgur](https://i.imgur.com/apsfsvk.png)
-
-Here are some tutorial videos on how to use some of these free UE plugins:
-
-* https://www.youtube.com/watch?v=7Ff0zZcHmaU
-* https://www.youtube.com/watch?v=P75oIsxrYlY
-* https://www.youtube.com/watch?v=UqR6rnZEidg
-* https://www.youtube.com/watch?v=hdk5Bf4zZwk
-
-<br/>
-
 ##### <a name="mesh-tool"></a>[Mesh Tool](https://forums.unrealengine.com/unreal-engine/marketplace/107840-mesh-tool-a-mesh-editor) - <i>highly recommended</i>!
 
-[Mesh Tool](https://forums.unrealengine.com/unreal-engine/marketplace/107840-mesh-tool-a-mesh-editor) is a commercial (paid) UE plugin which allows you to edit mesh assets and prototype props and levels without leaving the UE Editor. It also includes basic UV mapping tools!
+[Mesh Tool](https://marynate.itch.io/mesh-tool) is a commercial (paid) UE plugin which allows you to edit mesh assets and prototype props and levels without leaving the UE Editor. It also includes basic UV mapping tools!
 
 ![MeshTool](https://d3kjluh73b9h9o.cloudfront.net/original/3X/5/3/53e2d19b206094fc4216cbdd4e95c5769c93dd91.jpeg)
 
@@ -219,66 +116,9 @@ Tip: Keep an eye out for asset sales. Sometimes you can get a helpful tool for l
 
 <br/>
 
-##### <a name="mesh-tool"></a>[Instance Tool](https://www.unrealengine.com/marketplace/en-US/product/instance-tool) - <i>highly recommended</i>!
+##### <a name="other-marketplace-content"></a>Other Fab Assets
 
-[Instance Tool](https://www.unrealengine.com/marketplace/en-US/product/instance-tool) is a commercial (paid) UE plugin which allows you to quickly select/edit/convert Instanced Static Meshes in editor viewports. This is a good tool to have for [performance/optimization](#performance-optimization).
-
-![Imgur](https://cdn1.epicgames.com/ue/item/InstanceTool_screenshot_7-1920x1080-ce11e1497e8f0529bc734ab6f46b2d18.jpg?resize=1&w=1600)
-
-* [Get Instance Tool on the Marketplace](https://www.unrealengine.com/marketplace/en-US/product/instance-tool)
-
-Tip: Keep an eye out for asset sales. Sometimes you can get a helpful tool for less, or even sometimes <i>free</i>, during a sale.
-
-<br/>
-
-##### <a name="other-marketplace-content"></a>Other Marketplace Content
-
-You can try using more [Marketplace](https://www.unrealengine.com/marketplace) assets from the UE Marketplace here: https://www.unrealengine.com/marketplace
-
-Epic has a lot of free assets available as well: https://www.unrealengine.com/marketplace/en-US/free
-
-When using assets from the UE Marketplace, be sure to follow these guidelines:
-
-* If the asset requires the creation of a UE project, always create the default project somewhere temporary, first, and then manually copy the assets to the <b>Content</b> folder of your UE project.
-
-* If the asset is able to install directly into your UE campaign project, the asset should always get installed to the <b>Content</b> folder of your UE project, first (this is typically the default anyway).
-
-* The reason assets need to go in the <b>Content</b> folder first is because UE uses an internal <b>reference path</b> system to associate dependencies between assets.
-
-* For example, let's say you have an asset pack called <b>SomeMarketplaceAssetPack</b> with a material and a texture inside of it:
-
-```
-/Content/SomeMarketplaceAssetPack/Materials/M_SomeMaterial
-/Content/SomeMarketplaceAssetPack/Textures/T_SomeTexture
-```
-
-* If the material asset <b>M_SomeMaterial</b> is utilizing/referencing the texture <b>T_SomeTexture</b> inside of it, then the material will be pointing to the <b>absolute path</b> of the texture asset, like this:
-
-```
-/Content/SomeMarketplaceAssetPack/Textures/T_SomeTexture
-```
-
-* If you made the mistake of only copying/moving <b>M_SomeMaterial</b> to your <b>Campaign Content</b> folder, but not <b>T_SomeTexture</b>, then <b>M_SomeMaterial</b> would still be referencing the wrong <b>absolute path</b> (above). This means the asset <b><i>will not be cooked</i></b>!
-
-* To make sure the paths are migrated to the <b>Campaign Content</b> folder properly, you can follow a few steps and the UE editor <b><i>will automatically fix/resolve most of the dependencies for the absolute paths for you</i></b>!
-
-* Drag and drop the marketplace asset folder from the <b>Content</b> folder to the <b>Campaign Content</b> folder (optionally, if you want to place marketplace asset into sub-folder(s) under <b>Campaign Content</b>, create them and move the assets there):
-
-![Imgur](https://i.imgur.com/TPeCXMs.png)
-
-* When prompted, select <b>Move Here</b>:
-
-![Imgur](https://i.imgur.com/9LNKNwE.png)
-
-* The UE editor will begin migrating assets to your <b>Campaign Content</b> folder. It's at this point the editor <b><i>will automatically fix/resolve all of the dependencies for the absolute paths for you</i></b>.
-
-![Imgur](https://i.imgur.com/JvoW17Z.png)
-
-* You can try this out by following the installation instructions for [SuperGrid](#supergrid).
-
-Note: this may or may not have adverse affects on different types of assets contained within the marketplace content (for example: Blueprint dependencies). It has not been fully tested and results may vary, depending on how complicated the marketplace asset(s) you are working with are. You <i>may</i> have to perform additional manual work to make certain things compatible when moving things over to the <b>Campaign Content</b> folder. It's up to you to decide how advanced you want to make things.
-
-Tip: remember, if you would like to save disk space for your UE campaign project, analyze all marketplace assets and delete assets which are unnecessary.
+You can try using more [assets](https://www.fab.com/) from Fab here: https://www.fab.com/
 
 <br/>
 
@@ -319,28 +159,14 @@ If you want per-poly collision on the 3D mesh you are going to import into UE:
 
 Descent 1 and 2:
 
-Tutorial to convert old levels using Blender and Unreal Engine:
-* https://www.youtube.com/watch?v=H6XOQAU8rJ8
+Convert old levels using Arne's DesLevelObj tool:
+* [Download DesLevelObj](https://github.com/arbruijn/DesLevelObj/releases)
 
-It's even *easier* to convert a level using [Mesh Tool](https://www.unrealengine.com/marketplace/en-US/product/mesh-tool), a commercial Unreal Engine plugin ($50). We will create a tutorial video for this plugin in the near future.
+The Ascentroid Map Kit includes a texture remapping definition file you can use with DesLevelObj here:
+* [Download DesLevelObj_Ascentroid_Texture_Remap.json](https://raw.githubusercontent.com/Ascentroid/Ascentroid/refs/heads/master/MapKit/DesLevelObj/DesLevelObj_Ascentroid_Texture_Remap.json)
 
-* Setup [OTDVM](http://www.columbia.edu/~em36/otvdm.html) (easy), **OR** (harder) setup a [Windows 98](https://winworldpc.com/product/windows-98/98-second-edition) virtual machine (consider using [VirtualBox](https://www.virtualbox.org/), which is free).
-
-* [Download](https://drive.google.com/file/d/1E4M43I8zox58ODjqulhXaBSMnyYJu2z5/view?usp=sharing) and setup [LVLVIEW32](https://drive.google.com/file/d/1E4M43I8zox58ODjqulhXaBSMnyYJu2z5/view?usp=sharing) with OTDVM, **OR** on your Windows 98 virtual machine. Instructions/details are not included here; you will have to sort that out yourself since the process can be subjective depending on how you setup your environment.
-
-* In [LVLVIEW32](https://drive.google.com/file/d/1E4M43I8zox58ODjqulhXaBSMnyYJu2z5/view?usp=sharing), export your level to a DXF file.
-
-* Convert the DXF file to a FBX file. You can use a [3D tool](#3d-tools), or try a free 3D file converter like this one: https://products.aspose.app/3d/conversion/dxf-to-fbx
-
-* Some of the 3D mesh normals may be flipped. You can use a [3D tool](#3d-tools), or [Mesh Tool](#mesh-tool), to fix your normals.
-
-* You will probably need to scale your level to match Ascentroid's scale. A cube at Ascentroid scale is 20m x 20m x 20m. You can use a [3D tool](#3d-tools), or [Mesh Tool](#mesh-tool) to re-scale your level 3D mesh.
-
-* Texture your level 3D mesh by setting up UV mapping. You can use a [3D tool](#3d-tools), or [Mesh Tool](#mesh-tool).
-
-* Import your level 3D mesh into your UE campaign project. Remember: all assets used in your campaign <b>must</b> be saved in the <b>Campaign Content</b> folder (or they won't cook!).
-
-* <b>Optional, subjective</b>: When you [import your level 3D mesh](#import-3d-meshes) into the UE editor, you will probably want to disable collision generation. After it has been imported, edit the level 3D mesh and enable per-poly collision by setting <i>Collision Complexity</i> to <b>Use Complex Collision as Simple</b>:
+Convert OBJ to FBX using AutoDesk FBX Converter 2013:
+* [Download AutoDesk FBX Converter 2013](https://drive.google.com/file/d/10-3j3FsgTNJpqcoRJ6ukGrQSN8_pWF_H/view?usp=sharing)
 
 ![Imgur](https://i.imgur.com/PbdjoPb.png)
 
@@ -387,93 +213,11 @@ The Ascentroid map kit contains pre-fab assets and actors you can use in your UE
 
 <b>Pre-fab Content</b>
 
-* Placeable pre-fab content can be found in the <b>AscMapKit Content</b> folder. Feel free to explore this content to use in your project:
-
-![Imgur](https://i.imgur.com/Mz1Ytms.png)
-
-* You can drag and drop static meshes into your level(s). You can also use some of the materials, particles, textures and other assets that are available as part of pre-fab content.
-
-* For example, I swapped out the color of the sign text using a pre-fab material instance here:
-
-![Imgur](https://i.imgur.com/7Fo6s1Z.png)
-
-* Another example, a pre-fab particle is included you could use as a power station effect:
-
-![Imgur](https://i.imgur.com/UDe8Vsg.png)
+* Use the Ascentroid UE editor panel to add pre-fab content. Feel free to explore this content to use in your project.
 
 * If you instead wanted to use your own material(s), create them in the <b>Campaign Content</b> folder, and then use it on a pre-fab. It should work. All content in the <b>AscMapKit Content</b> folder is shared with the game runtime. You should even be able to, for example, create material instances that reference base materials inside the <b>AscMapKit Content</b> folder. However, if this doesn't work, [please let me know](mailto:ascentroid@gmail.com) right away.
 
 * I'll be adding more pre-fab asset content to the map kit as it is developed. Eventually, I foresee the community developing and submitting new assets for the map kit as well! Perhaps, in the future, we could even build a completely separate, community asset pack system!
-
-<b>Actors</b>
-
-* Placeable game actors can be found in the <b>AscMapKit C++ Classes</b> folder:
-
-![Imgur](https://i.imgur.com/RITFPYX.png)
-
-<b><i>Player Start Positions</i></b>
-
-* Just drag and drop an <b>AscMapKitPlayerStart</b> from the <b>Player</b> folder. The 3D mesh and white arrow will show which direction the player will be oriented when spawning. You will want to add <b>eight (8)</b> player start positions to your level(s):
-
-![Imgur](https://i.imgur.com/yeQaWEl.png)
-
-<b><i>Powerups</i></b>
-
-* Just drag and drop an <b>AscMapKitPowerupActor</b> from the <b>Powerup</b> folder, and select a <b>Powerup Type</b> from the properties on the right-hand side of the editor:
-
-![Imgur](https://i.imgur.com/4cDPDmm.png)
-
-Tip: copy and paste powerup actors to quickly fill your level(s) with powerup spawn points!
-
-<b><i>Doors</i></b>
-
-* Just drag and drop an <b>AscMapKitDoorActor</b> from the <b>Door</b> folder, and select a <b>Door Type</b> from the properties on the right-hand side of the editor:
-
-![Imgur](https://i.imgur.com/FTtD71H.png)
-
-Tip: there are tons of actor properties you can tweak! Hover your mouse over the property in the editor. They should all be fully documented!
-
-![Imgur](https://i.imgur.com/ltWQUNf.png)
-
-Note: Doors cannot be scaled yet. This may be coming in the future.
-
-<b><i>Environment Areas</i></b>
-
-* Just drag and drop an <b>AscMapKitEnvironmentAreaActor</b> from the <b>Area</b> folder, and select an <b>Environment Area Type</b> from the properties on the right-hand side of the editor:
-
-![Imgur](https://i.imgur.com/R6DeTK6.png)
-
-Tip: power stations are considered environment areas. Just select <b>Power Station without Effects</b> or <b>Power Station with Effects</b> from the <b>Environment Area Type</b> property.
-
-Tip: environment area actors do not have pre-defined visual assets available (other than a power station particle). It's up to you to create/import the visual assets you want to use for things like water, acid, lava, etc. I highly recommend the Cartoon Water Shader (paid): https://www.unrealengine.com/marketplace/en-US/product/cartoon-water-shader
-
-Tip: there are tons of actor properties you can tweak! Hover your mouse over the property in the editor. They should all be fully documented!
-
-<b><i>Powerup Respawn Trigger Volumes</i></b>
-
-* In order for the Ascentroid game runtime to know where and how to respawn powerups, you need to place <b>Powerup Respawn Trigger Volumes</b> in your level(s).
-
-* Just drag and drop an <b>AscMapKitPowerupRespawnTriggerBox</b> from the <b>Powerup</b> folder, and select which <b>Powerups</b> are allowed to spawn in this volume from the properties on the right-hand side of the editor:
-
-![Imgur](https://i.imgur.com/qfYOUrq.png)
-
-Tip: you can create many Powerup Respawn Trigger Volumes in your level(s) and scale them to size to fit your needs. For example, this level has them setup like this:
-
-![Imgur](https://i.imgur.com/Hw3ct9Y.png)
-
-Note: if you don't add Powerup Respawn Trigger Volumes to your level(s), then powerups will <b><i>not</i></b> respawn after despawning in multiplayer!
-
-<b><i>Enemies</i></b>
-
-* Just drag and drop an <b>AscMapKitEnemyActor</b> from the <b>Enemy</b> folder, and select an <b>Enemy Type</b> from the properties on the right-hand side of the editor:
-
-![Imgur](https://i.imgur.com/NSYSdgH.png)
-
-Note: enemies are represented as billboards/sprites in the editor because the static meshes are commercial assets (purchased) and cannot not be distributed in the map kit. If you would like to modify properties like <i>colors</i>, they are displayed on the cube and sphere meshes attached to the map kit actor (so you can preview them while working).
-
-Note: at the time of this writing, single player and cooperative game modes are still under heavy development, so a lot of properties related to enemies are still in progress. Some of them may not even be functional.
-
-Tip: there are tons of actor properties you can tweak! Hover your mouse over the property in the editor. They should all be fully documented!
 
 <b><i>Summary</i></b>
 
@@ -499,49 +243,11 @@ If you have any questions about the map kit content, properties, etc, please [em
 
 <br/><br/><br/>
 
-#### Scripting is possible, however...
+#### MOD Support
 
-Currently, most scripting capabilities will only run on the client and are not replicated in multiplayer (except in the case where Ascentroid map kit actors send explicit network commands).
+Tentatively, Ascentroid may support scripting with limited Blueprints support, and [UnLua](https://github.com/Tencent/UnLua/blob/master/Docs/EN/UnLua_Programming_Guide.md).
 
-Eventually, Ascentroid map kit actors will have events you can attach to in order to perform client-side scripting operations. This is still <i>highly experimental</i>, but here is an example of an event emitted by an Ascentroid map kit trigger actor using [Blueprints](https://docs.unrealengine.com/en-US/ProgrammingAndScripting/Blueprints/GettingStarted/index.html):
-
-![Imgur](https://i.imgur.com/gj43Q9X.png)
-
-When this trigger is deactivated, it will change the visibility of a few static meshes in the level, and spawn some particles. It opens up a secret area in the map, and spawns a grate mesh.
-
-This Blueprint is embedded entirely in the <b>Campaign Content</b> and considered client-side scripting.
-
-The trigger deactivation <i>is</i> an explicit network command sent by the Ascentroid map kit trigger actor, so all of the clients in the game scripts will operate in the same way.
-
-In the future, I may add generic [RPC-like](https://en.wikipedia.org/wiki/Remote_procedure_call) features for Blueprint-only network communication (depending on how things go).
-
-Lastly, <i>only</i> Blueprints scripting is supported. Ascentroid does not yet support scripting in C++. This is still being researched.
-
-<br/><br/><br/>
-
-## Demo Campaign Project
-
-A UE demo campaign project has been created, which you can download and inspect for learning purposes. It includes three levels and various free content sources. Be sure to read the included <b>Readme.txt</b> file.
-
-Download the UE demo campaign project zip file from here:
-https://drive.google.com/file/d/1zlutTZXBK4Vy-YLGeMa7izCC1L5hhVVt/view?usp=sharing
-
-![Imgur](https://i.imgur.com/Wr0BNjx.png)
-
-![Imgur](https://i.imgur.com/wpUXtgC.png)
-
-![Imgur](https://i.imgur.com/mYw42eb.png)
-
-<br/><br/><br/>
-
-## Template Campaign Project
-
-A UE template campaign project has been created, which you can download and open, then copy and paste assets from into your own campaign! Just have both projects open and you can copy and paste (CTRL+C, CTRL+V) assets from one level to the other seamlessly. Just remember to adjust locations and settings of the assets for your own campaign. Be sure not to delete anything out of the template campaign, or change/save it. If you do, you may have to delete it and re-download it again.
-
-Download the UE template campaign project zip file from here:
-https://drive.google.com/file/d/1jskTpWxB0KLx1hdVMsVNNXpgbg1ElNax/view?usp=share_link
-
-![Imgur](https://i.imgur.com/wUVscgY.png)
+The Ascentroid Map Kit Tool currently has pre-alpha/prototype support for [UnLua](https://github.com/Tencent/UnLua/blob/master/Docs/EN/UnLua_Programming_Guide.md). Download the tool and take a look at the MOD section.
 
 <br/><br/><br/>
 
