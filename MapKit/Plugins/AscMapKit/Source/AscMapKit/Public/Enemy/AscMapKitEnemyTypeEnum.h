@@ -7,6 +7,7 @@ UENUM()
 enum class EAscMapKitEnemyTypeEnum : uint8
 {
     None = 0 UMETA(DisplayName = "Please Select"),
+    Waypoint UMETA(DisplayName = "Waypoint"),
     AlienCylon UMETA(DisplayName = "Alien Cylon"),
     AlienGrawn UMETA(DisplayName = "Alien Grawn"),
     MachineAssaultCache UMETA(DisplayName = "Machine Assault Cache"),

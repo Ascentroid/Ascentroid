@@ -14,4 +14,10 @@ struct ASCMAPKIT_API FAscTriggerDataAssetStruct : public FAscEditorToolDataAsset
 
 	UPROPERTY(EditAnywhere)
 	EAscMapKitTriggerTypeEnum TriggerType;
+
+	UPROPERTY(EditAnywhere)
+	UStaticMesh *ActiveStaticMesh;
+
+	UPROPERTY(EditAnywhere)
+	UStaticMesh *InactiveStaticMesh;
 };

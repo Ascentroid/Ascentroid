@@ -19,7 +19,7 @@ struct ASCMAPKIT_API FAscMapKitEnemyPropertiesStatusStruct
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     bool DisableAttack;
 	
-	// The enemy will not attack, but will continue to perform all other functions.
+	// The enemy will not move, but will continue to perform all other functions.
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
 	bool DisableMovement;
 

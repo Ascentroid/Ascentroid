@@ -1,6 +1,7 @@
 #pragma once
 
 // Ascentroid
+#include "AscMapKit/Public/Core/Constant/AscMapKitMaterialEmitColorTypeEnum.h"
 #include "AscMapKit/Public/Data/AscEditorToolDataAssetStruct.h"
 #include "AscMapKit/Public/Decor/AscMapKitDecorTypeEnum.h"
 
@@ -22,10 +23,19 @@ struct ASCMAPKIT_API FAscDecorDataAssetStruct : public FAscEditorToolDataAssetSt
 	UStaticMesh *StaticMesh;
 
 	UPROPERTY(EditAnywhere)
+	UStaticMesh *StaticMeshDestroyed;
+
+	UPROPERTY(EditAnywhere)
+	bool bHasPictureSupport;
+	
+	UPROPERTY(EditAnywhere)
 	bool bHasDestructibleSupport;
 	
 	UPROPERTY(EditAnywhere)
 	bool bHasLightSupport;
+
+	UPROPERTY(EditAnywhere)
+	EAscMapKitMaterialEmitColorTypeEnum DefaultLightColor;
 
 	UPROPERTY(EditAnywhere)
 	FVector LightRelativeLocationOffset;

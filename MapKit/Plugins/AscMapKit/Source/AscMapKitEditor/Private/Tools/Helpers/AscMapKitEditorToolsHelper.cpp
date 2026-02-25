@@ -10,7 +10,7 @@
 // Ascentroid
 #include "AscMapKit/Public/Core/Util/AscMapKitUtil.h"
 
-UWorld * UAscMapKitEditorToolsHelper::GetEditorWorld()
+UWorld *UAscMapKitEditorToolsHelper::GetEditorWorld()
 {
 	if (!GEditor)
 		return nullptr;
@@ -194,24 +194,6 @@ void UAscMapKitEditorToolsHelper::EditorRenameSequentialActorName(
 
 	Actor->Rename(*(UseActorName + FGuid::NewGuid().ToString()));
 	Actor->SetActorLabel(*UseActorName);
-}
-
-FString UAscMapKitEditorToolsHelper::GenerateRandomString(int32 MaxLength)
-{
-	const FString CharSet = TEXT("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789");
-	const int32 CharSetLength = CharSet.Len();
-
-	MaxLength = FMath::Max(1, MaxLength);
-
-	FString Result;
-
-	for (int32 i = 0; i < MaxLength; i++)
-	{
-		const int32 RandomIndex = FMath::RandRange(0, CharSetLength - 1);
-		Result += CharSet[RandomIndex];
-	}
-
-	return Result;
 }
 
 void UAscMapKitEditorToolsHelper::ShowErrorMessage(const FString &Arg)

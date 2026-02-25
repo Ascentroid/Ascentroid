@@ -6,6 +6,5 @@
 UENUM()
 enum class EAscMapKitTriggerPropertiesInvisibleCollisionTypeEnum : uint8
 {
-	Box = 1,
-	StaticMesh = 2
+	Box = 1
 };

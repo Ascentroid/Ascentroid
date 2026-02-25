@@ -2,8 +2,6 @@
 
 // Ascentroid
 #include "AscMapKit/Public/Trigger/AscMapKitTriggerDefaultGameRuntimeBoundingBox.h"
-#include "AscMapKit/Public/Trigger/AscMapKitTriggerPropertiesCustomStruct.h"
-#include "AscMapKit/Public/Trigger/AscMapKitTriggerPropertiesEnemyGeneratorStruct.h"
 #include "AscMapKit/Public/Trigger/AscMapKitTriggerPropertiesInvisibleStruct.h"
 #include "AscMapKit/Public/Trigger/AscMapKitTriggerPropertiesMakeDoorDestructibleStruct.h"
 #include "AscMapKit/Public/Trigger/AscMapKitTriggerPropertiesMakeDoorIndestructibleStruct.h"
@@ -11,10 +9,12 @@
 #include "AscMapKit/Public/Trigger/AscMapKitTriggerPropertiesOnDestroyDoorStruct.h"
 #include "AscMapKit/Public/Trigger/AscMapKitTriggerPropertiesOnExecuteStruct.h"
 #include "AscMapKit/Public/Trigger/AscMapKitTriggerPropertiesOnForcefieldChangeStruct.h"
+#include "AscMapKit/Public/Trigger/AscMapKitTriggerPropertiesOnHideActorsStruct.h"
 #include "AscMapKit/Public/Trigger/AscMapKitTriggerPropertiesOnInactiveStruct.h"
 #include "AscMapKit/Public/Trigger/AscMapKitTriggerPropertiesOnLockDoorStruct.h"
 #include "AscMapKit/Public/Trigger/AscMapKitTriggerPropertiesOnOpenDoorStruct.h"
 #include "AscMapKit/Public/Trigger/AscMapKitTriggerPropertiesOnUnlockDoorStruct.h"
+#include "AscMapKit/Public/Trigger/AscMapKitTriggerPropertiesOnShowActorsStruct.h"
 #include "AscMapKit/Public/Trigger/AscMapKitTriggerPropertiesOtherEffectsStruct.h"
 #include "AscMapKit/Public/Trigger/AscMapKitTriggerPropertiesResetReusableTriggersStruct.h"
 #include "AscMapKit/Public/Trigger/AscMapKitTriggerPropertiesReusableStruct.h"
@@ -61,7 +61,13 @@ struct ASCMAPKIT_API FAscMapKitTriggerPropertiesStruct
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     FAscMapKitTriggerPropertiesOnInactiveStruct OnInactive;
-    
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    FAscMapKitTriggerPropertiesOnShowActorsStruct OnShowActors;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    FAscMapKitTriggerPropertiesOnHideActorsStruct OnHideActors;
+
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     FAscMapKitTriggerPropertiesOnForcefieldChangeStruct OnForcefieldChange;
     
@@ -88,7 +94,4 @@ struct ASCMAPKIT_API FAscMapKitTriggerPropertiesStruct
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     FAscMapKitTriggerPropertiesOtherEffectsStruct OtherEffects;
-    
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
-    FAscMapKitTriggerPropertiesCustomStruct Custom;
 };

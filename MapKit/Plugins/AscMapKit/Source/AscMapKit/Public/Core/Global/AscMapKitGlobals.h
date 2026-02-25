@@ -3,8 +3,10 @@
 // Ascentroid
 #include "AscMapKit/Public/Data/AscEnvironmentAreaDataAsset.h"
 #include "AscMapKit/Public/Data/AscDecorDataAsset.h"
+#include "AscMapKit/Public/Data/AscDecorPictureDataAsset.h"
 #include "AscMapKit/Public/Data/AscDoorDataAsset.h"
 #include "AscMapKit/Public/Data/AscDoorFrameDataAsset.h"
+#include "AscMapKit/Public/Data/AscDoorCodeDataAsset.h"
 #include "AscMapKit/Public/Data/AscEnemyDataAsset.h"
 #include "AscMapKit/Public/Data/AscFanDataAsset.h"
 #include "AscMapKit/Public/Data/AscTriggerDataAsset.h"
@@ -23,12 +25,18 @@ public:
 
 	UFUNCTION()
 	static UAscDecorDataAsset *GetDecorDataAsset();
+	
+	UFUNCTION()
+	static UAscDecorPictureDataAsset *GetDecorPictureDataAsset();
 
 	UFUNCTION()
 	static UAscDoorDataAsset *GetDoorDataAsset();
 
 	UFUNCTION()
 	static UAscDoorFrameDataAsset *GetDoorFrameDataAsset();
+
+	UFUNCTION()
+	static UAscDoorCodeDataAsset *GetDoorCodeDataAsset();
 
 	UFUNCTION()
 	static UAscEnemyDataAsset *GetEnemyDataAsset();

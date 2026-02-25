@@ -20,4 +20,7 @@ public:
 
 	UFUNCTION()
 	TArray<FAscEditorToolDataAssetStruct> GetAssetItemsAsEditorToolData();
+
+	UFUNCTION()
+	const FAscTriggerDataAssetStruct &Get(const EAscMapKitTriggerTypeEnum &TriggerType);
 };

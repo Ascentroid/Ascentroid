@@ -1,7 +1,10 @@
 #include "AscMapKitEditor/Public/Tools/AscMapKitEditorToolsUtilityWidget.h"
 
 // UE
+#include "Editor/ContentBrowser/Public/ContentBrowserModule.h"
+#include "Editor/ContentBrowser/Public/IContentBrowserSingleton.h"
 #include "Editor/UnrealEd/Public/ActorGroupingUtils.h"
+#include "Runtime/AssetRegistry/Public/AssetRegistryModule.h"
 #include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
 #include "Runtime/Core/Public/Algo/MaxElement.h"
 #include "Runtime/Core/Public/Internationalization/Regex.h"
@@ -33,11 +36,15 @@
 // Ascentroid
 #include "AscMapKit/Public/Area/AscMapKitEnvironmentAreaActor.h"
 #include "AscMapKit/Public/Core/Global/AscMapKitGlobals.h"
+#include "AscMapKit/Public/Core/Util/AscMapKitUtil.h"
 #include "AscMapKit/Public/Decor/AscMapKitDecorActor.h"
 #include "AscMapKit/Public/Door/AscMapKitDoorActor.h"
 #include "AscMapKit/Public/Enemy/AscMapKitEnemyActor.h"
+#include "AscMapKit/Public/Enemy/AscMapKitEnemyUtil.h"
+#include "AscMapKit/Public/Enemy/AscMapKitEnemyWaypointActor.h"
 #include "AscMapKit/Public/Fan/AscMapKitFanActor.h"
 #include "AscMapKit/Public/Forcefield/AscMapKitForcefieldActor.h"
+#include "AscMapKit/Public/Gui/Interact/Display/AscMapKitGuiInteractDisplayActor.h"
 #include "AscMapKit/Public/Navmap/AscMapKitNavmapActor.h"
 #include "AscMapKit/Public/Player/AscMapKitDefaultPostProcessActor.h"
 #include "AscMapKit/Public/Player/AscMapKitPlayerStart.h"
@@ -240,20 +247,6 @@ UAscMapKitEditorToolsUtilityWidget::UAscMapKitEditorToolsUtilityWidget()
 	// todo: @reminder: change all material overrides from indexes to slot names
 	// todo: @reminder: slot names are easier to reference and will be more friendly for map makers
 
-	// todo: @reminder: remove
-	DoorTypeStaticMeshMaterialEmitColorOverrideMap.Empty();
-	DoorTypeStaticMeshMaterialEmitColorOverrideMap.Add(EAscMapKitDoorTypeEnum::Animated20x20mBasic004, 4);
-	DoorTypeStaticMeshMaterialEmitColorOverrideMap.Add(EAscMapKitDoorTypeEnum::Animated20x20mBasic005, 2);
-
-	// todo: @reminder: remove? use material slot names instead? "Emit"?
-	DoorFrameTypeStaticMeshMaterialEmitColorOverrideMap.Empty();
-	DoorFrameTypeStaticMeshMaterialEmitColorOverrideMap.Add(EAscMapKitDoorFrameTypeEnum::Frame20x20mBasic001, 4);
-	DoorFrameTypeStaticMeshMaterialEmitColorOverrideMap.Add(EAscMapKitDoorFrameTypeEnum::Frame20x20mBasic002, 2);
-
-	// todo: triggers don't have emit materials yet
-	TriggerTypeStaticMeshMaterialEmitColorOverrideMap.Empty();
-	//TriggerTypeStaticMeshMaterialEmitColorOverrideMap.Add(EAscMapKitTriggerTypeEnum::Basic001, 0);
-
 	MaterialEmitColorTypeMaterialMap.Empty();
 	MaterialEmitColorTypeMaterialMap.Add(EAscMapKitMaterialEmitColorTypeEnum::Blue, MaterialEmitColorBlue);
 	MaterialEmitColorTypeMaterialMap.Add(EAscMapKitMaterialEmitColorTypeEnum::BlueDark, MaterialEmitColorBlueDark);
@@ -282,8 +275,10 @@ void UAscMapKitEditorToolsUtilityWidget::NativeConstruct()
 
 	EnvironmentAreaDataAsset = UAscMapKitGlobals::GetEnvironmentAreaDataAsset();
 	DecorDataAsset = UAscMapKitGlobals::GetDecorDataAsset();
+	DecorPictureDataAsset = UAscMapKitGlobals::GetDecorPictureDataAsset();
 	DoorDataAsset = UAscMapKitGlobals::GetDoorDataAsset();
 	DoorFrameDataAsset = UAscMapKitGlobals::GetDoorFrameDataAsset();
+	DoorCodeDataAsset = UAscMapKitGlobals::GetDoorCodeDataAsset();
 	EnemyDataAsset = UAscMapKitGlobals::GetEnemyDataAsset();
 	FanDataAsset = UAscMapKitGlobals::GetFanDataAsset();
 	TriggerDataAsset = UAscMapKitGlobals::GetTriggerDataAsset();
@@ -324,6 +319,13 @@ void UAscMapKitEditorToolsUtilityWidget::NativeConstruct()
 
 	for (const auto &Item : DoorFrameDataAsset->AssetItems)
 		DoorFrameTypeMap.Add(Item.DoorFrameType, Item.Name);
+
+	// Door Code
+	DoorCodeTypeMap.Empty();
+	DoorCodeTypeMap.Add(EAscMapKitDoorCodeTypeEnum::None, TEXT("Please Select"));
+
+	for (const auto &Item : DoorCodeDataAsset->AssetItems)
+		DoorCodeTypeMap.Add(Item.DoorCodeType, Item.Name);
 
 	// Enemy
 	EnemyTypeMap.Empty();
@@ -415,6 +417,7 @@ void UAscMapKitEditorToolsUtilityWidget::NativeConstruct()
 	SetupGridPanelButtons(DecorDataAsset->GetAssetItemsAsEditorToolData(), TEXT("Decor"), GridPanelDecor, DecorButtonMap);
 	SetupGridPanelButtons(DoorDataAsset->GetAssetItemsAsEditorToolData(), TEXT("Door"), GridPanelDoor, DoorButtonMap);
 	SetupGridPanelButtons(DoorFrameDataAsset->GetAssetItemsAsEditorToolData(), TEXT("DoorFrame"), GridPanelDoorFrame, DoorFrameButtonMap);
+	SetupGridPanelButtons(DoorCodeDataAsset->GetAssetItemsAsEditorToolData(), TEXT("DoorCode"), GridPanelDoorCode, DoorCodeButtonMap);
 	SetupGridPanelButtons(EnemyDataAsset->GetAssetItemsAsEditorToolData(), TEXT("Enemy"), GridPanelEnemy, EnemyButtonMap);
 	SetupGridPanelButtons(FanDataAsset->GetAssetItemsAsEditorToolData(), TEXT("Fan"), GridPanelFan, FanButtonMap);
 	SetupGridPanelButtons(TriggerDataAsset->GetAssetItemsAsEditorToolData(), TEXT("Trigger"), GridPanelTrigger, TriggerButtonMap);
@@ -559,6 +562,42 @@ void UAscMapKitEditorToolsUtilityWidget::NativeConstruct()
 	BtnAddDoorFrame->OnClicked.Clear();
 	BtnAddDoorFrame->OnClicked.AddDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnAddDoorFrameOnClick);
 
+	// Create Door Code
+	ComboBoxAddDoorCodeType->ClearOptions();
+	ComboBoxAddDoorCodeType->AddOption(TEXT("Please Select"));
+
+	for (const auto &Item : DoorCodeDataAsset->AssetItems)
+		ComboBoxAddDoorCodeType->AddOption(Item.Name);
+
+	ComboBoxAddDoorCodeType->SetSelectedIndex(0);
+
+	ComboBoxAddDoorCodeType->OnSelectionChanged.Clear();
+	ComboBoxAddDoorCodeType->OnSelectionChanged.AddDynamic(this, &UAscMapKitEditorToolsUtilityWidget::ComboBoxAddDoorCodeTypeOnSelectionChanged);
+
+	ComboBoxAddDoorCodeColor->ClearOptions();
+
+	for (const auto &Item : MaterialEmitColorTypeMap)
+		ComboBoxAddDoorCodeColor->AddOption(Item.Value);
+
+	ComboBoxAddDoorCodeColor->SetSelectedIndex(0);
+
+	ComboBoxAddDoorCodeCount->ClearOptions();
+	ComboBoxAddDoorCodeCount->AddOption(TEXT("How Many?"));
+
+	for (auto i = 1; i <= 10; i++)
+		ComboBoxAddDoorCodeCount->AddOption(FString::Printf(TEXT("%d"), i));
+
+	ComboBoxAddDoorCodeCount->SetSelectedIndex(1);
+
+	ComboBoxAddDoorCodeWhere->ClearOptions();
+	ComboBoxAddDoorCodeWhere->AddOption(TEXT("Where?"));
+	ComboBoxAddDoorCodeWhere->AddOption(TEXT("0, 0, 0"));
+	ComboBoxAddDoorCodeWhere->AddOption(TEXT("Selected"));
+	ComboBoxAddDoorCodeWhere->SetSelectedIndex(2);
+
+	BtnAddDoorCode->OnClicked.Clear();
+	BtnAddDoorCode->OnClicked.AddDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnAddDoorCodeOnClick);
+
 	// Create Enemy
 	ComboBoxAddEnemyType->ClearOptions();
 	ComboBoxAddEnemyType->AddOption(TEXT("Please Select"));
@@ -594,6 +633,9 @@ void UAscMapKitEditorToolsUtilityWidget::NativeConstruct()
 
 	BtnAddEnemy->OnClicked.Clear();
 	BtnAddEnemy->OnClicked.AddDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnAddEnemyOnClick);
+
+	BtnGenerateRandomEnemySettings->OnClicked.Clear();
+	BtnGenerateRandomEnemySettings->OnClicked.AddDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnGenerateRandomEnemySettingsOnClick);
 
 	// Create Fan
 	ComboBoxAddFanType->ClearOptions();
@@ -821,6 +863,13 @@ void UAscMapKitEditorToolsUtilityWidget::NativeConstruct()
 
 	BtnGeneratePowerupRespawns->OnClicked.Clear();
 	BtnGeneratePowerupRespawns->OnClicked.AddDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnGeneratePowerupRespawnsOnClick);
+
+	// Generate - Other
+	BtnSubTitleGenerateOther->OnClicked.Clear();
+	BtnSubTitleGenerateOther->OnClicked.AddDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnSubTitleGenerateOtherOnClick);
+
+	BtnGenerateOtherRepairMeshMaterials->OnClicked.Clear();
+	BtnGenerateOtherRepairMeshMaterials->OnClicked.AddDynamic(this, &UAscMapKitEditorToolsUtilityWidget::BtnGenerateOtherRepairMeshMaterialsOnClick);
 
 	// Validate Run
 	BtnSubTitleValidate->OnClicked.Clear();
@@ -1263,6 +1312,7 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddAreaOnClick()
 							FogStaticMeshComponent->SetWorldScale3D(FVector(20.f, 20.f, 20.f));
 							FogStaticMeshComponent->SetRelativeLocation(FVector(0.f, 0.f, 0.f));
 							FogStaticMeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+							FogStaticMeshComponent->SetCollisionProfileName(UCollisionProfile::NoCollision_ProfileName);
 
 							UMaterialInstanceConstant *UseMaterial = nullptr;
 
@@ -1788,7 +1838,7 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddDecorOnClick()
 		return;
 	}
 
-	if (DecorColorType == EAscMapKitMaterialEmitColorTypeEnum::None)
+	if (DecorColorType == EAscMapKitMaterialEmitColorTypeEnum::None && DecorData.DefaultLightColor == EAscMapKitMaterialEmitColorTypeEnum::None)
 		DecorColorType = EAscMapKitMaterialEmitColorTypeEnum::Green;
 
 	auto SpawnLocation = FVector::ZeroVector;
@@ -1859,7 +1909,7 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddDecorOnClick()
 							// note: we cannot use sequence for name because it is based on the parent piece
 							// note: when I tested it, we ended up with sequences 001, 007, 013, etc, because it includes the other actor names
 							// note: so to get around this, we just generate a random string instead
-							const auto LadderFolderName = FString::Printf(TEXT("Ladder_%s"), *UAscMapKitEditorToolsHelper::GenerateRandomString());
+							const auto LadderFolderName = FString::Printf(TEXT("Ladder_%s"), *UAscMapKitUtil::GenerateRandomString(8));
 
 							bFolderNameOverridden = true;
 							
@@ -1971,10 +2021,14 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddDecorOnClick()
 					}
 				}
 
+				AscMapKitDecorActor->MapKit.bHasDestructibleSupport = DecorData.bHasDestructibleSupport;
 				AscMapKitDecorActor->MapKit.Destructible.Enable = DecorData.bHasDestructibleSupport && ChkBoxAddDecorDestructible->IsChecked();
 
 				if (DecorData.DestructibleAnimationBlueprint)
 					AscMapKitDecorActor->MapKit.Destructible.DestructibleClass = DecorData.DestructibleAnimationBlueprint;
+
+				if (DecorData.StaticMeshDestroyed && AscMapKitDecorActor->StaticMeshDestroyedComponent)
+					AscMapKitDecorActor->StaticMeshDestroyedComponent->SetStaticMesh(DecorData.StaticMeshDestroyed);
 
 				if (ChkBoxAddDecorLight->IsChecked() && DecorData.bHasLightSupport)
 				{
@@ -2004,6 +2058,9 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddDecorOnClick()
 
 						if (PointLightActor && PointLightActor->PointLightComponent)
 						{
+							if (DecorColorType == EAscMapKitMaterialEmitColorTypeEnum::None && DecorData.DefaultLightColor != EAscMapKitMaterialEmitColorTypeEnum::None)
+								DecorColorType = DecorData.DefaultLightColor;
+
 							UAscMapKitEditorToolsLightHelper::SetPointLightDefaults(
 								PointLightActor,
 								DecorColorType,
@@ -2061,6 +2118,41 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddDecorOnClick()
 								}
 							}
 						}
+					}
+				}
+
+				if (DecorData.bHasPictureSupport && AscMapKitDecorActor->StaticMeshComponent)
+				{
+					const auto RandomIndex = FMath::RandRange(0, DecorPictureDataAsset->AssetItems.Num() - 1);
+					
+					if (DecorPictureDataAsset->AssetItems.IsValidIndex(RandomIndex))
+					{
+						const auto RandomPictureAsset = DecorPictureDataAsset->AssetItems[RandomIndex];
+						const auto PictureMaterial = RandomPictureAsset.Picture;
+						const auto NumSlots = AscMapKitDecorActor->StaticMeshComponent->GetNumMaterials();
+
+						int32 SlotToUse = INDEX_NONE;
+
+						for (int32 SlotIdx = 0; SlotIdx < NumSlots; ++SlotIdx)
+						{
+							const FName SlotName = AscMapKitDecorActor->StaticMeshComponent->GetMaterialSlotNames().IsValidIndex(SlotIdx)
+								? AscMapKitDecorActor->StaticMeshComponent->GetMaterialSlotNames()[SlotIdx]
+								: NAME_None;
+
+							UMaterialInterface *CurrentMaterial = AscMapKitDecorActor->StaticMeshComponent->GetMaterial(SlotIdx);
+
+							const bool bNameContainsPicture = SlotName.ToString().Contains(TEXT("Picture"), ESearchCase::IgnoreCase);
+							const bool bIsNullMaterial = CurrentMaterial == nullptr;
+
+							if (bNameContainsPicture || bIsNullMaterial)
+							{
+								SlotToUse = SlotIdx;
+								break;
+							}
+						}
+
+						if (SlotToUse != INDEX_NONE)
+							AscMapKitDecorActor->StaticMeshComponent->SetMaterial(SlotToUse, PictureMaterial);
 					}
 				}
 
@@ -2245,21 +2337,6 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddDoorOnClick()
 				AscMapKitDoorActor->MapKit.NonDestructible.DisableEntireCollisionOnOpen = true;
 				AscMapKitDoorActor->MapKit.NonDestructible.DisableEntireCollisionOnOpenDelaySeconds = 0.f;
 				AscMapKitDoorActor->MapKit.NonDestructible.DisableDefaultToggleCollisionBoneNamesDelaySeconds = 0.3f;
-
-				// todo: @reminder: disabled color feature for doors
-				// if (DoorColorType != EAscMapKitMaterialEmitColorTypeEnum::None &&
-				// 	MaterialEmitColorTypeMaterialMap.Contains(DoorColorType) &&
-				// 	DoorTypeStaticMeshMaterialEmitColorOverrideMap.Contains(DoorType))
-				// {
-				// 	FAscMapKitDoorPropertiesCustomMaterialStruct OverrideMaterialStruct;
-				// 	OverrideMaterialStruct.OverrideMaterial = true;
-				// 	OverrideMaterialStruct.MaterialIndex = DoorTypeStaticMeshMaterialEmitColorOverrideMap[DoorType];
-				// 	OverrideMaterialStruct.Material = MaterialEmitColorTypeMaterialMap[DoorColorType];
-				//
-				// 	AscMapKitDoorActor->MapKit.NonDestructible.OverrideMaterials.Add(OverrideMaterialStruct);
-				//
-				// 	AscMapKitDoorActor->StaticMeshComponent->SetMaterial(OverrideMaterialStruct.MaterialIndex, OverrideMaterialStruct.Material);
-				// }
 
 				// todo: @reminder: @refactor: better way to detect destructible?? how to keep in sync with actor defaults??
 				// todo: @doorshit
@@ -2462,6 +2539,221 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddDoorFrameOnClick()
 		UAscMapKitEditorToolsHelper::ShowErrorMessage(FString::Printf(TEXT("Developer error (contact Ascentroid support)! Could not find static mesh for: %s"), *DoorFrameTypeAsFString));
 }
 
+void UAscMapKitEditorToolsUtilityWidget::ComboBoxAddDoorCodeTypeOnSelectionChanged(const FString SelectedItem, const ESelectInfo::Type SelectionType)
+{
+	const auto NameClean = SelectedItem.Replace(TEXT(" "), TEXT(""));
+
+	if (DoorCodeButtonMap.Contains(NameClean))
+		DoorCodeButtonMap[NameClean]->OnClicked.Broadcast();
+	else
+		HandleButtonSelectionHighlighting(GridPanelDoorCode, true);
+}
+
+void UAscMapKitEditorToolsUtilityWidget::BtnAddDoorCodeOnClick()
+{
+	if (ComboBoxAddDoorCodeType->GetSelectedIndex() == 0)
+	{
+		UAscMapKitEditorToolsHelper::ShowErrorMessage(TEXT("Please select a DoorCode type!"));
+		return;
+	}
+
+	if (ComboBoxAddDoorCodeCount->GetSelectedIndex() == 0)
+	{
+		UAscMapKitEditorToolsHelper::ShowErrorMessage(TEXT("Please select how many DoorCode(s) to add!"));
+		return;
+	}
+
+	if (ComboBoxAddDoorCodeWhere->GetSelectedIndex() == 0)
+	{
+		UAscMapKitEditorToolsHelper::ShowErrorMessage(TEXT("Please select where to add the DoorCode(s)!"));
+		return;
+	}
+
+	const auto DoorCodeTypeAsFString = ComboBoxAddDoorCodeType->GetSelectedOption();
+	const auto DoorCodeColorTypeAsFString = ComboBoxAddDoorCodeColor->GetSelectedOption();
+	const auto Count = FCString::Atoi(*ComboBoxAddDoorCodeCount->GetSelectedOption());
+	const auto Where = ComboBoxAddDoorCodeWhere->GetSelectedOption();
+
+	auto bFoundDoorCodeType = false;
+	auto DoorCodeType = EAscMapKitDoorCodeTypeEnum::None;
+
+	for (const TPair<EAscMapKitDoorCodeTypeEnum, FString> &Pair : DoorCodeTypeMap)
+	{
+		if (Pair.Value == DoorCodeTypeAsFString)
+		{
+			bFoundDoorCodeType = true;
+			DoorCodeType = Pair.Key;
+			break;
+		}
+	}
+
+	if (!bFoundDoorCodeType)
+	{
+		UAscMapKitEditorToolsHelper::ShowErrorMessage(FString::Printf(TEXT("Developer error (contact Ascentroid support)! DoorCodeTypeMap does not contain: %s"), *DoorCodeTypeAsFString));
+		return;
+	}
+
+	auto bFoundDoorCodeColorType = false;
+	auto DoorCodeColorType = EAscMapKitMaterialEmitColorTypeEnum::None;
+
+	for (const TPair<EAscMapKitMaterialEmitColorTypeEnum, FString> &Pair : MaterialEmitColorTypeMap)
+	{
+		if (Pair.Value == DoorCodeColorTypeAsFString)
+		{
+			bFoundDoorCodeColorType = true;
+			DoorCodeColorType = Pair.Key;
+			break;
+		}
+	}
+
+	if (!bFoundDoorCodeColorType)
+	{
+		UAscMapKitEditorToolsHelper::ShowErrorMessage(FString::Printf(TEXT("Developer error (contact Ascentroid support)! DoorCodeColorTypeMap does not contain: %s"), *DoorCodeColorTypeAsFString));
+		return;
+	}
+
+	if (DoorCodeColorType == EAscMapKitMaterialEmitColorTypeEnum::None)
+		DoorCodeColorType = EAscMapKitMaterialEmitColorTypeEnum::Green;
+
+	auto SpawnLocation = FVector::ZeroVector;
+
+	if (Where == TEXT("Selected"))
+	{
+		const auto bFoundSelectedActor = UAscMapKitEditorToolsHelper::GetEditorFirstSelectedActor(SpawnLocation);
+
+		if (!bFoundSelectedActor)
+			UAscMapKitEditorToolsHelper::ShowWarnMessage(TEXT("Nothing was selected in the editor. Using spawn location (0, 0, 0)."));
+	}
+
+	if (DoorCodeType == EAscMapKitDoorCodeTypeEnum::None)
+	{
+		UAscMapKitEditorToolsHelper::ShowErrorMessage(FString::Printf(TEXT("Developer error (contact Ascentroid support)! DoorCodeTypeMap resolved to 'None': %s"), *DoorCodeTypeAsFString));
+		return;
+	}
+
+	const auto DoorCodeStaticMeshActorClass = AStaticMeshActor::StaticClass();
+	const auto DoorCodeMapKitActorClass = AAscMapKitGuiInteractDisplayActor::StaticClass();
+	const auto DoorCodeData = DoorCodeDataAsset->Get(DoorCodeType);
+
+	if (DoorCodeData.StaticMesh)
+	{
+		const auto DoorCodeStaticMeshNamePrefix = FString::Printf(TEXT("DoorCode_SM_%s"), *DoorCodeTypeAsFString.Replace(TEXT(" "), TEXT("_")));
+		const auto DoorCodeStaticMeshNameSequence = UAscMapKitEditorToolsHelper::GetEditorNextActorSequence(DoorCodeStaticMeshActorClass, DoorCodeStaticMeshNamePrefix);
+
+		const auto DoorCodeMapKitNamePrefix = FString::Printf(TEXT("DoorCode_Gui_Display_%s"), *DoorCodeTypeAsFString.Replace(TEXT(" "), TEXT("_")));
+		const auto DoorCodeMapKitNameSequence = UAscMapKitEditorToolsHelper::GetEditorNextActorSequence(DoorCodeMapKitActorClass, DoorCodeMapKitNamePrefix);
+
+		const auto TransactionContext = FString::Printf(TEXT("%s::%hc"), *GetClass()->GetName(), *__FUNCTION__);
+
+		UKismetSystemLibrary::BeginTransaction(TransactionContext, FText::FromString(TEXT("Add Door Code(s)")), nullptr);
+
+		GEditor->SelectNone(true, true, false);
+
+		auto UseColor = UAscMapKitEditorToolsLightHelper::GetLightColorAsFLinearColor(DoorCodeColorType);
+
+		if (DoorCodeColorType == EAscMapKitMaterialEmitColorTypeEnum::None)
+			UseColor = FLinearColor::Green;
+		
+		for (auto i = 0; i < Count; i++)
+		{
+			auto UseDoorCodeId = 0;
+
+			TArray<int32> FoundDoorCodeIds;
+
+			for (TActorIterator<AAscMapKitGuiInteractDisplayActor> ActorItr(UAscMapKitEditorToolsHelper::GetEditorWorld()); ActorItr; ++ActorItr)
+			{
+				const auto FoundDoorCode = *ActorItr;
+			
+				if (FoundDoorCode)
+					FoundDoorCodeIds.AddUnique(FCString::Atoi(*FoundDoorCode->MapKit.Id));
+			}
+
+			if (FoundDoorCodeIds.Num() > 0)
+				UseDoorCodeId = *Algo::MaxElement(FoundDoorCodeIds);
+			
+			auto bDoorCodeStaticMeshNameAlreadyExists = false;
+			auto bDoorCodeMapKitNameAlreadyExists = false;
+
+			FString OutStaticMeshActorName = TEXT("");
+			FString OutStaticMeshActorDefaultName = TEXT("");
+
+			FString OutMapKitActorName = TEXT("");
+			FString OutMapKitActorDefaultName = TEXT("");
+
+			const auto DoorCodeStaticMeshActorSpawned = UAscMapKitEditorToolsHelper::SpawnInEditor(
+				DoorCodeStaticMeshActorClass,
+				FTransform(SpawnLocation),
+				DoorCodeStaticMeshNamePrefix,
+				DoorCodeStaticMeshNameSequence + i,
+				bDoorCodeStaticMeshNameAlreadyExists,
+				OutStaticMeshActorName,
+				OutStaticMeshActorDefaultName
+			);
+
+			const auto DoorCodeMapKitActorSpawned = UAscMapKitEditorToolsHelper::SpawnInEditor(
+				DoorCodeMapKitActorClass,
+				FTransform(SpawnLocation),
+				DoorCodeMapKitNamePrefix,
+				DoorCodeMapKitNameSequence + i,
+				bDoorCodeMapKitNameAlreadyExists,
+				OutMapKitActorName,
+				OutMapKitActorDefaultName
+			);
+
+			if (bDoorCodeStaticMeshNameAlreadyExists)
+				UAscMapKitEditorToolsHelper::ShowWarnMessage(FString::Printf(TEXT("Door code '%s' already exists (name conflict?). Using a default name instead (sorry): %s"), *OutStaticMeshActorName, *OutStaticMeshActorDefaultName));
+
+			if (bDoorCodeMapKitNameAlreadyExists)
+				UAscMapKitEditorToolsHelper::ShowWarnMessage(FString::Printf(TEXT("Door code '%s' already exists (name conflict?). Using a default name instead (sorry): %s"), *OutMapKitActorName, *OutMapKitActorDefaultName));
+
+			if (DoorCodeStaticMeshActorSpawned && DoorCodeMapKitActorSpawned && DoorCodeStaticMeshActorSpawned->IsA(DoorCodeStaticMeshActorClass) && DoorCodeMapKitActorSpawned->IsA(DoorCodeMapKitActorClass))
+			{
+				AStaticMeshActor *DoorCodeStaticMeshActor = Cast<AStaticMeshActor>(DoorCodeStaticMeshActorSpawned);
+				AAscMapKitGuiInteractDisplayActor *DoorCodeMapKitActor = Cast<AAscMapKitGuiInteractDisplayActor>(DoorCodeMapKitActorSpawned);
+
+				if (DoorCodeStaticMeshActor && DoorCodeStaticMeshActor->GetStaticMeshComponent())
+				{
+					const auto DoorCodeStaticMeshComponent = DoorCodeStaticMeshActor->GetStaticMeshComponent();
+
+					if (DoorCodeStaticMeshComponent)
+					{
+						DoorCodeStaticMeshComponent->SetStaticMesh(DoorCodeData.StaticMesh);
+						DoorCodeStaticMeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+						DoorCodeStaticMeshComponent->SetCollisionProfileName(UCollisionProfile::NoCollision_ProfileName);
+
+						if (DoorCodeMapKitActor)
+						{
+							DoorCodeMapKitActor->AttachToActor(DoorCodeStaticMeshActor, FAttachmentTransformRules::KeepRelativeTransform);
+							DoorCodeMapKitActor->SetActorRelativeLocation(FVector(0.f, -2.f, 0.f));
+							DoorCodeMapKitActor->SetActorRelativeRotation(FRotator(0.f, -90.f, 0.f));
+
+							DoorCodeMapKitActor->MapKit = DoorCodeMapKitActor->GetMapKitDefaults();
+							DoorCodeMapKitActor->MapKit.Id = FString::Printf(TEXT("%0*d"), 3, UseDoorCodeId + 1);
+							DoorCodeMapKitActor->MapKit.Color = UseColor;
+
+							DoorCodeMapKitActor->UpdateColor();
+						}
+					}
+
+					DoorCodeStaticMeshActor->SetFolderPath(FName("DoorCodes"));
+
+					GEditor->SelectActor(DoorCodeStaticMeshActor, true, true);
+
+					UKismetSystemLibrary::TransactObject(DoorCodeStaticMeshActor);
+
+					UAscMapKitEditorToolsHelper::ShowInfoMessage(FString::Printf(TEXT("Created door code: %s"), *DoorCodeStaticMeshActor->GetHumanReadableName()));
+				}
+			}
+		}
+
+		GEditor->NoteSelectionChange();
+
+		UKismetSystemLibrary::EndTransaction();
+	}
+	else
+		UAscMapKitEditorToolsHelper::ShowErrorMessage(FString::Printf(TEXT("Developer error (contact Ascentroid support)! Could not find static mesh for: %s"), *DoorCodeTypeAsFString));
+}
+
 void UAscMapKitEditorToolsUtilityWidget::BtnSubTitleCreateEnemyOnClick()
 {
 	ToggleSection(TEXT("Enemy"), TxtSubTitleCreateEnemy, SectionPanelEnemy);
@@ -2502,7 +2794,7 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddEnemyOnClick()
 	const auto Count = FCString::Atoi(*ComboBoxAddEnemyCount->GetSelectedOption());
 	const auto Where = ComboBoxAddEnemyWhere->GetSelectedOption();
 
-	const TSubclassOf<AActor> EnemyActorClass = AAscMapKitEnemyActor::StaticClass();
+	TSubclassOf<AActor> EnemyActorClass = AAscMapKitEnemyActor::StaticClass();
 
 	auto bFoundEnemyType = false;
 	auto EnemyType = EAscMapKitEnemyTypeEnum::None;
@@ -2522,6 +2814,9 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddEnemyOnClick()
 		UAscMapKitEditorToolsHelper::ShowErrorMessage(FString::Printf(TEXT("Developer error (contact Ascentroid support)! EnemyTypeMap does not contain: %s"), *EnemyTypeAsFString));
 		return;
 	}
+
+	if (EnemyType == EAscMapKitEnemyTypeEnum::Waypoint)
+		EnemyActorClass = AAscMapKitEnemyWaypointActor::StaticClass();
 
 	auto bFoundEnemyColorType = false;
 	auto EnemyColorType = EAscMapKitMaterialEmitColorTypeEnum::None;
@@ -2613,6 +2908,16 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddEnemyOnClick()
 				AscMapKitEnemyActor->EditorUpdateWeaponSockets();
 				AscMapKitEnemyActor->SetFolderPath(FName("Enemies"));
 
+				// todo: @reminder: can we automate this somehow? from data assets?
+				if (AscMapKitEnemyActor->MapKit.EnemyType == EAscMapKitEnemyTypeEnum::AlienGrawn)
+					AscMapKitEnemyActor->MapKit.Melee.Enable = true;
+				else if (
+					AscMapKitEnemyActor->MapKit.EnemyType == EAscMapKitEnemyTypeEnum::MachineGeminiTurret ||
+					AscMapKitEnemyActor->MapKit.EnemyType == EAscMapKitEnemyTypeEnum::MachineSarkTurret ||
+					AscMapKitEnemyActor->MapKit.EnemyType == EAscMapKitEnemyTypeEnum::MachineServasTurret
+				)
+					AscMapKitEnemyActor->MapKit.Turret.Enable = true;
+
 				// todo: @reminder: disabled because it looks stupid
 				AscMapKitEnemyActor->MapKit.Destructible.ScaleOverTime = false;
 
@@ -2622,19 +2927,55 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddEnemyOnClick()
 				AscMapKitEnemyActor->MapKit.Destructible.Disappear.DelaySecondsRangeMin = 0.3f;
 				AscMapKitEnemyActor->MapKit.Destructible.Disappear.DelaySecondsRangeMax = 0.5f;
 				AscMapKitEnemyActor->MapKit.Destructible.Disappear.EffectsDelaySeconds = 0.5f;
-
-				GEditor->SelectActor(AscMapKitEnemyActor, true, true);
-
-				UKismetSystemLibrary::TransactObject(AscMapKitEnemyActor);
-
-				UAscMapKitEditorToolsHelper::ShowInfoMessage(FString::Printf(TEXT("Created enemy: %s"), *AscMapKitEnemyActor->GetHumanReadableName()));
 			}
+		}
+
+		if (AscMapKitEnemyActorSpawned)
+		{
+			GEditor->SelectActor(AscMapKitEnemyActorSpawned, true, true);
+			UKismetSystemLibrary::TransactObject(AscMapKitEnemyActorSpawned);
+			UAscMapKitEditorToolsHelper::ShowInfoMessage(FString::Printf(TEXT("Created: %s"), *AscMapKitEnemyActorSpawned->GetHumanReadableName()));
 		}
 	}
 
 	GEditor->NoteSelectionChange();
 
 	UKismetSystemLibrary::EndTransaction();
+}
+
+void UAscMapKitEditorToolsUtilityWidget::BtnGenerateRandomEnemySettingsOnClick()
+{
+	if (!GEditor)
+		return;
+	
+	TArray<AActor *> SelectedActors;
+	GEditor->GetSelectedActors()->GetSelectedObjects<AActor>(SelectedActors);
+
+	int32 UpdatedCount = 0;
+	
+	for (const auto &Actor : SelectedActors)
+	{
+		const auto Enemy = Cast<AAscMapKitEnemyActor>(Actor);
+
+		if (Enemy && Enemy->MapKit.EnemyType != EAscMapKitEnemyTypeEnum::None)
+		{
+			Enemy->Modify();
+			
+			Enemy->MapKit = UAscMapKitEnemyUtil::GenerateRandomEnemyProperties(Enemy->MapKit.EnemyType);
+
+			Enemy->MarkPackageDirty();
+			Enemy->PostEditChange();
+
+			UKismetSystemLibrary::TransactObject(Enemy);
+
+			UAscMapKitEditorToolsHelper::ShowInfoMessage(FString::Printf(TEXT("Enemy updated: %s"), *Enemy->GetHumanReadableName()));
+
+			UpdatedCount++;
+		}
+	}
+
+	if (UpdatedCount <= 0)
+		UAscMapKitEditorToolsHelper::ShowWarnMessage(TEXT("Please select one or more enemies to randomize."));
 }
 
 void UAscMapKitEditorToolsUtilityWidget::BtnSubTitleCreateFanOnClick()
@@ -3881,8 +4222,10 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddTriggerOnClick()
 	}
 
 	if (TriggerColorType == EAscMapKitMaterialEmitColorTypeEnum::None)
-		TriggerColorType = EAscMapKitMaterialEmitColorTypeEnum::Green;
+		TriggerColorType = EAscMapKitMaterialEmitColorTypeEnum::Cyan;
 
+	const auto TriggerData = TriggerDataAsset->Get(TriggerType);
+	
 	auto SpawnLocation = FVector::ZeroVector;
 
 	if (Where == TEXT("Selected"))
@@ -3952,20 +4295,20 @@ void UAscMapKitEditorToolsUtilityWidget::BtnAddTriggerOnClick()
 				AscMapKitTriggerActor->MapKit.Id = FString::Printf(TEXT("%0*d"), 3, UseTriggerId + 1);
 				AscMapKitTriggerActor->MapKit.TriggerType = TriggerType;
 
-				// todo: triggers don't have emit materials yet
-				// if (TriggerColorType != EAscMapKitMaterialEmitColorTypeEnum::None &&
-				// 	MaterialEmitColorTypeMaterialMap.Contains(TriggerColorType) &&
-				// 	TriggerTypeStaticMeshMaterialEmitColorOverrideMap.Contains(TriggerType))
-				// {
-				// 	FAscMapKitTriggerPropertiesCustomMaterialStruct OverrideMaterialStruct;
-				// 	OverrideMaterialStruct.OverrideMaterial = true;
-				// 	OverrideMaterialStruct.MaterialIndex = TriggerTypeStaticMeshMaterialEmitColorOverrideMap[TriggerType];
-				// 	OverrideMaterialStruct.Material = MaterialEmitColorTypeMaterialMap[TriggerColorType];
-				//
-				// 	AscMapKitTriggerActor->MapKit.Custom.OverrideMaterials.Add(OverrideMaterialStruct);
-				//
-				// 	AscMapKitTriggerActor->StaticMeshComponent->SetMaterial(OverrideMaterialStruct.MaterialIndex, OverrideMaterialStruct.Material);
-				// }
+				if (TriggerData.ActiveStaticMesh && AscMapKitTriggerActor->ActiveStaticMeshComponent)
+				{
+					AscMapKitTriggerActor->ActiveStaticMeshComponent->SetStaticMesh(TriggerData.ActiveStaticMesh);
+					AscMapKitTriggerActor->ActiveStaticMeshComponent->SetCastShadow(false);
+					
+					if (TriggerColorType != EAscMapKitMaterialEmitColorTypeEnum::None && MaterialEmitColorTypeMaterialMap.Contains(TriggerColorType))
+						AscMapKitTriggerActor->ActiveStaticMeshComponent->SetMaterialByName(FName(TEXT("TriggerState")), MaterialEmitColorTypeMaterialMap[TriggerColorType]);
+				}
+
+				if (TriggerData.InactiveStaticMesh && AscMapKitTriggerActor->InactiveStaticMeshComponent)
+				{
+					AscMapKitTriggerActor->InactiveStaticMeshComponent->SetStaticMesh(TriggerData.InactiveStaticMesh);
+					AscMapKitTriggerActor->InactiveStaticMeshComponent->SetCastShadow(false);
+				}
 
 				AscMapKitTriggerActor->EditorUpdateTriggerType(AscMapKitTriggerActor->MapKit.TriggerType);
 				AscMapKitTriggerActor->SetFolderPath(FName("Triggers"));
@@ -4456,6 +4799,47 @@ void UAscMapKitEditorToolsUtilityWidget::BtnSubTitleGeneratePowerupRespawnsOnCli
 void UAscMapKitEditorToolsUtilityWidget::BtnGeneratePowerupRespawnsOnClick()
 {
 	UAscMapKitEditorToolsPowerupRespawnTriggerHelper::Generate(GetClass()->GetName(), __FUNCTION__, ChkBoxGeneratePowerupRespawnsDeleteExisting->IsChecked());
+}
+
+void UAscMapKitEditorToolsUtilityWidget::BtnSubTitleGenerateOtherOnClick()
+{
+	ToggleSection(TEXT("Other"), TxtSubTitleGenerateOther, SectionPanelGenerateOther);
+}
+
+void UAscMapKitEditorToolsUtilityWidget::BtnGenerateOtherRepairMeshMaterialsOnClick()
+{
+	const FContentBrowserModule &ContentBrowserModule = FModuleManager::LoadModuleChecked<FContentBrowserModule>("ContentBrowser");
+
+	TArray<FAssetData> SelectedAssets;
+	ContentBrowserModule.Get().GetSelectedAssets(SelectedAssets);
+
+	if (SelectedAssets.Num() <= 0)
+	{
+		UAscMapKitEditorToolsHelper::ShowErrorMessage(TEXT("Please select one or more static mesh assets in the asset browser."));
+		return;
+	}
+
+	const auto TransactionContext = FString::Printf(TEXT("%s::%hc"), *GetClass()->GetName(), *__FUNCTION__);
+
+	UKismetSystemLibrary::BeginTransaction(TransactionContext, FText::FromString(TEXT("Repair Static Mesh Asset Material(s)")), nullptr);
+
+	int32 FixedCount = 0;
+
+	for (const FAssetData &AssetData : SelectedAssets)
+	{
+		const auto StaticMesh = Cast<UStaticMesh>(AssetData.GetAsset());
+
+		if (!StaticMesh)
+			continue;
+
+		CleanUnusedMaterialSlots(StaticMesh);
+
+		FixedCount++;
+	}
+
+	UKismetSystemLibrary::EndTransaction();
+
+	UAscMapKitEditorToolsHelper::ShowInfoMessage(FString::Printf(TEXT("Cleaned %d static mesh assets"), FixedCount));
 }
 
 void UAscMapKitEditorToolsUtilityWidget::BtnSubTitleValidateOnClick()
@@ -5063,10 +5447,12 @@ void UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick(UAscMapKitEditorToolsSel
 			HandleButtonSelectionHighlighting(GridPanelArea, false, Button);
 		else if (ButtonName.Contains(TEXT("Decor")))
 			HandleButtonSelectionHighlighting(GridPanelDecor, false, Button);
-		else if (ButtonName.Contains(TEXT("Door")) && !ButtonName.Contains(TEXT("DoorFrame")))
+		else if (ButtonName.Contains(TEXT("Door")) && !ButtonName.Contains(TEXT("DoorFrame")) && !ButtonName.Contains(TEXT("DoorCode")))
 			HandleButtonSelectionHighlighting(GridPanelDoor, false, Button);
 		else if (ButtonName.Contains(TEXT("DoorFrame")))
 			HandleButtonSelectionHighlighting(GridPanelDoorFrame, false, Button);
+		else if (ButtonName.Contains(TEXT("DoorCode")))
+			HandleButtonSelectionHighlighting(GridPanelDoorCode, false, Button);
 		else if (ButtonName.Contains(TEXT("Enemy")))
 			HandleButtonSelectionHighlighting(GridPanelEnemy, false, Button);
 		else if (ButtonName.Contains(TEXT("Fan")))
@@ -5119,6 +5505,12 @@ void UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick(UAscMapKitEditorToolsSel
 					static_cast<uint8>(EAscMapKitDecorTypeEnum::Grate_20x20m_Basic_004)
 				).ToString()
 			);
+		else if (ButtonName == TEXT("BtnCreateDecorGrate20x20mBasic005"))
+			ComboBoxAddDecorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDecorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDecorTypeEnum::Grate_20x20m_Basic_005)
+				).ToString()
+			);
 		else if (ButtonName == TEXT("BtnCreateDecorGrate10x20mBasic001"))
 			ComboBoxAddDecorType->SetSelectedOption(
 				StaticEnum<EAscMapKitDecorTypeEnum>()->GetDisplayNameTextByIndex(
@@ -5143,6 +5535,24 @@ void UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick(UAscMapKitEditorToolsSel
 					static_cast<uint8>(EAscMapKitDecorTypeEnum::Ladder_Set_001)
 				).ToString()
 			);
+		else if (ButtonName == TEXT("BtnCreateDecorLightBasic001"))
+			ComboBoxAddDecorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDecorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDecorTypeEnum::Light_Basic_001)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDecorLightBasic002"))
+			ComboBoxAddDecorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDecorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDecorTypeEnum::Light_Basic_002)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDecorLightBasic003"))
+			ComboBoxAddDecorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDecorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDecorTypeEnum::Light_Basic_003)
+				).ToString()
+			);
 		else if (ButtonName == TEXT("BtnCreateDecorPiece001"))
 			ComboBoxAddDecorType->SetSelectedOption(
 				StaticEnum<EAscMapKitDecorTypeEnum>()->GetDisplayNameTextByIndex(
@@ -5153,6 +5563,12 @@ void UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick(UAscMapKitEditorToolsSel
 			ComboBoxAddDecorType->SetSelectedOption(
 				StaticEnum<EAscMapKitDecorTypeEnum>()->GetDisplayNameTextByIndex(
 					static_cast<uint8>(EAscMapKitDecorTypeEnum::Piece_002)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDecorPiece003"))
+			ComboBoxAddDecorType->SetSelectedOption(
+				StaticEnum<EAscMapKitDecorTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDecorTypeEnum::Piece_003)
 				).ToString()
 			);
 		else if (ButtonName == TEXT("BtnCreateDecorLetter"))
@@ -5480,6 +5896,33 @@ void UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick(UAscMapKitEditorToolsSel
 				).ToString()
 			);
 
+		// Door Codes
+		// Basic
+		else if (ButtonName == TEXT("BtnCreateDoorCodeBasic001"))
+			ComboBoxAddDoorCodeType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorCodeTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorCodeTypeEnum::Basic001)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDoorCodeBasic002"))
+			ComboBoxAddDoorCodeType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorCodeTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorCodeTypeEnum::Basic002)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDoorCodeBasic003"))
+			ComboBoxAddDoorCodeType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorCodeTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorCodeTypeEnum::Basic003)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateDoorCodeCustom"))
+			ComboBoxAddDoorCodeType->SetSelectedOption(
+				StaticEnum<EAscMapKitDoorCodeTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitDoorCodeTypeEnum::Custom)
+				).ToString()
+			);
+
 		// Doors
 		// Destructible
 		else if (ButtonName == TEXT("BtnCreateDoorDestructible20x20mBasic001"))
@@ -5499,6 +5942,12 @@ void UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick(UAscMapKitEditorToolsSel
 			);
 
 		// Enemies
+		else if (ButtonName == TEXT("BtnCreateEnemyWaypoint"))
+			ComboBoxAddEnemyType->SetSelectedOption(
+				StaticEnum<EAscMapKitEnemyTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitEnemyTypeEnum::Waypoint)
+				).ToString()
+			);
 		else if (ButtonName == TEXT("BtnCreateEnemyAlienCylon"))
 			ComboBoxAddEnemyType->SetSelectedOption(
 				StaticEnum<EAscMapKitEnemyTypeEnum>()->GetDisplayNameTextByIndex(
@@ -5581,6 +6030,24 @@ void UAscMapKitEditorToolsUtilityWidget::BtnEasyOnClick(UAscMapKitEditorToolsSel
 					static_cast<uint8>(EAscMapKitTriggerTypeEnum::Basic001)
 				).ToString()
 			);
+		else if (ButtonName == TEXT("BtnCreateTriggerBasic002"))
+			ComboBoxAddTriggerType->SetSelectedOption(
+				StaticEnum<EAscMapKitTriggerTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitTriggerTypeEnum::Basic002)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateTriggerBasic003"))
+			ComboBoxAddTriggerType->SetSelectedOption(
+				StaticEnum<EAscMapKitTriggerTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitTriggerTypeEnum::Basic003)
+				).ToString()
+			);
+		else if (ButtonName == TEXT("BtnCreateTriggerBasic004"))
+			ComboBoxAddTriggerType->SetSelectedOption(
+				StaticEnum<EAscMapKitTriggerTypeEnum>()->GetDisplayNameTextByIndex(
+					static_cast<uint8>(EAscMapKitTriggerTypeEnum::Basic004)
+				).ToString()
+			);
 		else if (ButtonName == TEXT("BtnCreateTriggerCustom"))
 			ComboBoxAddTriggerType->SetSelectedOption(
 				StaticEnum<EAscMapKitTriggerTypeEnum>()->GetDisplayNameTextByIndex(
@@ -5650,6 +6117,94 @@ void UAscMapKitEditorToolsUtilityWidget::HandleButtonSelectionHighlighting(UGrid
 			}
 		}
 	}
+}
+
+void UAscMapKitEditorToolsUtilityWidget::CleanUnusedMaterialSlots(UStaticMesh *StaticMesh)
+{
+	if (!StaticMesh)
+        return;
+
+    if (!StaticMesh->RenderData || StaticMesh->RenderData->LODResources.Num() == 0)
+        return;
+
+    FStaticMeshRenderData *RenderData = StaticMesh->RenderData.Get();
+    FStaticMeshLODResources& LOD = RenderData->LODResources[0]; // LOD0 only (UE4)
+
+    const int32 NumSections = LOD.Sections.Num();
+    const int32 NumMaterialSlots = StaticMesh->StaticMaterials.Num();
+
+    if (NumMaterialSlots <= NumSections)
+        return;
+
+	UAscMapKitEditorToolsHelper::ShowInfoMessage(FString::Printf(TEXT("Cleaning StaticMesh '%s' - Sections: %d  Materials: %d"), *StaticMesh->GetName(), NumSections, NumMaterialSlots));
+
+    // build a "keep" list based on actual used material indices
+    TSet<int32> UsedMaterialSlotIndices;
+	
+    for (int32 SectionIndex = 0; SectionIndex < NumSections; SectionIndex++)
+    {
+        const FStaticMeshSection& Section = LOD.Sections[SectionIndex];
+        UsedMaterialSlotIndices.Add(Section.MaterialIndex);
+    }
+
+    // duild a new compact StaticMaterials array
+    TArray<FStaticMaterial> NewMaterials;
+    NewMaterials.Reserve(UsedMaterialSlotIndices.Num());
+
+    // mapping from old index to new index
+    TMap<int32, int32> OldToNewIndex;
+
+    int32 NewIndexCounter = 0;
+	
+    for (int32 OldIndex = 0; OldIndex < NumMaterialSlots; OldIndex++)
+    {
+        if (UsedMaterialSlotIndices.Contains(OldIndex))
+        {
+            NewMaterials.Add(StaticMesh->StaticMaterials[OldIndex]);
+            OldToNewIndex.Add(OldIndex, NewIndexCounter);
+            NewIndexCounter++;
+        }
+    }
+
+    // apply new compacted material list
+    StaticMesh->StaticMaterials = NewMaterials;
+
+    // fix SectionInfoMap to match new indices
+    FMeshSectionInfoMap &SectionInfoMap = StaticMesh->GetSectionInfoMap();
+
+    for (int32 LODIndex = 0; LODIndex < StaticMesh->GetNumLODs(); LODIndex++)
+    {
+        for (int32 SectionIdx = 0; SectionIdx < StaticMesh->GetNumSections(LODIndex); SectionIdx++)
+        {
+            FMeshSectionInfo Info = SectionInfoMap.Get(LODIndex, SectionIdx);
+
+            const int32 *NewIndex = OldToNewIndex.Find(Info.MaterialIndex);
+        	
+            if (NewIndex)
+            {
+                Info.MaterialIndex = *NewIndex;
+                SectionInfoMap.Set(LODIndex, SectionIdx, Info);
+            }
+        }
+    }
+
+    // fix the LOD section material indices
+    for (int32 SectionIndex = 0; SectionIndex < NumSections; SectionIndex++)
+    {
+        FStaticMeshSection &Section = LOD.Sections[SectionIndex];
+
+        if (const int32 *NewIndex = OldToNewIndex.Find(Section.MaterialIndex))
+            Section.MaterialIndex = *NewIndex;
+    }
+
+    // mark dirty and rebuild
+    StaticMesh->Modify();
+    StaticMesh->PostEditChange();
+    StaticMesh->MarkPackageDirty();
+
+	UKismetSystemLibrary::TransactObject(StaticMesh);
+
+	UAscMapKitEditorToolsHelper::ShowInfoMessage(FString::Printf(TEXT("StaticMesh '%s' cleaned: now %d slots"), *StaticMesh->GetName(), StaticMesh->StaticMaterials.Num()));
 }
 
 void UAscMapKitEditorToolsUtilityWidget::ToggleSection(const FString &TitleText, UTextBlock *TxtSubTitleWidget, UWidget *SectionPanelWidget)

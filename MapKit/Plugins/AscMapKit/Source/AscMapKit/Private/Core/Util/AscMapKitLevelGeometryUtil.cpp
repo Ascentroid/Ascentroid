@@ -147,10 +147,7 @@ TArray<FVector> UAscMapKitLevelGeometryUtil::GetRandomLocations(
 			if (IsValidStaticMesh(StaticMesh))
 			{
 				if (OnLevelMeshProcessing.IsBound())
-				{
-					OnLevelMeshProcessing.Execute(*StaticMeshActorName);
-					//UAscMapKitLevelGeometryUtil::ShowInfoMessage(FString::Printf(TEXT("Processing Level Mesh: (%s)"), *StaticMeshActorName));
-				}
+					OnLevelMeshProcessing.Execute(*FString::Printf(TEXT("Processing Level Mesh: (%s)"), *StaticMeshActorName));
 
 				for (auto LODIndex = 0; LODIndex < StaticMesh->GetNumLODs(); ++LODIndex)
 				{
@@ -230,7 +227,7 @@ TArray<FVector> UAscMapKitLevelGeometryUtil::GetRandomLocations(
 			// );
 
 			//if (HitResult.GetActor())
-			//	UAscMapKitLevelGeometryUtil::ShowInfoMessage(FString::Printf(TEXT("Hit actor: %s"), *HitResult.GetActor()->GetHumanReadableName()));
+			//	OnLevelMeshProcessing.Execute(*FString::Printf(TEXT("Hit actor: %s"), *HitResult.GetActor()->GetHumanReadableName()));
 
 			const auto CenterPoint = (StartLocation + HitResult.Location) * 0.5f;
 
@@ -240,7 +237,7 @@ TArray<FVector> UAscMapKitLevelGeometryUtil::GetRandomLocations(
 			{
 				const auto DistanceFromCenterPointToExisting = FMath::Abs((ExistingCenterPoint - CenterPoint).Size());
 
-				// UAscMapKitLevelGeometryUtil::ShowInfoMessage(FString::Printf(TEXT("DistanceFromCenterPointToExisting: %f"), DistanceFromCenterPointToExisting));
+				//OnLevelMeshProcessing.Execute(*FString::Printf(TEXT("DistanceFromCenterPointToExisting: %f"), DistanceFromCenterPointToExisting));
 
 				if (DistanceFromCenterPointToExisting < CenterPointDistanceThreshold)
 				{
@@ -301,14 +298,12 @@ TArray<FVector> UAscMapKitLevelGeometryUtil::GetRandomLocations(
 			}
 		}
 
-		return Results;
+		// todo: @reminder: @wtf: did we want to only return 1 sometimes? do we need a param? need to see what else calls this helper
+		//return Results;
 	}
 
 	if (OnLevelMeshesNotFound.IsBound())
-	{
 		OnLevelMeshesNotFound.Execute();
-		//UAscMapKitLevelGeometryUtil::ShowWarnMessage(TEXT("No meshes were found (AStaticMeshActor)."));
-	}
 
 	return Results;
 }

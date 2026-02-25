@@ -3,55 +3,56 @@
 // UE
 #include "Runtime/CoreUObject/Public/UObject/ConstructorHelpers.h"
 
+// Ascentroid
+#include "AscMapKit/Public/Core/Global/AscMapKitGlobals.h"
+
+// Ascentroid
+#include "AscMapKit/Public/Core/Util/AscMapKitUtil.h"
+
 AAscMapKitTriggerActor::AAscMapKitTriggerActor()
 {
-    const ConstructorHelpers::FObjectFinder<UStaticMesh> CubeStaticMeshRef(TEXT("StaticMesh'/Engine/BasicShapes/Cube.Cube'"));
-
     EmptyRootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("EmptyRootComponent"));
     EmptyRootComponent->SetMobility(EComponentMobility::Static);
 
     RootComponent = EmptyRootComponent;
-
-    ArrowComponent = CreateDefaultSubobject<UArrowComponent>(TEXT("ArrowComponent"));
-    ArrowComponent->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
-    ArrowComponent->ArrowColor = FColor::White;
-    ArrowComponent->ArrowSize = 10.f;
-
-    BillboardComponent = CreateDefaultSubobject<UAscMapKitTriggerBillboardComponent>(TEXT("BillboardComponent"));
-    BillboardComponent->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
-    BillboardComponent->SetSprite(nullptr);
     
-    StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
-    StaticMeshComponent->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
-    StaticMeshComponent->SetRelativeScale3D(FVector(1.f, 1.f, 1.f));
-    StaticMeshComponent->SetCollisionProfileName(TEXT("NoCollision"));
-
-    if (CubeStaticMeshRef.Succeeded())
-        CubeStaticMesh = CubeStaticMeshRef.Object;
-
     InvisibleTriggerCollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Box"));
     InvisibleTriggerCollisionBox->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
     InvisibleTriggerCollisionBox->SetRelativeLocation(FVector(0.f, 0.f, 0.f));
     InvisibleTriggerCollisionBox->SetBoxExtent(FVector(1000.f, 1000.f, 1000.f));
+    InvisibleTriggerCollisionBox->SetGenerateOverlapEvents(true);
     InvisibleTriggerCollisionBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
     InvisibleTriggerCollisionBox->SetCollisionProfileName(TEXT("TriggerInvisible")); // todo: need to create collision profile
     InvisibleTriggerCollisionBox->SetWalkableSlopeOverride(FWalkableSlopeOverride(WalkableSlope_Unwalkable, 0.f));
     InvisibleTriggerCollisionBox->CanCharacterStepUpOn = ECB_No;
     InvisibleTriggerCollisionBox->SetIsReplicated(false);
 
-    InvisibleTriggerCollisionStaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
-    InvisibleTriggerCollisionStaticMesh->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
-    InvisibleTriggerCollisionStaticMesh->CastShadow = false;
-    InvisibleTriggerCollisionStaticMesh->bCastStaticShadow = false;
-    InvisibleTriggerCollisionStaticMesh->bCastDynamicShadow = false;
-    InvisibleTriggerCollisionStaticMesh->SetEnableGravity(false);
-    InvisibleTriggerCollisionStaticMesh->SetNotifyRigidBodyCollision(true);
-    InvisibleTriggerCollisionStaticMesh->SetGenerateOverlapEvents(true);
-    InvisibleTriggerCollisionStaticMesh->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-    InvisibleTriggerCollisionStaticMesh->SetCollisionProfileName(TEXT("TriggerInvisible")); // todo: need to create collision profile
-    InvisibleTriggerCollisionStaticMesh->SetWalkableSlopeOverride(FWalkableSlopeOverride(WalkableSlope_Unwalkable, 0.f));
-    InvisibleTriggerCollisionStaticMesh->CanCharacterStepUpOn = ECB_No;
-    InvisibleTriggerCollisionStaticMesh->SetIsReplicated(false);
+    ActiveStaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ActiveStaticMeshComponent"));
+    ActiveStaticMeshComponent->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+    ActiveStaticMeshComponent->SetRelativeScale3D(FVector(1.f, 1.f, 1.f));
+    ActiveStaticMeshComponent->SetSimulatePhysics(false);
+    ActiveStaticMeshComponent->SetEnableGravity(false);
+    ActiveStaticMeshComponent->CastShadow = false;
+    ActiveStaticMeshComponent->bCastDynamicShadow = false;
+    ActiveStaticMeshComponent->SetNotifyRigidBodyCollision(true);
+    ActiveStaticMeshComponent->SetGenerateOverlapEvents(true);
+    ActiveStaticMeshComponent->SetWalkableSlopeOverride(FWalkableSlopeOverride(WalkableSlope_Unwalkable, 0.f));
+    ActiveStaticMeshComponent->CanCharacterStepUpOn = ECB_No;
+    ActiveStaticMeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+    ActiveStaticMeshComponent->SetCollisionProfileName(TEXT("NoCollision"));
+
+    InactiveStaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("InactiveStaticMeshComponent"));
+    InactiveStaticMeshComponent->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+    InactiveStaticMeshComponent->SetRelativeScale3D(FVector(1.f, 1.f, 1.f));
+    InactiveStaticMeshComponent->CastShadow = false;
+    InactiveStaticMeshComponent->bCastDynamicShadow = false;
+    InactiveStaticMeshComponent->SetNotifyRigidBodyCollision(true);
+    InactiveStaticMeshComponent->SetGenerateOverlapEvents(true);
+    InactiveStaticMeshComponent->SetWalkableSlopeOverride(FWalkableSlopeOverride(WalkableSlope_Unwalkable, 0.f));
+    InactiveStaticMeshComponent->CanCharacterStepUpOn = ECB_No;
+    InactiveStaticMeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+    InactiveStaticMeshComponent->SetCollisionProfileName(TEXT("NoCollision"));
+    InactiveStaticMeshComponent->SetVisibility(false, true);
     
     DefaultGameRuntimeBoundingBoxInternal = CreateDefaultSubobject<UAscMapKitTriggerDefaultGameRuntimeBoundingBox>(TEXT("DefaultGameRuntimeBoundingBox"));
     DefaultGameRuntimeBoundingBoxInternal->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
@@ -60,14 +61,8 @@ AAscMapKitTriggerActor::AAscMapKitTriggerActor()
     MapKit = GetMapKitDefaults(DefaultGameRuntimeBoundingBoxInternal);
 
 #if !UE_BUILD_SHIPPING
-    ArrowComponent->SetHiddenInGame(false);
-    BillboardComponent->SetHiddenInGame(false);
-    StaticMeshComponent->SetHiddenInGame(false);
+    ActiveStaticMeshComponent->SetHiddenInGame(false);
     DefaultGameRuntimeBoundingBoxInternal->SetHiddenInGame(false);
-#endif
-
-#if WITH_EDITORONLY_DATA
-    BillboardComponent->SetEditorScale(8.f);
 #endif
 }
 
@@ -85,6 +80,13 @@ FAscMapKitTriggerPropertiesStruct AAscMapKitTriggerActor::GetMapKitDefaults(UAsc
     Result.Reusable.ShowHudMessageWhenAllRulesComplete = true;
     
     Result.OnExecute.ExecuteMaxCount = 1;
+
+    Result.OnShowActors.FadeDelaySeconds = 0.1f;
+    Result.OnShowActors.DelaySeconds = 0.5f;
+
+    Result.OnHideActors.FadeDelaySeconds = 0.1f;
+    Result.OnHideActors.DelaySeconds = 0.5f;
+
     Result.OnLockDoor.CloseDoorWhenLocked = true;
 
     Result.OnExecute.ShowHudMessage = true;
@@ -110,28 +112,16 @@ void AAscMapKitTriggerActor::OnConstruction(const FTransform &Transform)
     Super::OnConstruction(Transform);
 
 #if WITH_EDITOR
-    if (BillboardComponent != nullptr)
-        BillboardComponent->EditorUpdateTriggerType(MapKit.TriggerType);
-
     if (MapKit.DefaultGameRuntimeBoundingBox != nullptr)
         MapKit.DefaultGameRuntimeBoundingBox->EditorUpdateTriggerType(MapKit.TriggerType);
     
     EditorUpdateTriggerType(MapKit.TriggerType);
-#endif
-
-#if !UE_BUILD_SHIPPING
-    ArrowComponent->SetRelativeRotation(FRotator(0.f, 180.f, 0.f)); // todo: confirm direction
 #endif
 }
 
 void AAscMapKitTriggerActor::BeginPlay()
 {
     Super::BeginPlay();
-
-#if !UE_BUILD_SHIPPING
-    if (BillboardComponent && BillboardComponent->CurrentTexture != nullptr)
-        BillboardComponent->SetSprite(BillboardComponent->CurrentTexture);
-#endif
 }
 
 #if WITH_EDITOR
@@ -141,9 +131,6 @@ void AAscMapKitTriggerActor::PostEditChangeProperty(struct FPropertyChangedEvent
 
     if (PropertyChangedEvent.GetPropertyName() == TEXT("TriggerType"))
     {
-        if (BillboardComponent != nullptr)
-            BillboardComponent->EditorUpdateTriggerType(MapKit.TriggerType);
-
         if (MapKit.DefaultGameRuntimeBoundingBox != nullptr)
             MapKit.DefaultGameRuntimeBoundingBox->EditorUpdateTriggerType(MapKit.TriggerType);
         
@@ -153,30 +140,39 @@ void AAscMapKitTriggerActor::PostEditChangeProperty(struct FPropertyChangedEvent
 
 void AAscMapKitTriggerActor::EditorUpdateTriggerType(const EAscMapKitTriggerTypeEnum TriggerType)
 {
-    UMaterialInterface *UseMaterial = nullptr;
-
-    if (TriggerType == EAscMapKitTriggerTypeEnum::Custom && MapKit.Custom.StaticMeshPreview != nullptr)
+    if (!TriggerDataAsset)
+        TriggerDataAsset = UAscMapKitGlobals::GetTriggerDataAsset();
+    
+    if (TriggerDataAsset)
     {
-        StaticMeshComponent->SetStaticMesh(MapKit.Custom.StaticMeshPreview);
-        StaticMeshComponent->SetRelativeTransform(MapKit.Custom.StaticMeshPreviewRelativeTransform);
-
-        if (MapKit.Custom.StaticMeshPreviewMaterial != nullptr)
-            StaticMeshComponent->SetMaterial(0, MapKit.Custom.StaticMeshPreviewMaterial);
+        if (ActiveStaticMeshComponent)
+            ActiveStaticMeshComponent->SetStaticMesh(nullptr);
+        
+        if (InactiveStaticMeshComponent)
+            InactiveStaticMeshComponent->SetStaticMesh(nullptr);
+        
+        if (TriggerType != EAscMapKitTriggerTypeEnum::None && TriggerType != EAscMapKitTriggerTypeEnum::Invisible)
+        {
+            const auto TriggerData = TriggerDataAsset->Get(TriggerType);
+            
+            if (ActiveStaticMeshComponent && TriggerData.ActiveStaticMesh)
+                ActiveStaticMeshComponent->SetStaticMesh(TriggerData.ActiveStaticMesh);
+    
+            if (InactiveStaticMeshComponent && TriggerData.InactiveStaticMesh)
+                InactiveStaticMeshComponent->SetStaticMesh(TriggerData.InactiveStaticMesh);
+        }
     }
-    // else if (TriggerType == EAscMapKitTriggerTypeEnum::Invisible)
-    // {
-    //     // todo: anything to do?
-    // }
-    else
+    
+    if (ActiveStaticMeshComponent)
     {
-        StaticMeshComponent->SetStaticMesh(nullptr);
-        StaticMeshComponent->SetMaterial(0, UseMaterial);
+        ActiveStaticMeshComponent->Modify();
+        ActiveStaticMeshComponent->PostEditChange();
     }
-
-    if (StaticMeshComponent)
+    
+    if (InactiveStaticMeshComponent)
     {
-        StaticMeshComponent->Modify();
-        StaticMeshComponent->PostEditChange();
+        InactiveStaticMeshComponent->Modify();
+        InactiveStaticMeshComponent->PostEditChange();
     }
 
     Modify();
@@ -185,3 +181,8 @@ void AAscMapKitTriggerActor::EditorUpdateTriggerType(const EAscMapKitTriggerType
     MarkPackageDirty();
 }
 #endif
+
+void AAscMapKitTriggerActor::OnDeactivate_Implementation()
+{
+    UAscMapKitUtil::Log(FString::Printf(TEXT("OnDeactivate_Implementation(): %s"), *GetHumanReadableName()));
+}

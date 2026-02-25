@@ -6,7 +6,7 @@
 
 // Ascentroid
 #include "AscMapKit/Public/Core/Global/AscMapKitBaseActor.h"
-#include "AscMapKit/Public/Trigger/AscMapKitTriggerBillboardComponent.h"
+#include "AscMapKit/Public/Data/AscTriggerDataAsset.h"
 #include "AscMapKit/Public/Trigger/AscMapKitTriggerPropertiesStruct.h"
 #include "AscMapKit/Public/Trigger/AscMapKitTriggerTypeEnum.h"
 
@@ -33,28 +33,21 @@ public:
     // * These are configured as components in the map kit so you can visualize the collision in the editor.
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Ascentroid|Components|Collision")
     UBoxComponent *InvisibleTriggerCollisionBox;
-
-    // If you selected a map kit collision type of "Static Mesh", specify the static mesh in the "Static Mesh" property.
-    // * Only the "Static Mesh" property is used at runtime.
-    // * All other properties are ignored.
-    // * These are configured as components in the map kit so you can visualize the collision in the editor.
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Ascentroid|Components|Collision")
-    UStaticMeshComponent *InvisibleTriggerCollisionStaticMesh;
     
     UPROPERTY()
     USceneComponent *EmptyRootComponent;
 
-    UPROPERTY()
-    UArrowComponent *ArrowComponent;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category="Ascentroid")
+    UStaticMeshComponent *ActiveStaticMeshComponent;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, Category="Ascentroid")
+    UStaticMeshComponent *InactiveStaticMeshComponent;
 
     UPROPERTY()
-    UAscMapKitTriggerBillboardComponent *BillboardComponent;
+    UMaterialInterface *PrimaryColorMaterial;
     
     UPROPERTY()
-    UStaticMesh *CubeStaticMesh;
-
-    UPROPERTY()
-    UStaticMeshComponent *StaticMeshComponent;
+    UMaterialInstanceDynamic *PrimaryColorMaterialInstance;
 
     UFUNCTION()
     void OnConstruction(const FTransform &Transform) override;
@@ -68,10 +61,16 @@ public:
     void EditorUpdateTriggerType(EAscMapKitTriggerTypeEnum TriggerType);
 #endif
 
-    UFUNCTION(BlueprintImplementableEvent, Category="Ascentroid")
+    UFUNCTION(BlueprintNativeEvent, Category="Ascentroid")
     void OnDeactivate();
 
+    UFUNCTION()
+    virtual void OnDeactivate_Implementation();
+    
 private:
     UPROPERTY()
     UAscMapKitTriggerDefaultGameRuntimeBoundingBox *DefaultGameRuntimeBoundingBoxInternal;
+    
+    UPROPERTY()
+    UAscTriggerDataAsset *TriggerDataAsset;
 };

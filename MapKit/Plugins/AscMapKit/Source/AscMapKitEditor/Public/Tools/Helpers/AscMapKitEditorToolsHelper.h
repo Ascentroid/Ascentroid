@@ -46,9 +46,6 @@ public:
 	);
 
 	UFUNCTION()
-	static FString GenerateRandomString(int32 MaxLength = 8);
-
-	UFUNCTION()
 	static void ShowErrorMessage(const FString &Arg);
 
 	UFUNCTION()

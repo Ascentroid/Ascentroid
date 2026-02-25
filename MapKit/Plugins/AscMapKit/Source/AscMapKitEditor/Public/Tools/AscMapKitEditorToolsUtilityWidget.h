@@ -23,14 +23,17 @@
 #include "AscMapKit/Public/Core/Constant/AscMapKitMaterialEmitColorTypeEnum.h"
 #include "AscMapKit/Public/Data/AscEnvironmentAreaDataAsset.h"
 #include "AscMapKit/Public/Data/AscDecorDataAsset.h"
+#include "AscMapKit/Public/Data/AscDecorPictureDataAsset.h"
 #include "AscMapKit/Public/Data/AscDoorDataAsset.h"
 #include "AscMapKit/Public/Data/AscDoorFrameDataAsset.h"
+#include "AscMapKit/Public/Data/AscDoorCodeDataAsset.h"
 #include "AscMapKit/Public/Data/AscEnemyDataAsset.h"
 #include "AscMapKit/Public/Data/AscFanDataAsset.h"
 #include "AscMapKit/Public/Data/AscTriggerDataAsset.h"
 #include "AscMapKit/Public/Decor/AscMapKitDecorTypeEnum.h"
 #include "AscMapKit/Public/Door/AscMapKitDoorTypeEnum.h"
 #include "AscMapKit/Public/Door/AscMapKitDoorFrameTypeEnum.h"
+#include "AscMapKit/Public/Door/AscMapKitDoorCodeTypeEnum.h"
 #include "AscMapKit/Public/Enemy/AscMapKitEnemyTypeEnum.h"
 #include "AscMapKit/Public/Fan/AscMapKitFanTypeEnum.h"
 #include "AscMapKit/Public/Powerup/AscMapKitPowerupTypeEnum.h"
@@ -250,6 +253,31 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void BtnAddDoorFrameOnClick();
 
+	// Create Door Code
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UGridPanel *GridPanelDoorCode;
+	
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UComboBoxString *ComboBoxAddDoorCodeType;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UComboBoxString *ComboBoxAddDoorCodeColor;
+
+	UFUNCTION(BlueprintCallable)
+	void ComboBoxAddDoorCodeTypeOnSelectionChanged(const FString SelectedItem, const ESelectInfo::Type SelectionType);
+	
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UComboBoxString *ComboBoxAddDoorCodeCount;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UComboBoxString *ComboBoxAddDoorCodeWhere;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UButton *BtnAddDoorCode;
+
+	UFUNCTION(BlueprintCallable)
+	void BtnAddDoorCodeOnClick();
+	
 	// Create Enemy
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
 	UTextBlock *TxtSubTitleCreateEnemy;
@@ -286,6 +314,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void BtnAddEnemyOnClick();
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UButton *BtnGenerateRandomEnemySettings;
+
+	UFUNCTION(BlueprintCallable)
+	void BtnGenerateRandomEnemySettingsOnClick();
 
 	// Create Fan
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
@@ -595,6 +629,25 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void BtnGeneratePowerupRespawnsOnClick();
+	
+	// Generate - Other
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UTextBlock *TxtSubTitleGenerateOther;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UGridPanel *SectionPanelGenerateOther;
+	
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UButton *BtnSubTitleGenerateOther;
+	
+	UFUNCTION(BlueprintCallable)
+	void BtnSubTitleGenerateOtherOnClick();
+	
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
+	UButton *BtnGenerateOtherRepairMeshMaterials;
+
+	UFUNCTION(BlueprintCallable)
+	void BtnGenerateOtherRepairMeshMaterialsOnClick();
 
 	// Validate Run
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget))
@@ -853,18 +906,27 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void HandleButtonSelectionHighlighting(UGridPanel *GridPanel, const bool &bReset, UAscMapKitEditorToolsSelfRefButtonWidget *Button = nullptr);
 
+	UFUNCTION(BlueprintCallable)
+	void CleanUnusedMaterialSlots(UStaticMesh *StaticMesh);
+	
 private:
 	UPROPERTY()
 	UAscEnvironmentAreaDataAsset *EnvironmentAreaDataAsset;
 
 	UPROPERTY()
 	UAscDecorDataAsset *DecorDataAsset;
+	
+	UPROPERTY()
+	UAscDecorPictureDataAsset *DecorPictureDataAsset;
 
 	UPROPERTY()
 	UAscDoorDataAsset *DoorDataAsset;
 
 	UPROPERTY()
 	UAscDoorFrameDataAsset *DoorFrameDataAsset;
+
+	UPROPERTY()
+	UAscDoorCodeDataAsset *DoorCodeDataAsset;
 
 	UPROPERTY()
 	UAscEnemyDataAsset *EnemyDataAsset;
@@ -886,6 +948,9 @@ private:
 
 	UPROPERTY()
 	TMap<FString, UAscMapKitEditorToolsSelfRefButtonWidget *> DoorFrameButtonMap;
+
+	UPROPERTY()
+	TMap<FString, UAscMapKitEditorToolsSelfRefButtonWidget *> DoorCodeButtonMap;
 
 	UPROPERTY()
 	TMap<FString, UAscMapKitEditorToolsSelfRefButtonWidget *> EnemyButtonMap;
@@ -1022,13 +1087,10 @@ private:
 	TMap<EAscMapKitDoorTypeEnum, FString> DoorTypeMap;
 
 	UPROPERTY()
-	TMap<EAscMapKitDoorTypeEnum, int32> DoorTypeStaticMeshMaterialEmitColorOverrideMap;
-
-	UPROPERTY()
-	TMap<EAscMapKitDoorFrameTypeEnum, int32> DoorFrameTypeStaticMeshMaterialEmitColorOverrideMap;
-
-	UPROPERTY()
 	TMap<EAscMapKitDoorFrameTypeEnum, FString> DoorFrameTypeMap;
+
+	UPROPERTY()
+	TMap<EAscMapKitDoorCodeTypeEnum, FString> DoorCodeTypeMap;
 
 	UPROPERTY()
 	TMap<EAscMapKitEnemyTypeEnum, FString> EnemyTypeMap;
@@ -1045,9 +1107,6 @@ private:
 	UPROPERTY()
 	TMap<EAscMapKitTriggerTypeEnum, FString> TriggerTypeMap;
 	
-	UPROPERTY()
-	TMap<EAscMapKitTriggerTypeEnum, int32> TriggerTypeStaticMeshMaterialEmitColorOverrideMap;
-
 	UFUNCTION()
 	void ToggleSection(const FString &TitleText, UTextBlock *TxtSubTitleWidget, UWidget *SectionPanelWidget);
 };

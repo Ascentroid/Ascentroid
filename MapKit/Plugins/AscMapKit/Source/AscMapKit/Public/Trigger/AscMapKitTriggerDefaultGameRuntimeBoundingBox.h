@@ -19,6 +19,6 @@ public:
 
 #if WITH_EDITOR
     UFUNCTION()
-    void EditorUpdateTriggerType(EAscMapKitTriggerTypeEnum TriggerType);
+    void EditorUpdateTriggerType(const EAscMapKitTriggerTypeEnum &TriggerType);
 #endif
 };

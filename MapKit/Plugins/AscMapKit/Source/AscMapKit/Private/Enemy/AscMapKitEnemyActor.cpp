@@ -99,6 +99,8 @@ FAscMapKitEnemyPropertiesStruct AAscMapKitEnemyActor::GetMapKitDefaults()
     Result.Behavior.Modes.Snipe.TotalApplicableEnemiesThreshold = 10;
     Result.Behavior.Modes.Snipe.NearbyEnemyThreshold = 3;
 
+    Result.Movement.StickinessPercentage = 80;
+    
     Result.Movement.Speed.MaxSpeed = 3000.f;
     
     Result.Movement.Speed.Toggle.Enable = true;

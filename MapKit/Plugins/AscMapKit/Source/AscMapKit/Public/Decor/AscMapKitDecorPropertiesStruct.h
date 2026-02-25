@@ -16,9 +16,14 @@ struct ASCMAPKIT_API FAscMapKitDecorPropertiesStruct
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     bool DisableCollision;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    UPROPERTY(meta = (HideInInspector))
+    bool bHasDestructibleSupport = false;
+
+    // If this is disabled, it means destructible is not supported for this decor item.
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, meta=(EditCondition="bHasDestructibleSupport", EditConditionHides="true", HideEditConditionToggle="true"))
     FAscMapKitDestructiblePropertiesStruct Destructible;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    // If this is disabled, it means destructible is not supported for this decor item.
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame, meta=(EditCondition="bHasDestructibleSupport", EditConditionHides="true", HideEditConditionToggle="true"))
     FAscMapKitDestructiblePropertiesSplashDamageStruct SplashDamage;
 };

@@ -18,15 +18,27 @@ UAscDecorDataAsset *UAscMapKitGlobals::GetDecorDataAsset()
 	return Cached;
 }
 
+UAscDecorPictureDataAsset *UAscMapKitGlobals::GetDecorPictureDataAsset()
+{
+	static UAscDecorPictureDataAsset *Cached = LoadAsset<UAscDecorPictureDataAsset>(TEXT("/AscMapKit/Editor/Tools/Data/DA_AscDecorPictureData.DA_AscDecorPictureData"));
+	return Cached;
+}
+
 UAscDoorDataAsset *UAscMapKitGlobals::GetDoorDataAsset()
 {
 	static UAscDoorDataAsset *Cached = LoadAsset<UAscDoorDataAsset>(TEXT("/AscMapKit/Editor/Tools/Data/DA_AscDoorData.DA_AscDoorData"));
 	return Cached;
 }
 
-UAscDoorFrameDataAsset * UAscMapKitGlobals::GetDoorFrameDataAsset()
+UAscDoorFrameDataAsset *UAscMapKitGlobals::GetDoorFrameDataAsset()
 {
 	static UAscDoorFrameDataAsset *Cached = LoadAsset<UAscDoorFrameDataAsset>(TEXT("/AscMapKit/Editor/Tools/Data/DA_AscDoorFrameData.DA_AscDoorFrameData"));
+	return Cached;
+}
+
+UAscDoorCodeDataAsset *UAscMapKitGlobals::GetDoorCodeDataAsset()
+{
+	static UAscDoorCodeDataAsset *Cached = LoadAsset<UAscDoorCodeDataAsset>(TEXT("/AscMapKit/Editor/Tools/Data/DA_AscDoorCodeData.DA_AscDoorCodeData"));
 	return Cached;
 }
 

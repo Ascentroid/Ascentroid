@@ -15,3 +15,16 @@ TArray<FAscEditorToolDataAssetStruct> UAscTriggerDataAsset::GetAssetItemsAsEdito
 
 	return Result;
 }
+
+const FAscTriggerDataAssetStruct &UAscTriggerDataAsset::Get(const EAscMapKitTriggerTypeEnum &TriggerType)
+{
+	for (auto &Item : AssetItems)
+	{
+		if (Item.TriggerType == TriggerType)
+			return Item;
+	}
+
+	static FAscTriggerDataAssetStruct DefaultStruct;
+
+	return DefaultStruct;
+}
